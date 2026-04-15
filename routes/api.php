@@ -1,9 +1,12 @@
 <?php
 
+use App\Http\Controllers\AbonnementController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BiblioController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OffreController;
 use App\Http\Controllers\PlanteController;
+use App\Http\Controllers\StockController;
 use App\Http\Controllers\SuiviPlanteController;
 use App\Http\Controllers\TacheController;
 use App\Http\Controllers\TodoListController;
@@ -30,4 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post  ('todo-lists/{todoList}/taches',           [TacheController::class, 'store']);
     Route::put   ('todo-lists/{todoList}/taches/{tache}',   [TacheController::class, 'update']);
     Route::delete('todo-lists/{todoList}/taches/{tache}',   [TacheController::class, 'destroy']);
+
+    Route::apiResource('messages',     MessageController::class)->except(['show']);
+    Route::apiResource('stocks',       StockController::class);
+    Route::apiResource('abonnements',  AbonnementController::class)->only(['index', 'store']);
 });

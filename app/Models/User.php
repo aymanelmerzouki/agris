@@ -46,4 +46,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(TodoList::class, 'ouvrier_id');
     }
+
+    public function messagesEnvoyes()  { return $this->hasMany(Message::class, 'expediteur_id'); }
+    public function messagesRecus()    { return $this->hasMany(Message::class, 'destinataire_id'); }
+    public function stocks()           { return $this->hasMany(Stock::class); }
+    public function abonnement()       { return $this->hasOne(Abonnement::class); }
 }
