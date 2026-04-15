@@ -16,25 +16,35 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',    [AuthController::class, 'login']);
 
-// Routes protégées
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',      [AuthController::class, 'me']);
 
-    Route::apiResource('plantes',      PlanteController::class);
-    Route::apiResource('biblios',      BiblioController::class);
-    Route::apiResource('suivi-plantes', SuiviPlanteController::class);
-    Route::apiResource('offres',       OffreController::class);
-    Route::apiResource('todo-lists',   TodoListController::class);
+    // Accessible à tous les rôles
+    Route::apiResource('plantes', PlanteController::class);
+    Route::apiResource('biblios', BiblioController::class);
+    Route::apiResource('offres',  OffreController::class);
+    Route::apiResource('messages', MessageController::class)->except(['show']);
+    Route::apiResource('abonnements', AbonnementController::class)->only(['index', 'store']);
 
-    // Tâches imbriquées sous todo-lists
-    Route::get   ('todo-lists/{todoList}/taches',           [TacheController::class, 'index']);
-    Route::post  ('todo-lists/{todoList}/taches',           [TacheController::class, 'store']);
-    Route::put   ('todo-lists/{todoList}/taches/{tache}',   [TacheController::class, 'update']);
-    Route::delete('todo-lists/{todoList}/taches/{tache}',   [TacheController::class, 'destroy']);
+    // Agriculteur + Manager
+    Route::middleware('role:agriculteur,manager')->group(function () {
+        Route::apiResource('suivi-plantes', SuiviPlanteController::class);
+        Route::apiResource('stocks', StockController::class);
+    });
 
-    Route::apiResource('messages',     MessageController::class)->except(['show']);
-    Route::apiResource('stocks',       StockController::class);
-    Route::apiResource('abonnements',  AbonnementController::class)->only(['index', 'store']);
+    // Manager uniquement — créer/gérer les todo-lists
+    Route::middleware('role:manager')->group(function () {
+        Route::apiResource('todo-lists', TodoListController::class)->except(['index', 'show']);
+    });
+
+    // Manager + Ouvrier — voir les todo-lists
+    Route::middleware('role:manager,ouvrier')->group(function () {
+        Route::apiResource('todo-lists', TodoListController::class)->only(['index', 'show']);
+        Route::get   ('todo-lists/{todoList}/taches',           [TacheController::class, 'index']);
+        Route::post  ('todo-lists/{todoList}/taches',           [TacheController::class, 'store']);
+        Route::put   ('todo-lists/{todoList}/taches/{tache}',   [TacheController::class, 'update']);
+        Route::delete('todo-lists/{todoList}/taches/{tache}',   [TacheController::class, 'destroy']);
+    });
 });
