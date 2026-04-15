@@ -1,0 +1,7 @@
+# Environnement
+.env
+
+# Dépendances
+node_modules/
+vendor/
+.DS_Store
