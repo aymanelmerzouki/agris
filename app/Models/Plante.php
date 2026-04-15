@@ -9,15 +9,15 @@ class Plante extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nom', 'espece', 'description', 'conditionsCulture'];
+    protected $fillable = [
+        'nom', 'espece', 'famille', 'origine', 'description', 'conditionsCulture',
+        'temperatureMin', 'temperatureMax', 'saisonPlantation', 'dureePousseeJours',
+        'rendementMoyenKgHa', 'typeIrrigation', 'estBio', 'imageUrl',
+    ];
 
-    public function suiviPlantes()
-    {
-        return $this->hasMany(SuiviPlante::class);
-    }
+    protected $casts = ['estBio' => 'boolean'];
 
-    public function biblios()
-    {
-        return $this->belongsToMany(Biblio::class, 'biblio_plante');
-    }
+    public function suiviPlantes() { return $this->hasMany(SuiviPlante::class); }
+    public function biblios() { return $this->belongsToMany(Biblio::class, 'biblio_plante'); }
+    public function offres() { return $this->hasMany(Offre::class); }
 }

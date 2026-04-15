@@ -9,10 +9,12 @@ class Tache extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['todo_list_id', 'nomTache', 'description', 'priorite', 'estFaite'];
+    protected $fillable = [
+        'todo_list_id', 'nomTache', 'description', 'priorite',
+        'categorie', 'estFaite', 'completeeAt', 'dureeEstimeeMin',
+    ];
 
-    public function todoList()
-    {
-        return $this->belongsTo(TodoList::class);
-    }
+    protected $casts = ['estFaite' => 'boolean', 'completeeAt' => 'datetime'];
+
+    public function todoList() { return $this->belongsTo(TodoList::class); }
 }

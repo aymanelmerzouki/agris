@@ -14,13 +14,17 @@ return new class extends Migration
             $table->foreignId('plante_id')->constrained()->cascadeOnDelete();
             $table->date('dateDebut');
             $table->date('DateAgriculte')->nullable();
-            $table->float('BesoinsEau');
+            $table->float('BesoinsEau');                              // litres/jour
+            $table->float('superficieHa')->nullable();               // hectares cultivés
+            $table->string('parcelle')->nullable();                   // identifiant parcelle
+            $table->enum('stadeVegetatif', ['germination','croissance','floraison','fructification','recolte'])->nullable();
+            $table->float('tauxHumidite')->nullable();               // % humidité sol
+            $table->float('phSol')->nullable();                      // pH du sol
+            $table->text('notesAgriculteur')->nullable();
+            $table->enum('statut', ['en_cours','recolte','abandonne'])->default('en_cours');
             $table->timestamps();
         });
     }
 
-    public function down(): void
-    {
-        Schema::dropIfExists('suivi_plantes');
-    }
+    public function down(): void { Schema::dropIfExists('suivi_plantes'); }
 };

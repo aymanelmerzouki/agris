@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Tache;
+use App\Models\TodoList;
+use Illuminate\Http\Request;
+
+class TacheController extends Controller
+{
+    public function index(TodoList $todoList)
+    {
+        return response()->json($todoList->taches()->orderBy('priorite')->get());
+    }
+
+    public function store(Request $request, TodoList $todoList)
+    {
+        $data = $request->validate([
+            'nomTache'        => 'required|string|max:255',
+            'description'     => 'nullable|string',
+            'priorite'        => 'in:basse,normale,haute,urgente',
+            'categorie'       => 'in:irrigation,recolte,traitement,semis,entretien,autre',
+            'dureeEstimeeMin' => 'nullable|integer|min:1',
+        ]);
+
+        $tache = $todoList->taches()->create($data);
+        $todoList->increment('nbreTaches');
+
+        return response()->json($tache, 201);
+    }
+
+    public function update(Request $request, TodoList $todoList, Tache $tache)
+    {
+        $data = $request->validate([
+            'nomTache'        => 'sometimes|string|max:255',
+            'description'     => 'nullable|string',
+            'priorite'        => 'in:basse,normale,haute,urgente',
+            'categorie'       => 'in:irrigation,recolte,traitement,semis,entretien,autre',
+            'estFaite'        => 'boolean',
+            'dureeEstimeeMin' => 'nullable|integer|min:1',
+        ]);
+
+        // Horodatage automatique à la complétion
+        if (isset($data['estFaite']) && $data['estFaite'] && !$tache->estFaite) {
+            $data['completeeAt'] = now();
+        }
+
+        $tache->update($data);
+        return response()->json($tache);
+    }
+
+    public function destroy(TodoList $todoList, Tache $tache)
+    {
+        $tache->delete();
+        $todoList->decrement('nbreTaches');
+        return response()->json(null, 204);
+    }
+}

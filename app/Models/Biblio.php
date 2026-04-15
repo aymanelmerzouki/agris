@@ -9,10 +9,9 @@ class Biblio extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['titre'];
+    protected $fillable = ['titre', 'auteur', 'source', 'type', 'resume', 'langue', 'datePublication', 'estValide'];
 
-    public function plantes()
-    {
-        return $this->belongsToMany(Plante::class, 'biblio_plante');
-    }
+    protected $casts = ['estValide' => 'boolean', 'datePublication' => 'date'];
+
+    public function plantes() { return $this->belongsToMany(Plante::class, 'biblio_plante'); }
 }
