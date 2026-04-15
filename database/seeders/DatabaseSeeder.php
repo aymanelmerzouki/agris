@@ -2,60 +2,65 @@
 
 namespace Database\Seeders;
 
+use App\Models\Abonnement;
 use App\Models\Biblio;
+use App\Models\Message;
 use App\Models\Offre;
 use App\Models\Plante;
+use App\Models\Stock;
 use App\Models\SuiviPlante;
 use App\Models\Tache;
 use App\Models\TodoList;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Utilisateur de test
-        $admin = User::firstOrCreate(
-            ['email' => 'test@example.com'],
-            User::factory()->make(['name' => 'Test User', 'email' => 'test@example.com'])->toArray()
-        );
+        // Utilisateurs fixes par rôle
+        $admin = User::firstOrCreate(['email' => 'admin@agris.com'], [
+            'name' => 'Admin', 'password' => Hash::make('password'), 'role' => 'admin',
+        ]);
 
-        // 4 autres utilisateurs
-        $users = User::factory(4)->create();
-        $allUsers = $users->prepend($admin);
+        $manager = User::firstOrCreate(['email' => 'manager@agris.com'], [
+            'name' => 'Manager Test', 'password' => Hash::make('password'), 'role' => 'manager', 'nomEntreprise' => 'AgriCorp',
+        ]);
 
-        // 10 plantes
+        $agriculteur = User::firstOrCreate(['email' => 'test@example.com'], [
+            'name' => 'Test User', 'password' => Hash::make('password'), 'role' => 'agriculteur',
+        ]);
+
+        $ouvrier = User::firstOrCreate(['email' => 'ouvrier@agris.com'], [
+            'name' => 'Ouvrier Test', 'password' => Hash::make('password'), 'role' => 'ouvrier',
+        ]);
+
+        // Plantes et biblios
         $plantes = Plante::factory(10)->create();
-
-        // 10 ressources bibliographiques
         Biblio::factory(10)->create();
 
-        // Suivis de plantes (2 par utilisateur)
-        $allUsers->each(function ($user) use ($plantes) {
-            SuiviPlante::factory(2)->create([
-                'user_id'   => $user->id,
-                'plante_id' => $plantes->random()->id,
-            ]);
-        });
+        // Suivis et offres pour l'agriculteur
+        SuiviPlante::factory(3)->create(['user_id' => $agriculteur->id, 'plante_id' => $plantes->random()->id]);
+        Offre::factory(3)->create(['user_id' => $agriculteur->id, 'plante_id' => $plantes->random()->id]);
 
-        // Offres (3 par utilisateur)
-        $allUsers->each(function ($user) use ($plantes) {
-            Offre::factory(3)->create([
-                'user_id'   => $user->id,
-                'plante_id' => $plantes->random()->id,
-            ]);
-        });
+        // Stocks pour le manager
+        Stock::factory(3)->create(['user_id' => $manager->id, 'plante_id' => $plantes->random()->id]);
 
-        // TodoLists avec tâches
-        $allUsers->each(function ($user) use ($allUsers) {
-            $todoList = TodoList::factory()->create([
-                'manager_id' => $user->id,
-                'ouvrier_id' => $allUsers->where('id', '!=', $user->id)->random()->id,
-            ]);
+        // TodoList manager → ouvrier avec tâches
+        $todoList = TodoList::factory()->create([
+            'manager_id' => $manager->id,
+            'ouvrier_id' => $ouvrier->id,
+        ]);
+        Tache::factory(4)->create(['todo_list_id' => $todoList->id]);
+        $todoList->update(['nbreTaches' => 4]);
 
-            Tache::factory(3)->create(['todo_list_id' => $todoList->id]);
-            $todoList->update(['nbreTaches' => 3]);
-        });
+        // Messages entre utilisateurs
+        Message::factory(5)->create(['expediteur_id' => $manager->id, 'destinataire_id' => $ouvrier->id]);
+        Message::factory(3)->create(['expediteur_id' => $ouvrier->id, 'destinataire_id' => $manager->id]);
+
+        // Abonnements
+        Abonnement::firstOrCreate(['user_id' => $manager->id], ['plan' => 'pro', 'statut' => 'actif', 'dateDebut' => now(), 'prix' => 299]);
+        Abonnement::firstOrCreate(['user_id' => $agriculteur->id], ['plan' => 'basic', 'statut' => 'actif', 'dateDebut' => now(), 'prix' => 99]);
     }
 }
