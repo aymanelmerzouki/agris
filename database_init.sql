@@ -1,1 +1,2 @@
--- Fichier d'initialisation de la base de données AgriSaaS
+-- Fichier d'initialisation de la base de données Agris
+
