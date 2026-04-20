@@ -1,0 +1,52 @@
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import PrivateRoute from './components/PrivateRoute';
+import Navbar from './components/Navbar';
+
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
+import Dashboard from './pages/Dashboard/Dashboard';
+import Plantes from './pages/Bibliotheque/Plantes';
+import PlanteDetail from './pages/Bibliotheque/PlanteDetail';
+import Favoris from './pages/Bibliotheque/Favoris';
+import SuiviPlantes from './pages/Suivi/SuiviPlantes';
+import Offres from './pages/Offres/Offres';
+import TodoLists from './pages/TodoList/TodoLists';
+import Alertes from './pages/Alertes/Alertes';
+
+import '../css/app.css';
+
+function Layout({ children }) {
+    return (
+        <>
+            <Navbar />
+            <main>{children}</main>
+        </>
+    );
+}
+
+createRoot(document.getElementById('app')).render(
+    <StrictMode>
+        <AuthProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+
+                    <Route path="/" element={<PrivateRoute><Layout><Dashboard /></Layout></PrivateRoute>} />
+                    <Route path="/plantes" element={<PrivateRoute><Layout><Plantes /></Layout></PrivateRoute>} />
+                    <Route path="/plantes/:id" element={<PrivateRoute><Layout><PlanteDetail /></Layout></PrivateRoute>} />
+                    <Route path="/favoris" element={<PrivateRoute><Layout><Favoris /></Layout></PrivateRoute>} />
+                    <Route path="/suivi" element={<PrivateRoute roles={['agriculteur', 'manager']}><Layout><SuiviPlantes /></Layout></PrivateRoute>} />
+                    <Route path="/offres" element={<PrivateRoute><Layout><Offres /></Layout></PrivateRoute>} />
+                    <Route path="/todo-lists" element={<PrivateRoute roles={['manager', 'ouvrier']}><Layout><TodoLists /></Layout></PrivateRoute>} />
+                    <Route path="/alertes" element={<PrivateRoute><Layout><Alertes /></Layout></PrivateRoute>} />
+
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+            </BrowserRouter>
+        </AuthProvider>
+    </StrictMode>
+);

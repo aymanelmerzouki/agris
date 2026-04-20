@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AbonnementController;
+use App\Http\Controllers\AlerteArrosageController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BiblioController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OffreController;
+use App\Http\Controllers\PlanteFavoriController;
 use App\Http\Controllers\PlanteController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\SuiviPlanteController;
@@ -25,8 +27,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('plantes', PlanteController::class);
     Route::apiResource('biblios', BiblioController::class);
     Route::apiResource('offres',  OffreController::class);
+    Route::post('offres/{offre}/accepter', [OffreController::class, 'accepter']);
     Route::apiResource('messages', MessageController::class)->except(['show']);
     Route::apiResource('abonnements', AbonnementController::class)->only(['index', 'store']);
+
+    // Favoris
+    Route::get('favoris',                        [PlanteFavoriController::class, 'index']);
+    Route::post('plantes/{plante}/favori',        [PlanteFavoriController::class, 'toggle']);
+
+    // Alertes arrosage
+    Route::get('alertes',                        [AlerteArrosageController::class, 'index']);
+    Route::post('alertes/marquer-lues',          [AlerteArrosageController::class, 'marquerLues']);
 
     // Agriculteur + Manager
     Route::middleware('role:agriculteur,manager')->group(function () {
@@ -39,7 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('todo-lists', TodoListController::class)->except(['index', 'show']);
     });
 
-    // Manager + Ouvrier — voir les todo-lists
+    // Manager + Ouvrier — voir les todo-lists et gérer les tâches
     Route::middleware('role:manager,ouvrier')->group(function () {
         Route::apiResource('todo-lists', TodoListController::class)->only(['index', 'show']);
         Route::get   ('todo-lists/{todoList}/taches',           [TacheController::class, 'index']);

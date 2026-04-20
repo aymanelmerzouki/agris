@@ -36,12 +36,19 @@ class TacheController extends Controller
             'description'     => 'nullable|string',
             'priorite'        => 'in:basse,normale,haute,urgente',
             'categorie'       => 'in:irrigation,recolte,traitement,semis,entretien,autre',
+            'statut'          => 'in:en_attente,en_cours,termine',
             'estFaite'        => 'boolean',
             'dureeEstimeeMin' => 'nullable|integer|min:1',
         ]);
 
-        // Horodatage automatique à la complétion
-        if (isset($data['estFaite']) && $data['estFaite'] && !$tache->estFaite) {
+        // Sync estFaite avec statut
+        if (isset($data['statut'])) {
+            $data['estFaite'] = $data['statut'] === 'termine';
+            if ($data['estFaite'] && !$tache->estFaite) {
+                $data['completeeAt'] = now();
+            }
+        } elseif (isset($data['estFaite']) && $data['estFaite'] && !$tache->estFaite) {
+            $data['statut'] = 'termine';
             $data['completeeAt'] = now();
         }
 

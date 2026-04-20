@@ -20,4 +20,5 @@ class Plante extends Model
     public function suiviPlantes() { return $this->hasMany(SuiviPlante::class); }
     public function biblios() { return $this->belongsToMany(Biblio::class, 'biblio_plante'); }
     public function offres() { return $this->hasMany(Offre::class); }
+    public function favorisParUsers() { return $this->belongsToMany(User::class, 'plante_favoris'); }
 }

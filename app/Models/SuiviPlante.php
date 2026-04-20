@@ -19,4 +19,5 @@ class SuiviPlante extends Model
 
     public function user() { return $this->belongsTo(User::class); }
     public function plante() { return $this->belongsTo(Plante::class); }
+    public function alertes() { return $this->hasMany(AlerteArrosage::class); }
 }

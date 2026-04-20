@@ -61,6 +61,19 @@ class OffreController extends Controller
         return response()->json($offre);
     }
 
+    public function accepter(Request $request, Offre $offre)
+    {
+        if ($offre->statut !== 'disponible') {
+            return response()->json(['message' => 'Cette offre n\'est plus disponible.'], 422);
+        }
+        if ($offre->user_id === $request->user()->id) {
+            return response()->json(['message' => 'Vous ne pouvez pas acheter votre propre offre.'], 422);
+        }
+
+        $offre->update(['statut' => 'vendu', 'acheteur_id' => $request->user()->id]);
+        return response()->json($offre->load('user:id,name', 'acheteur:id,name', 'plante:id,nom'));
+    }
+
     public function destroy(Offre $offre)
     {
         $offre->delete();
