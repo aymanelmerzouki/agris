@@ -4,24 +4,26 @@ import api from '../api';
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('user')) ?? null; }
+        catch { return null; }
+    });
+    const [loading, setLoading] = useState(!!localStorage.getItem('token'));
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
-            api.get('/me')
-                .then((r) => setUser(r.data))
-                .catch(() => localStorage.removeItem('token'))
-                .finally(() => setLoading(false));
-        } else {
-            setLoading(false);
-        }
+        if (!token) { setLoading(false); return; }
+
+        api.get('/me')
+            .then((r) => { setUser(r.data); localStorage.setItem('user', JSON.stringify(r.data)); })
+            .catch(() => { localStorage.removeItem('token'); localStorage.removeItem('user'); setUser(null); })
+            .finally(() => setLoading(false));
     }, []);
 
     const login = async (email, password) => {
         const { data } = await api.post('/login', { email, password });
         localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
         setUser(data.user);
         return data.user;
     };
@@ -29,6 +31,7 @@ export function AuthProvider({ children }) {
     const register = async (payload) => {
         const { data } = await api.post('/register', payload);
         localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
         setUser(data.user);
         return data.user;
     };
@@ -36,6 +39,7 @@ export function AuthProvider({ children }) {
     const logout = async () => {
         await api.post('/logout');
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
         setUser(null);
     };
 
