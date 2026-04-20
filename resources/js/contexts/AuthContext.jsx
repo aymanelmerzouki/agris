@@ -19,7 +19,7 @@ export function AuthProvider({ children }) {
 
         api.get('/me')
             .then((r) => { setUser(r.data); localStorage.setItem('user', JSON.stringify(r.data)); })
-            .catch(() => { localStorage.removeItem('token'); localStorage.removeItem('user'); setUser(null); })
+            .catch(() => { /* axios interceptor gère le 401 */ })
             .finally(() => setLoading(false));
     }, []);
 
