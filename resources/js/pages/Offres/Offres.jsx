@@ -68,7 +68,7 @@ export default function Offres() {
                                 {o.statut}
                             </span>
                         </div>
-                        <p className="text-lg font-bold text-green-700 mt-2">{o.prix} DA / {o.unite}</p>
+                        <p className="text-lg font-bold text-green-700 mt-2">{o.prix} MAD / {o.unite}</p>
                         <p className="text-sm text-gray-600">Qté: {o.quantite} {o.unite} {o.livraison && '· 🚚 Livraison'}</p>
                         {o.description && <p className="text-xs text-gray-400 mt-1">{o.description}</p>}
                         {o.statut === 'disponible' && o.user_id !== user?.id && (

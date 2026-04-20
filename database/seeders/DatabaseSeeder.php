@@ -36,8 +36,10 @@ class DatabaseSeeder extends Seeder
             'name' => 'Ouvrier Test', 'password' => Hash::make('password'), 'role' => 'ouvrier',
         ]);
 
-        // Plantes et biblios
-        $plantes = Plante::factory(10)->create();
+        // Plantes réelles
+        $this->call(PlanteSeeder::class);
+        $plantes = Plante::all();
+
         Biblio::factory(10)->create();
 
         // Suivis et offres pour l'agriculteur

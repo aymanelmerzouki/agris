@@ -1,10 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
 
+import Landing from './pages/Landing/Landing';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
 import Dashboard from './pages/Dashboard/Dashboard';
@@ -27,15 +28,22 @@ function Layout({ children }) {
     );
 }
 
+function Home() {
+    const { user, loading } = useAuth();
+    if (loading) return null;
+    return user ? <Navigate to="/dashboard" replace /> : <Landing />;
+}
+
 createRoot(document.getElementById('app')).render(
     <StrictMode>
         <AuthProvider>
             <BrowserRouter>
                 <Routes>
+                    <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
 
-                    <Route path="/" element={<PrivateRoute><Layout><Dashboard /></Layout></PrivateRoute>} />
+                    <Route path="/dashboard" element={<PrivateRoute><Layout><Dashboard /></Layout></PrivateRoute>} />
                     <Route path="/plantes" element={<PrivateRoute><Layout><Plantes /></Layout></PrivateRoute>} />
                     <Route path="/plantes/:id" element={<PrivateRoute><Layout><PlanteDetail /></Layout></PrivateRoute>} />
                     <Route path="/favoris" element={<PrivateRoute><Layout><Favoris /></Layout></PrivateRoute>} />
