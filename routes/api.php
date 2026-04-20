@@ -14,9 +14,12 @@ use App\Http\Controllers\TacheController;
 use App\Http\Controllers\TodoListController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\NewsController;
+
 // Auth publique
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login',    [AuthController::class, 'login']);
+Route::get('/news',      [NewsController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
