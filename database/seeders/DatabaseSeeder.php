@@ -42,6 +42,8 @@ class DatabaseSeeder extends Seeder
 
         Biblio::factory(10)->create();
 
+        // Utilisateurs fixes par rôle
+
         // Suivis et offres pour l'agriculteur
         SuiviPlante::factory(3)->create(['user_id' => $agriculteur->id, 'plante_id' => $plantes->random()->id]);
         Offre::factory(3)->create(['user_id' => $agriculteur->id, 'plante_id' => $plantes->random()->id]);

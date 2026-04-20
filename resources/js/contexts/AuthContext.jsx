@@ -8,7 +8,10 @@ export function AuthProvider({ children }) {
         try { return JSON.parse(localStorage.getItem('user')) ?? null; }
         catch { return null; }
     });
-    const [loading, setLoading] = useState(!!localStorage.getItem('token'));
+    const [loading, setLoading] = useState(
+        // loading=true seulement si token existe MAIS pas de user en cache
+        !!localStorage.getItem('token') && !localStorage.getItem('user')
+    );
 
     useEffect(() => {
         const token = localStorage.getItem('token');
