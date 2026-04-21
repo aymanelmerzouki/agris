@@ -8,40 +8,35 @@ const NATURES_SOL = [
         value: 'argileux',
         label: 'Argileux',
         desc: 'Lourd, retient bien l\'eau',
-        // Sol argileux rouge/brun compact
-        img: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=300&q=80',
+        img: 'https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=300&q=80',
         color: 'border-orange-500 bg-orange-50',
     },
     {
         value: 'sableux',
         label: 'Sableux',
         desc: 'Léger, draine rapidement',
-        // Sol sableux / dunes
-        img: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=300&q=80',
+        img: 'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=300&q=80',
         color: 'border-yellow-400 bg-yellow-50',
     },
     {
         value: 'limoneux',
         label: 'Limoneux',
         desc: 'Équilibré, fertile',
-        // Terre agricole brune fertile
-        img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=300&q=80',
+        img: 'https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=300&q=80',
         color: 'border-amber-500 bg-amber-50',
     },
     {
         value: 'calcaire',
         label: 'Calcaire',
         desc: 'Alcalin, caillouteux',
-        // Sol rocailleux calcaire blanc/gris
-        img: 'https://images.unsplash.com/photo-1531722569936-825d4eaf4af8?w=300&q=80',
+        img: 'https://images.unsplash.com/photo-1567225557594-88d73e55f2cb?w=300&q=80',
         color: 'border-gray-400 bg-gray-50',
     },
     {
         value: 'humifere',
         label: 'Humifère',
         desc: 'Riche en matière organique',
-        // Sol noir humifère avec végétation
-        img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=300&q=80',
+        img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=300&q=80',
         color: 'border-stone-600 bg-stone-50',
     },
 ];
