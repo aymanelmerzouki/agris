@@ -210,12 +210,19 @@ export default function TodoLists() {
                                                 {t.completeeAt && <span>✅ {new Date(t.completeeAt).toLocaleDateString('fr-FR')}</span>}
                                             </div>
                                         </div>
-                                        <select
-                                            className={`text-xs px-3 py-1.5 rounded-full border-0 font-medium cursor-pointer ${STATUTS_TACHE.find(s => s.value === t.statut)?.color}`}
-                                            value={t.statut}
-                                            onChange={(e) => updateStatut(t, e.target.value)}>
-                                            {STATUTS_TACHE.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-                                        </select>
+                                        {/* Ouvrier : peut changer le statut | Manager : lecture seule */}
+                                        {user?.role === 'ouvrier' ? (
+                                            <select
+                                                className={`text-xs px-3 py-1.5 rounded-full border-0 font-medium cursor-pointer ${STATUTS_TACHE.find(s => s.value === t.statut)?.color}`}
+                                                value={t.statut}
+                                                onChange={(e) => updateStatut(t, e.target.value)}>
+                                                {STATUTS_TACHE.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+                                            </select>
+                                        ) : (
+                                            <span className={`text-xs px-3 py-1.5 rounded-full font-medium ${STATUTS_TACHE.find(s => s.value === t.statut)?.color}`}>
+                                                {STATUTS_TACHE.find(s => s.value === t.statut)?.label}
+                                            </span>
+                                        )}
                                     </div>
                                 ))}
                             </div>
