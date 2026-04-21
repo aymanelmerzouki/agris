@@ -12,7 +12,7 @@ class SuiviPlante extends Model
     protected $fillable = [
         'user_id', 'plante_id', 'dateDebut', 'DateAgriculte', 'BesoinsEau',
         'superficieHa', 'parcelle', 'stadeVegetatif', 'tauxHumidite',
-        'phSol', 'notesAgriculteur', 'statut',
+        'phSol', 'notesAgriculteur', 'statut', 'natureSol',
     ];
 
     protected $casts = ['dateDebut' => 'date', 'DateAgriculte' => 'date'];

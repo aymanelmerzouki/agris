@@ -2,6 +2,45 @@ import { useEffect, useState } from 'react';
 import api from '../../api';
 
 const STADES = ['germination', 'croissance', 'floraison', 'fructification', 'recolte'];
+
+const NATURES_SOL = [
+    {
+        value: 'argileux',
+        label: 'Argileux',
+        desc: 'Lourd, retient bien l\'eau',
+        img: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=300',
+        color: 'border-orange-400 bg-orange-50',
+    },
+    {
+        value: 'sableux',
+        label: 'Sableux',
+        desc: 'Léger, draine rapidement',
+        img: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=300',
+        color: 'border-yellow-400 bg-yellow-50',
+    },
+    {
+        value: 'limoneux',
+        label: 'Limoneux',
+        desc: 'Équilibré, fertile',
+        img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=300',
+        color: 'border-green-400 bg-green-50',
+    },
+    {
+        value: 'calcaire',
+        label: 'Calcaire',
+        desc: 'Alcalin, bien drainé',
+        img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300',
+        color: 'border-gray-400 bg-gray-50',
+    },
+    {
+        value: 'humifere',
+        label: 'Humifère',
+        desc: 'Riche en matière organique',
+        img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=300',
+        color: 'border-brown-400 bg-amber-50',
+    },
+];
+
 const STADE_COLORS = {
     germination: 'bg-yellow-100 text-yellow-700',
     croissance: 'bg-blue-100 text-blue-700',
@@ -9,14 +48,24 @@ const STADE_COLORS = {
     fructification: 'bg-orange-100 text-orange-700',
     recolte: 'bg-green-100 text-green-700',
 };
-const STATUTS = { en_cours: { label: 'En cours', color: 'bg-green-100 text-green-700' }, recolte: { label: 'Récolté', color: 'bg-emerald-100 text-emerald-700' }, abandonne: { label: 'Abandonné', color: 'bg-red-100 text-red-600' } };
+
+const STATUTS = {
+    en_cours: { label: 'En cours', color: 'bg-green-100 text-green-700' },
+    recolte: { label: 'Récolté', color: 'bg-emerald-100 text-emerald-700' },
+    abandonne: { label: 'Abandonné', color: 'bg-red-100 text-red-600' },
+};
 
 export default function SuiviPlantes() {
     const [suivis, setSuivis] = useState([]);
     const [plantes, setPlantes] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [form, setForm] = useState({ plante_id: '', dateDebut: '', BesoinsEau: '', superficieHa: '', parcelle: '', stadeVegetatif: 'germination', phSol: '', notesAgriculteur: '' });
+    const [calcul, setCalcul] = useState(null);
+    const [calcLoading, setCalcLoading] = useState(false);
+    const [form, setForm] = useState({
+        plante_id: '', dateDebut: '', natureSol: '',
+        superficieHa: '', parcelle: '', stadeVegetatif: 'germination', notesAgriculteur: '',
+    });
 
     useEffect(() => {
         Promise.all([
@@ -28,19 +77,39 @@ export default function SuiviPlantes() {
         }).finally(() => setLoading(false));
     }, []);
 
-    const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+    const set = (k) => (v) => {
+        const newForm = { ...form, [k]: v };
+        setForm(newForm);
+        // Recalcul automatique si on a plante + sol + superficie
+        if (newForm.plante_id && newForm.natureSol && newForm.superficieHa > 0) {
+            calculerAuto(newForm);
+        }
+    };
+
+    const calculerAuto = async (f) => {
+        setCalcLoading(true);
+        try {
+            const { data } = await api.post('/suivi-plantes/calculer', {
+                plante_id: f.plante_id,
+                natureSol: f.natureSol,
+                superficieHa: f.superficieHa,
+            });
+            setCalcul(data);
+        } catch {}
+        finally { setCalcLoading(false); }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { data } = await api.post('/suivi-plantes', form);
         setSuivis((prev) => [data, ...prev]);
         setShowForm(false);
-        setForm({ plante_id: '', dateDebut: '', BesoinsEau: '', superficieHa: '', parcelle: '', stadeVegetatif: 'germination', phSol: '', notesAgriculteur: '' });
+        setCalcul(null);
+        setForm({ plante_id: '', dateDebut: '', natureSol: '', superficieHa: '', parcelle: '', stadeVegetatif: 'germination', notesAgriculteur: '' });
     };
 
     return (
         <div className="min-h-screen bg-gray-50 pb-20 md:pb-8">
-            {/* Header */}
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
@@ -55,53 +124,115 @@ export default function SuiviPlantes() {
             </div>
 
             <div className="max-w-5xl mx-auto px-4 md:px-6 mt-6">
-                {/* Formulaire */}
                 {showForm && (
-                    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 mb-6">
-                        <h2 className="font-bold text-gray-800 mb-4">Enregistrer une nouvelle culture</h2>
-                        <div className="grid grid-cols-2 gap-4">
-                            <select className="input col-span-2" value={form.plante_id} onChange={set('plante_id')} required>
-                                <option value="">Choisir une plante *</option>
+                    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 mb-6 space-y-6">
+                        <h2 className="font-bold text-gray-800 text-lg">Enregistrer une nouvelle culture</h2>
+
+                        {/* Plante */}
+                        <div>
+                            <label className="text-sm font-medium text-gray-700 mb-1 block">Plante *</label>
+                            <select className="input" value={form.plante_id}
+                                onChange={(e) => set('plante_id')(e.target.value)} required>
+                                <option value="">Choisir une plante</option>
                                 {plantes.map((p) => <option key={p.id} value={p.id}>{p.nom} — {p.espece}</option>)}
                             </select>
+                        </div>
+
+                        {/* Nature du sol — sélection par images */}
+                        <div>
+                            <label className="text-sm font-medium text-gray-700 mb-3 block">
+                                Nature du sol * <span className="text-gray-400 font-normal">(choisissez celle qui ressemble le plus à votre sol)</span>
+                            </label>
+                            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                                {NATURES_SOL.map((sol) => (
+                                    <button key={sol.value} type="button"
+                                        onClick={() => set('natureSol')(sol.value)}
+                                        className={`rounded-xl border-2 overflow-hidden transition-all ${form.natureSol === sol.value ? sol.color + ' border-2 shadow-md scale-105' : 'border-gray-200 hover:border-gray-300'}`}>
+                                        <img src={sol.img} alt={sol.label}
+                                            className="w-full h-20 object-cover"
+                                            onError={(e) => { e.target.style.display = 'none'; }} />
+                                        <div className="p-2 text-center">
+                                            <p className="text-xs font-bold text-gray-800">{sol.label}</p>
+                                            <p className="text-xs text-gray-400 leading-tight">{sol.desc}</p>
+                                        </div>
+                                        {form.natureSol === sol.value && (
+                                            <div className="bg-green-500 text-white text-xs text-center py-0.5">✓ Sélectionné</div>
+                                        )}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Superficie + Parcelle */}
+                        <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="text-xs text-gray-500 mb-1 block">Date de début *</label>
-                                <input className="input" type="date" value={form.dateDebut} onChange={set('dateDebut')} required />
+                                <label className="text-sm font-medium text-gray-700 mb-1 block">Superficie (ha) *</label>
+                                <input className="input" type="number" step="0.1" min="0.01" placeholder="ex: 2.5"
+                                    value={form.superficieHa}
+                                    onChange={(e) => set('superficieHa')(e.target.value)} required />
                             </div>
                             <div>
-                                <label className="text-xs text-gray-500 mb-1 block">Besoins en eau (L/jour) *</label>
-                                <input className="input" type="number" placeholder="ex: 25" value={form.BesoinsEau} onChange={set('BesoinsEau')} required />
+                                <label className="text-sm font-medium text-gray-700 mb-1 block">Parcelle</label>
+                                <input className="input" placeholder="ex: P-12"
+                                    value={form.parcelle}
+                                    onChange={(e) => set('parcelle')(e.target.value)} />
+                            </div>
+                        </div>
+
+                        {/* Résultat calcul automatique */}
+                        {calcLoading && (
+                            <div className="bg-blue-50 rounded-xl p-4 text-sm text-blue-600 animate-pulse">
+                                Calcul en cours...
+                            </div>
+                        )}
+                        {calcul && !calcLoading && (
+                            <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-4 border border-green-100">
+                                <p className="text-sm font-semibold text-gray-700 mb-3">✅ Estimations calculées automatiquement</p>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+                                        <p className="text-2xl font-extrabold text-blue-600">{calcul.BesoinsEau} L</p>
+                                        <p className="text-xs text-gray-500">Besoins en eau / jour</p>
+                                    </div>
+                                    <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+                                        <p className="text-2xl font-extrabold text-green-600">{calcul.phSol}</p>
+                                        <p className="text-xs text-gray-500">pH du sol estimé</p>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Date + Stade */}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="text-sm font-medium text-gray-700 mb-1 block">Date de début *</label>
+                                <input className="input" type="date" value={form.dateDebut}
+                                    onChange={(e) => set('dateDebut')(e.target.value)} required />
                             </div>
                             <div>
-                                <label className="text-xs text-gray-500 mb-1 block">Superficie (ha)</label>
-                                <input className="input" type="number" step="0.1" placeholder="ex: 2.5" value={form.superficieHa} onChange={set('superficieHa')} />
-                            </div>
-                            <div>
-                                <label className="text-xs text-gray-500 mb-1 block">Parcelle</label>
-                                <input className="input" placeholder="ex: P-12" value={form.parcelle} onChange={set('parcelle')} />
-                            </div>
-                            <div>
-                                <label className="text-xs text-gray-500 mb-1 block">Stade végétatif</label>
-                                <select className="input" value={form.stadeVegetatif} onChange={set('stadeVegetatif')}>
+                                <label className="text-sm font-medium text-gray-700 mb-1 block">Stade végétatif</label>
+                                <select className="input" value={form.stadeVegetatif}
+                                    onChange={(e) => set('stadeVegetatif')(e.target.value)}>
                                     {STADES.map((s) => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
                                 </select>
                             </div>
-                            <div>
-                                <label className="text-xs text-gray-500 mb-1 block">pH du sol (0–14)</label>
-                                <input className="input" type="number" step="0.1" min="0" max="14" placeholder="ex: 6.5" value={form.phSol} onChange={set('phSol')} />
-                            </div>
-                            <div className="col-span-2">
-                                <label className="text-xs text-gray-500 mb-1 block">Notes</label>
-                                <textarea className="input" rows={3} placeholder="Observations, traitements appliqués..." value={form.notesAgriculteur} onChange={set('notesAgriculteur')} />
-                            </div>
-                            <button className="btn-primary col-span-2 py-3" type="submit">
-                                ✅ Enregistrer la culture
-                            </button>
                         </div>
+
+                        <div>
+                            <label className="text-sm font-medium text-gray-700 mb-1 block">Notes</label>
+                            <textarea className="input" rows={2} placeholder="Observations..."
+                                value={form.notesAgriculteur}
+                                onChange={(e) => set('notesAgriculteur')(e.target.value)} />
+                        </div>
+
+                        <button className="btn-primary w-full py-3 text-base" type="submit"
+                            disabled={!form.natureSol || !calcul}>
+                            ✅ Enregistrer la culture
+                        </button>
+                        {!calcul && <p className="text-xs text-center text-gray-400">Sélectionnez une plante, un sol et une superficie pour continuer</p>}
                     </form>
                 )}
 
-                {/* Liste */}
+                {/* Liste cultures */}
                 {loading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {[...Array(3)].map((_, i) => <div key={i} className="bg-gray-100 rounded-2xl h-40 animate-pulse" />)}
@@ -110,7 +241,6 @@ export default function SuiviPlantes() {
                     <div className="text-center py-20 text-gray-400">
                         <p className="text-5xl mb-3">🌱</p>
                         <p className="font-medium">Aucune culture enregistrée.</p>
-                        <p className="text-sm mt-1">Cliquez sur "+ Nouvelle culture" pour commencer.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -125,11 +255,15 @@ export default function SuiviPlantes() {
                                         {STATUTS[s.statut]?.label}
                                     </span>
                                 </div>
-
                                 <div className="flex flex-wrap gap-2 mb-3">
                                     {s.stadeVegetatif && (
                                         <span className={`text-xs px-2 py-1 rounded-full font-medium ${STADE_COLORS[s.stadeVegetatif]}`}>
                                             {s.stadeVegetatif}
+                                        </span>
+                                    )}
+                                    {s.natureSol && (
+                                        <span className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-full">
+                                            🪨 {s.natureSol}
                                         </span>
                                     )}
                                     {s.parcelle && (
@@ -138,7 +272,6 @@ export default function SuiviPlantes() {
                                         </span>
                                     )}
                                 </div>
-
                                 <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
                                     <div className="bg-blue-50 rounded-lg p-2 text-center">
                                         <p className="text-blue-600 font-bold text-base">{s.BesoinsEau}L</p>
@@ -149,11 +282,9 @@ export default function SuiviPlantes() {
                                         <p>pH sol</p>
                                     </div>
                                 </div>
-
                                 {s.notesAgriculteur && (
                                     <p className="text-xs text-gray-400 mt-3 line-clamp-2 italic">"{s.notesAgriculteur}"</p>
                                 )}
-
                                 <p className="text-xs text-gray-300 mt-3">
                                     Depuis le {new Date(s.dateDebut).toLocaleDateString('fr-FR')}
                                 </p>

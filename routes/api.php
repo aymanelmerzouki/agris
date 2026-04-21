@@ -44,6 +44,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Agriculteur + Manager
     Route::middleware('role:agriculteur,manager')->group(function () {
+        Route::post('suivi-plantes/calculer', [SuiviPlanteController::class, 'calculer']);
         Route::apiResource('suivi-plantes', SuiviPlanteController::class);
         Route::apiResource('stocks', StockController::class);
     });
