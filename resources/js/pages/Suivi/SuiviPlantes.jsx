@@ -8,36 +8,41 @@ const NATURES_SOL = [
         value: 'argileux',
         label: 'Argileux',
         desc: 'Lourd, retient bien l\'eau',
-        img: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=300',
-        color: 'border-orange-400 bg-orange-50',
+        bg: 'bg-gradient-to-b from-orange-800 to-orange-950',
+        texture: '🟫',
+        color: 'border-orange-500 bg-orange-50',
     },
     {
         value: 'sableux',
         label: 'Sableux',
         desc: 'Léger, draine rapidement',
-        img: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=300',
+        bg: 'bg-gradient-to-b from-yellow-200 to-yellow-400',
+        texture: '🏜️',
         color: 'border-yellow-400 bg-yellow-50',
     },
     {
         value: 'limoneux',
         label: 'Limoneux',
         desc: 'Équilibré, fertile',
-        img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=300',
-        color: 'border-green-400 bg-green-50',
+        bg: 'bg-gradient-to-b from-amber-600 to-amber-800',
+        texture: '🌱',
+        color: 'border-amber-500 bg-amber-50',
     },
     {
         value: 'calcaire',
         label: 'Calcaire',
-        desc: 'Alcalin, bien drainé',
-        img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300',
+        desc: 'Alcalin, caillouteux',
+        bg: 'bg-gradient-to-b from-gray-300 to-gray-500',
+        texture: '🪨',
         color: 'border-gray-400 bg-gray-50',
     },
     {
         value: 'humifere',
         label: 'Humifère',
         desc: 'Riche en matière organique',
-        img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=300',
-        color: 'border-brown-400 bg-amber-50',
+        bg: 'bg-gradient-to-b from-stone-800 to-stone-950',
+        texture: '🍂',
+        color: 'border-stone-600 bg-stone-50',
     },
 ];
 
@@ -73,7 +78,7 @@ export default function SuiviPlantes() {
             api.get('/plantes?per_page=100'),
         ]).then(([s, p]) => {
             setSuivis(s.data.data ?? []);
-            setPlantes(p.data.data ?? []);
+            setPlantes(p.data.data ?? p.data ?? []);
         }).finally(() => setLoading(false));
     }, []);
 
@@ -147,10 +152,10 @@ export default function SuiviPlantes() {
                                 {NATURES_SOL.map((sol) => (
                                     <button key={sol.value} type="button"
                                         onClick={() => set('natureSol')(sol.value)}
-                                        className={`rounded-xl border-2 overflow-hidden transition-all ${form.natureSol === sol.value ? sol.color + ' border-2 shadow-md scale-105' : 'border-gray-200 hover:border-gray-300'}`}>
-                                        <img src={sol.img} alt={sol.label}
-                                            className="w-full h-20 object-cover"
-                                            onError={(e) => { e.target.style.display = 'none'; }} />
+                                        className={`rounded-xl border-2 overflow-hidden transition-all ${form.natureSol === sol.value ? sol.color + ' shadow-md scale-105' : 'border-gray-200 hover:border-gray-300'}`}>
+                                        <div className={`w-full h-20 ${sol.bg} flex items-center justify-center text-3xl`}>
+                                            {sol.texture}
+                                        </div>
                                         <div className="p-2 text-center">
                                             <p className="text-xs font-bold text-gray-800">{sol.label}</p>
                                             <p className="text-xs text-gray-400 leading-tight">{sol.desc}</p>
