@@ -25,6 +25,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',      [AuthController::class, 'me']);
+    Route::get('/ouvriers', fn() => response()->json(
+        \App\Models\User::where('role', 'ouvrier')->select('id','name','poste')->get()
+    ));
 
     // Accessible à tous les rôles
     Route::apiResource('plantes', PlanteController::class);
