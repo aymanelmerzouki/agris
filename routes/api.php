@@ -14,6 +14,7 @@ use App\Http\Controllers\TacheController;
 use App\Http\Controllers\TodoListController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewsController;
 
 // Auth publique
@@ -25,6 +26,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',      [AuthController::class, 'me']);
+    Route::get('/dashboard-stats', [DashboardController::class, 'index']);
     Route::get('/ouvriers', fn() => response()->json(
         \App\Models\User::where('role', 'ouvrier')->select('id','name','poste')->get()
     ));
