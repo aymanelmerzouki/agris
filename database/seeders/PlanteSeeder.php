@@ -1,10 +1,7 @@
 <?php
-
 namespace Database\Seeders;
-
 use App\Models\Plante;
 use Illuminate\Database\Seeder;
-
 class PlanteSeeder extends Seeder
 {
     public function run(): void
@@ -24,7 +21,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 60000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
-                'imageUrl' => 'https://images.unsplash.com/photo-1546094096-0df4bcaaa337?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Blé dur',
@@ -40,7 +37,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 3500,
                 'typeIrrigation' => 'pluviale',
                 'estBio' => false,
-                'imageUrl' => 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Olivier',
@@ -56,7 +53,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 8000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => true,
-                'imageUrl' => 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Arganier',
@@ -72,7 +69,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 500,
                 'typeIrrigation' => 'pluviale',
                 'estBio' => true,
-                'imageUrl' => 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Clémentine',
@@ -88,7 +85,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 25000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
-                'imageUrl' => 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab12?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Pomme de terre',
@@ -104,7 +101,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 25000,
                 'typeIrrigation' => 'aspersion',
                 'estBio' => false,
-                'imageUrl' => 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Menthe poivrée',
@@ -120,7 +117,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 15000,
                 'typeIrrigation' => 'aspersion',
                 'estBio' => true,
-                'imageUrl' => 'https://images.unsplash.com/photo-1628556270448-4d4e4148e1b1?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Cactus figuier de Barbarie',
@@ -136,7 +133,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 20000,
                 'typeIrrigation' => 'pluviale',
                 'estBio' => true,
-                'imageUrl' => 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Oignon',
@@ -152,7 +149,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 30000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
-                'imageUrl' => 'https://images.unsplash.com/photo-1508747703725-719777637510?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Safran',
@@ -168,7 +165,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 6,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => true,
-                'imageUrl' => 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Pastèque',
@@ -184,7 +181,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 35000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
-                'imageUrl' => 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600',
+                'imageUrl' => 'https:
             ],
             [
                 'nom' => 'Dattier',
@@ -200,10 +197,9 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 10000,
                 'typeIrrigation' => 'submersion',
                 'estBio' => true,
-                'imageUrl' => 'https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=600',
+                'imageUrl' => 'https:
             ],
         ];
-
         foreach ($plantes as $data) {
             Plante::firstOrCreate(['nom' => $data['nom']], $data);
         }

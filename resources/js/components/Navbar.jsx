@@ -35,7 +35,7 @@ export default function Navbar() {
 
     return (
         <>
-            {/* Top bar desktop */}
+            
             <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-700 shadow-sm hidden md:flex items-center justify-between px-6 py-3">
                 <Link to="/dashboard" className="flex items-center gap-2">
                     <span className="text-2xl">🌱</span>
@@ -71,7 +71,7 @@ export default function Navbar() {
                 </div>
             </header>
 
-            {/* Bottom nav mobile */}
+            
             <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-t border-gray-100 flex md:hidden">
                 {navItems.slice(0, 5).map((item) => (
                     <Link key={item.to} to={item.to}

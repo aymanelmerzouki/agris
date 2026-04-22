@@ -24,9 +24,9 @@ const SOL_COLORS = {
 function StatCard({ icon: Icon, label, value, sub, gradient, glow }) {
     return (
         <div className="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-100/50 dark:border-gray-700/50 shadow-xl shadow-gray-900/5 p-5 flex items-center gap-4 overflow-hidden">
-            {/* Glow background */}
+            
             <div className={`absolute -top-6 -left-6 w-24 h-24 rounded-full opacity-10 blur-2xl ${glow}`} />
-            {/* Icon container with gradient */}
+            
             <div className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${gradient}`}>
                 <Icon size={22} className="text-white" strokeWidth={2} />
             </div>
@@ -95,7 +95,6 @@ export default function Dashboard() {
         api.get('/news').then((r) => setNews(r.data?.slice(0, 4) ?? []));
     }, []);
 
-    // Doughnut
     const solLabels = stats ? Object.keys(stats.repartition_sols) : [];
     const solValues = stats ? Object.values(stats.repartition_sols) : [];
     const doughnutData = {
@@ -115,7 +114,6 @@ export default function Dashboard() {
         },
     };
 
-    // Line chart avec dégradé
     const evoLabels = stats?.evolution_cultures?.map((e) => e.mois) ?? [];
     const evoValues = stats?.evolution_cultures?.map((e) => e.total) ?? [];
 
@@ -167,7 +165,7 @@ export default function Dashboard() {
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20 md:pb-8">
-            {/* Hero */}
+            
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-6xl mx-auto">
                     <p className="text-green-100 text-sm">Bienvenue sur Agris</p>
@@ -181,7 +179,7 @@ export default function Dashboard() {
             </div>
 
             <div className="max-w-6xl mx-auto px-4 md:px-6 mt-6 space-y-6">
-                {/* Stat Cards */}
+                
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <StatCard
                         icon={Sprout}
@@ -209,9 +207,9 @@ export default function Dashboard() {
                     />
                 </div>
 
-                {/* Graphiques */}
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Courbe */}
+                    
                     <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-100/50 dark:border-gray-700/50 shadow-xl shadow-gray-900/5 p-5">
                         <div className="flex items-center gap-2 mb-1">
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center">
@@ -227,7 +225,7 @@ export default function Dashboard() {
                         )}
                     </div>
 
-                    {/* Donut */}
+                    
                     <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-100/50 dark:border-gray-700/50 shadow-xl shadow-gray-900/5 p-5">
                         <div className="flex items-center gap-2 mb-1">
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
@@ -254,7 +252,7 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                {/* Actualités */}
+                
                 <div>
                     <div className="flex items-center justify-between mb-4">
                         <h2 className="text-lg font-bold text-gray-900 dark:text-white">Actualités agricoles</h2>

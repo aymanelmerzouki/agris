@@ -66,7 +66,7 @@ export default function TodoLists() {
 
     return (
         <div className="min-h-screen bg-gray-50 pb-20 md:pb-8">
-            {/* Header */}
+            
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
                     <div>
@@ -83,16 +83,16 @@ export default function TodoLists() {
             </div>
 
             <div className="max-w-6xl mx-auto px-4 md:px-6 mt-6 flex gap-6">
-                {/* Colonne gauche — listes */}
+                
                 <div className="w-72 flex-shrink-0">
-                    {/* Formulaire nouvelle liste */}
+                    
                     {showListForm && user?.role === 'manager' && (
                         <form onSubmit={handleCreateList} className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 mb-4 space-y-3">
                             <h3 className="font-bold text-gray-800 text-sm">Nouvelle liste</h3>
 
                             <input className="input" placeholder="Titre *" value={listForm.titre} onChange={setL('titre')} required />
 
-                            {/* Sélecteur ouvrier par nom */}
+                            
                             <div>
                                 <label className="text-xs text-gray-500 mb-1 block">Assigner à un ouvrier *</label>
                                 <select className="input" value={listForm.ouvrier_id} onChange={setL('ouvrier_id')} required>
@@ -124,7 +124,7 @@ export default function TodoLists() {
                         </form>
                     )}
 
-                    {/* Liste des todo-lists */}
+                    
                     <div className="space-y-2">
                         {lists.length === 0 && <p className="text-gray-400 text-sm text-center py-8">Aucune liste.</p>}
                         {lists.map((l) => (
@@ -141,7 +141,7 @@ export default function TodoLists() {
                     </div>
                 </div>
 
-                {/* Colonne droite — tâches */}
+                
                 <div className="flex-1">
                     {!selected ? (
                         <div className="text-center py-20 text-gray-400">
@@ -166,12 +166,12 @@ export default function TodoLists() {
                                 )}
                             </div>
 
-                            {/* Formulaire nouvelle tâche */}
+                            
                             {showTacheForm && (
                                 <form onSubmit={handleCreateTache} className="bg-white rounded-2xl shadow-md border border-gray-100 p-4 mb-4 grid grid-cols-2 gap-3">
                                     <input className="input col-span-2" placeholder="Nom de la tâche *" value={tacheForm.nomTache} onChange={setT('nomTache')} required />
 
-                                    {/* Nature de la tâche */}
+                                    
                                     <div>
                                         <label className="text-xs text-gray-500 mb-1 block">Nature de la tâche</label>
                                         <select className="input" value={tacheForm.categorie} onChange={setT('categorie')}>
@@ -194,7 +194,7 @@ export default function TodoLists() {
                                 </form>
                             )}
 
-                            {/* Liste des tâches */}
+                            
                             <div className="space-y-2">
                                 {taches.length === 0 && <p className="text-gray-400 text-sm text-center py-10">Aucune tâche dans cette liste.</p>}
                                 {taches.map((t) => (
@@ -210,7 +210,7 @@ export default function TodoLists() {
                                                 {t.completeeAt && <span>✅ {new Date(t.completeeAt).toLocaleDateString('fr-FR')}</span>}
                                             </div>
                                         </div>
-                                        {/* Ouvrier : peut changer le statut | Manager : lecture seule */}
+                                        
                                         {user?.role === 'ouvrier' ? (
                                             <select
                                                 className={`text-xs px-3 py-1.5 rounded-full border-0 font-medium cursor-pointer ${STATUTS_TACHE.find(s => s.value === t.statut)?.color}`}

@@ -17,7 +17,6 @@ api.interceptors.response.use(
         if (err.response?.status === 401) {
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            // Redirect dur — évite toute boucle React Router
             if (!window.location.pathname.includes('/login')) {
                 window.location.href = '/login';
             }

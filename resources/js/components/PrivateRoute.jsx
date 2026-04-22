@@ -4,7 +4,6 @@ import { useAuth } from '../contexts/AuthContext';
 export default function PrivateRoute({ children, roles }) {
     const { user, loading } = useAuth();
 
-    // Si on a un user en cache, on affiche directement sans attendre /api/me
     if (!user && loading) return (
         <div className="flex items-center justify-center h-screen bg-gray-50">
             <div className="flex flex-col items-center gap-3">

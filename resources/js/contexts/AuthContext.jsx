@@ -9,7 +9,6 @@ export function AuthProvider({ children }) {
         catch { return null; }
     });
     const [loading, setLoading] = useState(
-        // loading=true seulement si token existe MAIS pas de user en cache
         !!localStorage.getItem('token') && !localStorage.getItem('user')
     );
 

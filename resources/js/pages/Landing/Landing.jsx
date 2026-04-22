@@ -25,7 +25,6 @@ const planteShowcase = [
     { nom: 'Clémentine', img: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab12?w=300', tag: 'Souss' },
 ];
 
-// Fallback news si pas de clé API
 const fallbackNews = [
     {
         title: 'Le Maroc renforce son plan Génération Green 2020-2030',
@@ -94,7 +93,7 @@ export default function Landing() {
     return (
         <div className="min-h-screen bg-white pb-16 md:pb-0">
 
-            {/* Navbar desktop */}
+            
             <nav className="fixed top-0 w-full z-50 bg-white/90 backdrop-blur border-b border-gray-100 px-6 py-4 hidden md:flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <span className="text-2xl">🌱</span>
@@ -106,7 +105,7 @@ export default function Landing() {
                 </div>
             </nav>
 
-            {/* Hero */}
+            
             <section className="relative pt-8 md:pt-24 pb-16 overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-br from-green-50 via-emerald-50 to-white" />
                 <div className="absolute top-0 right-0 w-1/2 h-full opacity-10"
@@ -141,7 +140,7 @@ export default function Landing() {
                 </div>
             </section>
 
-            {/* Stats */}
+            
             <section className="bg-green-700 py-10">
                 <div className="max-w-4xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center text-white">
                     {stats.map((s) => (
@@ -153,7 +152,7 @@ export default function Landing() {
                 </div>
             </section>
 
-            {/* Features */}
+            
             <section className="bg-gray-50 py-16" id="fonctionnalites">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="text-center mb-12">
@@ -174,7 +173,7 @@ export default function Landing() {
                 </div>
             </section>
 
-            {/* Plantes showcase */}
+            
             <section className="py-16 max-w-6xl mx-auto px-6" id="plantes">
                 <div className="text-center mb-10">
                     <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Plantes marocaines référencées</h2>
@@ -194,7 +193,7 @@ export default function Landing() {
                 </div>
             </section>
 
-            {/* CTA */}
+            
             <section className="py-16 bg-gradient-to-r from-green-600 to-emerald-600 text-white text-center" id="inscription">
                 <h2 className="text-2xl md:text-3xl font-bold mb-4">Prêt à moderniser votre exploitation ?</h2>
                 <p className="text-green-100 mb-8 max-w-md mx-auto text-sm">Rejoignez les agriculteurs marocains qui utilisent Agris pour optimiser leurs cultures.</p>
@@ -203,12 +202,12 @@ export default function Landing() {
                 </Link>
             </section>
 
-            {/* Footer desktop */}
+            
             <footer className="bg-gray-900 text-gray-400 py-6 text-center text-sm hidden md:block">
                 <p>🌱 Agris — Plateforme agricole marocaine · {new Date().getFullYear()}</p>
             </footer>
 
-            {/* Bottom nav mobile */}
+            
             <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 flex md:hidden">
                 {[
                     { href: '#actualites', icon: '📰', label: 'Actualités' },

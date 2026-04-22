@@ -85,7 +85,6 @@ export default function SuiviPlantes() {
     const set = (k) => (v) => {
         const newForm = { ...form, [k]: v };
         setForm(newForm);
-        // Recalcul automatique si on a plante + sol + superficie
         if (newForm.plante_id && newForm.natureSol && newForm.superficieHa > 0) {
             calculerAuto(newForm);
         }
@@ -133,7 +132,7 @@ export default function SuiviPlantes() {
                     <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 mb-6 space-y-6">
                         <h2 className="font-bold text-gray-800 text-lg">Enregistrer une nouvelle culture</h2>
 
-                        {/* Plante */}
+                        
                         <div>
                             <label className="text-sm font-medium text-gray-700 mb-1 block">Plante *</label>
                             <select className="input" value={form.plante_id}
@@ -143,7 +142,7 @@ export default function SuiviPlantes() {
                             </select>
                         </div>
 
-                        {/* Nature du sol — sélection par images */}
+                        
                         <div>
                             <label className="text-sm font-medium text-gray-700 mb-3 block">
                                 Nature du sol * <span className="text-gray-400 font-normal">(choisissez celle qui ressemble le plus à votre sol)</span>
@@ -169,7 +168,7 @@ export default function SuiviPlantes() {
                             </div>
                         </div>
 
-                        {/* Superficie + Parcelle */}
+                        
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="text-sm font-medium text-gray-700 mb-1 block">Superficie (ha) *</label>
@@ -185,7 +184,7 @@ export default function SuiviPlantes() {
                             </div>
                         </div>
 
-                        {/* Résultat calcul automatique */}
+                        
                         {calcLoading && (
                             <div className="bg-blue-50 rounded-xl p-4 text-sm text-blue-600 animate-pulse">
                                 Calcul en cours...
@@ -207,7 +206,7 @@ export default function SuiviPlantes() {
                             </div>
                         )}
 
-                        {/* Date + Stade */}
+                        
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="text-sm font-medium text-gray-700 mb-1 block">Date de début *</label>
@@ -238,7 +237,7 @@ export default function SuiviPlantes() {
                     </form>
                 )}
 
-                {/* Liste cultures */}
+                
                 {loading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {[...Array(3)].map((_, i) => <div key={i} className="bg-gray-100 rounded-2xl h-40 animate-pulse" />)}
