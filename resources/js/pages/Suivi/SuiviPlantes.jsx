@@ -9,6 +9,7 @@ const NATURES_SOL = [
         label: 'Argileux',
         desc: 'Lourd, retient bien l\'eau',
         img: '/images/sols/argileux.webp',
+        fallback: 'https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=300&q=80',
         color: 'border-orange-500 bg-orange-50',
     },
     {
@@ -16,6 +17,7 @@ const NATURES_SOL = [
         label: 'Sableux',
         desc: 'Léger, draine rapidement',
         img: '/images/sols/sableux.webp',
+        fallback: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=300&q=80',
         color: 'border-yellow-400 bg-yellow-50',
     },
     {
@@ -23,6 +25,7 @@ const NATURES_SOL = [
         label: 'Limoneux',
         desc: 'Équilibré, fertile',
         img: '/images/sols/limoneux.webp',
+        fallback: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=300&q=80',
         color: 'border-amber-500 bg-amber-50',
     },
     {
@@ -30,6 +33,7 @@ const NATURES_SOL = [
         label: 'Calcaire',
         desc: 'Alcalin, caillouteux',
         img: '/images/sols/calcaire.webp',
+        fallback: 'https://images.unsplash.com/photo-1531722569936-825d4eaf4af8?w=300&q=80',
         color: 'border-gray-400 bg-gray-50',
     },
     {
@@ -37,6 +41,7 @@ const NATURES_SOL = [
         label: 'Humifère',
         desc: 'Riche en matière organique',
         img: '/images/sols/humifere.webp',
+        fallback: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=300&q=80',
         color: 'border-stone-600 bg-stone-50',
     },
 ];
@@ -150,11 +155,8 @@ export default function SuiviPlantes() {
                                         className={`rounded-xl border-2 overflow-hidden transition-all ${form.natureSol === sol.value ? sol.color + ' shadow-md scale-105' : 'border-gray-200 hover:border-gray-300'}`}>
                                         <img src={sol.img} alt={sol.label}
                                             className="w-full h-20 object-cover bg-gray-200"
-                                            onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                                            onError={(e) => { e.target.onerror=null; e.target.src=sol.fallback; }}
                                         />
-                                        <div className="w-full h-20 bg-gray-200 items-center justify-center text-gray-400 text-xs hidden">
-                                            {sol.label}
-                                        </div>
                                         <div className="p-2 text-center">
                                             <p className="text-xs font-bold text-gray-800">{sol.label}</p>
                                             <p className="text-xs text-gray-400 leading-tight">{sol.desc}</p>
