@@ -8,8 +8,12 @@ use Illuminate\Http\Request;
 
 class TacheController extends Controller
 {
-    public function index(TodoList $todoList)
+    public function index(Request $request, TodoList $todoList)
     {
+        $user = $request->user();
+        if ($user->role === 'ouvrier' && $todoList->ouvrier_id !== $user->id) {
+            abort(403);
+        }
         return response()->json($todoList->taches()->orderBy('priorite')->get());
     }
 
@@ -31,6 +35,9 @@ class TacheController extends Controller
 
     public function update(Request $request, TodoList $todoList, Tache $tache)
     {
+        $this->authorize('update', $tache);
+
+        $user = $request->user();
         $data = $request->validate([
             'nomTache'        => 'sometimes|string|max:255',
             'description'     => 'nullable|string',
@@ -41,7 +48,10 @@ class TacheController extends Controller
             'dureeEstimeeMin' => 'nullable|integer|min:1',
         ]);
 
-        // Sync estFaite avec statut
+        if ($user->role === 'ouvrier') {
+            $data = array_intersect_key($data, array_flip(['statut', 'estFaite']));
+        }
+
         if (isset($data['statut'])) {
             $data['estFaite'] = $data['statut'] === 'termine';
             if ($data['estFaite'] && !$tache->estFaite) {
@@ -58,6 +68,7 @@ class TacheController extends Controller
 
     public function destroy(TodoList $todoList, Tache $tache)
     {
+        $this->authorize('delete', $tache);
         $tache->delete();
         $todoList->decrement('nbreTaches');
         return response()->json(null, 204);
