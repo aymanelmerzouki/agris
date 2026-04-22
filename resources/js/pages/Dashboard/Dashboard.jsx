@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../api';
+import { Sprout, ShoppingCart, BookOpen, TrendingUp } from 'lucide-react';
 import {
     Chart as ChartJS,
     ArcElement, Tooltip, Legend,
@@ -19,15 +20,18 @@ const SOL_COLORS = {
     humifere: '#44403c',
 };
 
-function StatCard({ icon, label, value, sub, color }) {
+function StatCard({ icon: Icon, label, value, sub, gradient, glow }) {
     return (
-        <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex items-center gap-4`}>
-            <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${color}`}>
-                {icon}
+        <div className="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-100/50 dark:border-gray-700/50 shadow-xl shadow-gray-900/5 p-5 flex items-center gap-4 overflow-hidden">
+            {/* Glow background */}
+            <div className={`absolute -top-6 -left-6 w-24 h-24 rounded-full opacity-10 blur-2xl ${glow}`} />
+            {/* Icon container with gradient */}
+            <div className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${gradient}`}>
+                <Icon size={22} className="text-white" strokeWidth={2} />
             </div>
-            <div>
-                <p className="text-2xl font-extrabold text-gray-900">{value}</p>
-                <p className="text-sm font-medium text-gray-700">{label}</p>
+            <div className="relative z-10">
+                <p className="text-2xl font-extrabold text-gray-900 dark:text-white">{value}</p>
+                <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">{label}</p>
                 {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
             </div>
         </div>
@@ -40,41 +44,64 @@ function formatDate(d) {
 
 export default function Dashboard() {
     const { user } = useAuth();
-    const [stats, setStats]   = useState(null);
-    const [news, setNews]     = useState([]);
+    const [stats, setStats] = useState(null);
+    const [news, setNews]   = useState([]);
+    const chartRef = useRef(null);
 
     useEffect(() => {
         api.get('/dashboard-stats').then((r) => setStats(r.data));
         api.get('/news').then((r) => setNews(r.data?.slice(0, 4) ?? []));
     }, []);
 
-    // Données graphique camembert sols
-    const solLabels  = stats ? Object.keys(stats.repartition_sols) : [];
-    const solValues  = stats ? Object.values(stats.repartition_sols) : [];
+    // Doughnut
+    const solLabels = stats ? Object.keys(stats.repartition_sols) : [];
+    const solValues = stats ? Object.values(stats.repartition_sols) : [];
     const doughnutData = {
         labels: solLabels.map((s) => s.charAt(0).toUpperCase() + s.slice(1)),
         datasets: [{
             data: solValues,
             backgroundColor: solLabels.map((s) => SOL_COLORS[s] ?? '#10b981'),
-            borderWidth: 2,
-            borderColor: '#fff',
+            borderWidth: 3,
+            borderColor: 'transparent',
+            hoverOffset: 6,
         }],
     };
+    const doughnutOptions = {
+        cutout: '70%',
+        plugins: {
+            legend: { position: 'bottom', labels: { padding: 16, font: { size: 12 } } },
+        },
+    };
 
-    // Données graphique courbe évolution
+    // Line chart avec dégradé
     const evoLabels = stats?.evolution_cultures?.map((e) => e.mois) ?? [];
     const evoValues = stats?.evolution_cultures?.map((e) => e.total) ?? [];
+
+    const getGradient = (ctx, chartArea) => {
+        if (!chartArea) return '#16a34a';
+        const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+        gradient.addColorStop(0, 'rgba(22,163,74,0.35)');
+        gradient.addColorStop(1, 'rgba(22,163,74,0)');
+        return gradient;
+    };
+
     const lineData = {
         labels: evoLabels,
         datasets: [{
             label: 'Nouvelles cultures',
             data: evoValues,
             borderColor: '#16a34a',
-            backgroundColor: 'rgba(22,163,74,0.1)',
+            backgroundColor: (context) => {
+                const { ctx, chartArea } = context.chart;
+                return getGradient(ctx, chartArea);
+            },
             fill: true,
-            tension: 0.4,
+            tension: 0.45,
             pointBackgroundColor: '#16a34a',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
             pointRadius: 5,
+            pointHoverRadius: 7,
         }],
     };
 
@@ -82,19 +109,28 @@ export default function Dashboard() {
         responsive: true,
         plugins: { legend: { display: false } },
         scales: {
-            y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f3f4f6' } },
-            x: { grid: { display: false } },
+            y: {
+                beginAtZero: true,
+                ticks: { stepSize: 1, color: '#9ca3af' },
+                grid: { color: 'rgba(156,163,175,0.1)', drawBorder: false },
+                border: { display: false },
+            },
+            x: {
+                grid: { display: false },
+                ticks: { color: '#9ca3af' },
+                border: { display: false },
+            },
         },
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-20 md:pb-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20 md:pb-8">
             {/* Hero */}
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-6xl mx-auto">
                     <p className="text-green-100 text-sm">Bienvenue sur Agris</p>
                     <h1 className="text-2xl md:text-3xl font-extrabold text-white mt-1">
-                        Bonjour, {user?.name} 👋
+                        Bonjour, {user?.name}
                     </h1>
                     <p className="text-green-200 text-sm mt-1 capitalize">
                         {user?.role}{user?.nomEntreprise ? ` · ${user.nomEntreprise}` : ''}
@@ -105,33 +141,64 @@ export default function Dashboard() {
             <div className="max-w-6xl mx-auto px-4 md:px-6 mt-6 space-y-6">
                 {/* Stat Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <StatCard icon="🌿" label="Cultures actives" value={stats?.stats.cultures_actives ?? '—'} sub="en cours de suivi" color="bg-green-50" />
-                    <StatCard icon="🛒" label="Offres disponibles" value={stats?.stats.offres_disponibles ?? '—'} sub="sur le marketplace" color="bg-blue-50" />
-                    <StatCard icon="📚" label="Plantes référencées" value={stats?.stats.total_plantes ?? '—'} sub="dans la bibliothèque" color="bg-amber-50" />
+                    <StatCard
+                        icon={Sprout}
+                        label="Cultures actives"
+                        value={stats?.stats.cultures_actives ?? '—'}
+                        sub="en cours de suivi"
+                        gradient="bg-gradient-to-br from-emerald-400 to-green-600"
+                        glow="bg-green-400"
+                    />
+                    <StatCard
+                        icon={ShoppingCart}
+                        label="Offres disponibles"
+                        value={stats?.stats.offres_disponibles ?? '—'}
+                        sub="sur le marketplace"
+                        gradient="bg-gradient-to-br from-blue-400 to-blue-600"
+                        glow="bg-blue-400"
+                    />
+                    <StatCard
+                        icon={BookOpen}
+                        label="Plantes référencées"
+                        value={stats?.stats.total_plantes ?? '—'}
+                        sub="dans la bibliothèque"
+                        gradient="bg-gradient-to-br from-amber-400 to-orange-500"
+                        glow="bg-amber-400"
+                    />
                 </div>
 
                 {/* Graphiques */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Courbe évolution */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-                        <h3 className="font-bold text-gray-800 mb-1">📈 Évolution des cultures</h3>
-                        <p className="text-xs text-gray-400 mb-4">Nouvelles cultures enregistrées par mois</p>
+                    {/* Courbe */}
+                    <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-100/50 dark:border-gray-700/50 shadow-xl shadow-gray-900/5 p-5">
+                        <div className="flex items-center gap-2 mb-1">
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center">
+                                <TrendingUp size={16} className="text-white" />
+                            </div>
+                            <h3 className="font-bold text-gray-800 dark:text-white">Évolution des cultures</h3>
+                        </div>
+                        <p className="text-xs text-gray-400 mb-4 ml-10">Nouvelles cultures par mois</p>
                         {stats ? (
                             <Line data={lineData} options={lineOptions} />
                         ) : (
-                            <div className="h-48 bg-gray-100 rounded-xl animate-pulse" />
+                            <div className="h-48 bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
                         )}
                     </div>
 
-                    {/* Camembert sols */}
-                    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-                        <h3 className="font-bold text-gray-800 mb-1">🪨 Répartition des sols</h3>
-                        <p className="text-xs text-gray-400 mb-4">Types de sols utilisés dans vos cultures</p>
+                    {/* Donut */}
+                    <div className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-100/50 dark:border-gray-700/50 shadow-xl shadow-gray-900/5 p-5">
+                        <div className="flex items-center gap-2 mb-1">
+                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+                            </div>
+                            <h3 className="font-bold text-gray-800 dark:text-white">Répartition des sols</h3>
+                        </div>
+                        <p className="text-xs text-gray-400 mb-4 ml-10">Types de sols dans vos cultures</p>
                         {stats ? (
                             solValues.length > 0 ? (
                                 <div className="flex items-center justify-center">
-                                    <div className="w-56 h-56">
-                                        <Doughnut data={doughnutData} options={{ plugins: { legend: { position: 'bottom' } } }} />
+                                    <div className="w-52 h-52">
+                                        <Doughnut data={doughnutData} options={doughnutOptions} />
                                     </div>
                                 </div>
                             ) : (
@@ -140,7 +207,7 @@ export default function Dashboard() {
                                 </div>
                             )
                         ) : (
-                            <div className="h-48 bg-gray-100 rounded-xl animate-pulse" />
+                            <div className="h-48 bg-gray-100 dark:bg-gray-700 rounded-xl animate-pulse" />
                         )}
                     </div>
                 </div>
@@ -148,21 +215,21 @@ export default function Dashboard() {
                 {/* Actualités */}
                 <div>
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-lg font-bold text-gray-900">📰 Actualités agricoles</h2>
-                        <span className="flex items-center gap-1.5 text-xs bg-green-50 text-green-600 border border-green-100 px-3 py-1.5 rounded-full font-medium">
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-white">Actualités agricoles</h2>
+                        <span className="flex items-center gap-1.5 text-xs bg-green-50 dark:bg-green-900/30 text-green-600 border border-green-100 dark:border-green-800 px-3 py-1.5 rounded-full font-medium">
                             <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                             En direct
                         </span>
                     </div>
                     {news.length === 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {[...Array(4)].map((_, i) => <div key={i} className="bg-gray-100 rounded-2xl h-48 animate-pulse" />)}
+                            {[...Array(4)].map((_, i) => <div key={i} className="bg-gray-100 dark:bg-gray-800 rounded-2xl h-48 animate-pulse" />)}
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                             {news.map((a, i) => (
                                 <a key={i} href={a.url} target="_blank" rel="noreferrer"
-                                    className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition group">
+                                    className="bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100/50 dark:border-gray-700/50 rounded-2xl overflow-hidden shadow-lg shadow-gray-900/5 hover:shadow-xl transition-all duration-300 group">
                                     <div className="h-32 overflow-hidden">
                                         <img src={a.image || 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400'}
                                             alt={a.title}
@@ -170,7 +237,7 @@ export default function Dashboard() {
                                             onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400'; }} />
                                     </div>
                                     <div className="p-3">
-                                        <p className="text-xs font-semibold text-gray-800 line-clamp-2 leading-snug">{a.title}</p>
+                                        <p className="text-xs font-semibold text-gray-800 dark:text-gray-200 line-clamp-2 leading-snug">{a.title}</p>
                                         <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
                                             <span>{a.source}</span>
                                             <span>{formatDate(a.date)}</span>
