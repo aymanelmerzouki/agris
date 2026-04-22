@@ -8,35 +8,35 @@ const NATURES_SOL = [
         value: 'argileux',
         label: 'Argileux',
         desc: 'Lourd, retient bien l\'eau',
-        img: 'https://images.unsplash.com/photo-1563514227147-6d2ff665a6a0?w=300&q=80',
+        img: '/images/sols/argileux.webp',
         color: 'border-orange-500 bg-orange-50',
     },
     {
         value: 'sableux',
         label: 'Sableux',
         desc: 'Léger, draine rapidement',
-        img: 'https://images.unsplash.com/photo-1618477461853-cf6ed80faba5?w=300&q=80',
+        img: '/images/sols/sableux.webp',
         color: 'border-yellow-400 bg-yellow-50',
     },
     {
         value: 'limoneux',
         label: 'Limoneux',
         desc: 'Équilibré, fertile',
-        img: 'https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=300&q=80',
+        img: '/images/sols/limoneux.webp',
         color: 'border-amber-500 bg-amber-50',
     },
     {
         value: 'calcaire',
         label: 'Calcaire',
         desc: 'Alcalin, caillouteux',
-        img: 'https://images.unsplash.com/photo-1567225557594-88d73e55f2cb?w=300&q=80',
+        img: '/images/sols/calcaire.webp',
         color: 'border-gray-400 bg-gray-50',
     },
     {
         value: 'humifere',
         label: 'Humifère',
         desc: 'Riche en matière organique',
-        img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=300&q=80',
+        img: '/images/sols/humifere.webp',
         color: 'border-stone-600 bg-stone-50',
     },
 ];
@@ -149,7 +149,12 @@ export default function SuiviPlantes() {
                                         onClick={() => set('natureSol')(sol.value)}
                                         className={`rounded-xl border-2 overflow-hidden transition-all ${form.natureSol === sol.value ? sol.color + ' shadow-md scale-105' : 'border-gray-200 hover:border-gray-300'}`}>
                                         <img src={sol.img} alt={sol.label}
-                                            className="w-full h-20 object-cover" />
+                                            className="w-full h-20 object-cover bg-gray-200"
+                                            onError={(e) => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
+                                        />
+                                        <div className="w-full h-20 bg-gray-200 items-center justify-center text-gray-400 text-xs hidden">
+                                            {sol.label}
+                                        </div>
                                         <div className="p-2 text-center">
                                             <p className="text-xs font-bold text-gray-800">{sol.label}</p>
                                             <p className="text-xs text-gray-400 leading-tight">{sol.desc}</p>
