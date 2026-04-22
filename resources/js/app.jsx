@@ -1,6 +1,6 @@
-import { StrictMode } from 'react';
+import { StrictMode, useEffect, useLocation } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation as useRouterLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
@@ -21,10 +21,13 @@ import Alertes from './pages/Alertes/Alertes';
 import '../css/app.css';
 
 function Layout({ children }) {
+    const location = useRouterLocation();
     return (
         <>
             <Navbar />
-            <main>{children}</main>
+            <main key={location.pathname} className="animate-fadeIn">
+                {children}
+            </main>
         </>
     );
 }

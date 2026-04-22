@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import DarkModeToggle from './DarkModeToggle';
 
 export default function Navbar() {
     const { user, logout } = useAuth();
@@ -35,7 +36,7 @@ export default function Navbar() {
     return (
         <>
             {/* Top bar desktop */}
-            <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm hidden md:flex items-center justify-between px-6 py-3">
+            <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-700 shadow-sm hidden md:flex items-center justify-between px-6 py-3">
                 <Link to="/dashboard" className="flex items-center gap-2">
                     <span className="text-2xl">🌱</span>
                     <span className="text-lg font-extrabold text-green-700 tracking-tight">Agris</span>
@@ -55,6 +56,7 @@ export default function Navbar() {
                 </nav>
 
                 <div className="flex items-center gap-3">
+                    <DarkModeToggle />
                     <div className="text-right hidden lg:block">
                         <p className="text-sm font-semibold text-gray-800">{user?.name}</p>
                         <p className="text-xs text-gray-400 capitalize">{user?.role}</p>
