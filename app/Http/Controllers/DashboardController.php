@@ -15,7 +15,19 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        // Stat cards
+        // Vue simplifiée pour l'ouvrier
+        if ($user->role === 'ouvrier') {
+            $todoListIds = \App\Models\TodoList::where('ouvrier_id', $user->id)->pluck('id');
+            return response()->json([
+                'role' => 'ouvrier',
+                'taches_a_faire' => \App\Models\Tache::whereIn('todo_list_id', $todoListIds)
+                    ->where('statut', '!=', 'termine')->count(),
+                'taches_terminees' => \App\Models\Tache::whereIn('todo_list_id', $todoListIds)
+                    ->where('statut', 'termine')->count(),
+            ]);
+        }
+
+        // Stats complètes pour agriculteur + manager
         $stats = [
             'cultures_actives'  => SuiviPlante::where('user_id', $user->id)->where('statut', 'en_cours')->count(),
             'offres_disponibles'=> Offre::where('statut', 'disponible')->count(),

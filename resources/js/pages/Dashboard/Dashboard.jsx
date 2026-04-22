@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../api';
-import { Sprout, ShoppingCart, BookOpen, TrendingUp } from 'lucide-react';
+import { Sprout, ShoppingCart, BookOpen, TrendingUp, CheckCircle, Clock, ListTodo } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import {
     Chart as ChartJS,
     ArcElement, Tooltip, Legend,
@@ -46,6 +47,47 @@ export default function Dashboard() {
     const { user } = useAuth();
     const [stats, setStats] = useState(null);
     const [news, setNews]   = useState([]);
+
+    useEffect(() => {
+        api.get('/dashboard-stats').then((r) => setStats(r.data));
+        api.get('/news').then((r) => setNews(r.data?.slice(0, 4) ?? []));
+    }, []);
+    if (stats?.role === 'ouvrier') {
+        return (
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20 md:pb-8">
+                <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
+                    <div className="max-w-2xl mx-auto">
+                        <p className="text-green-100 text-sm">Bienvenue sur Agris</p>
+                        <h1 className="text-2xl font-extrabold text-white mt-1">Bonjour, {user?.name}</h1>
+                        <p className="text-green-200 text-sm mt-1">Ouvrier</p>
+                    </div>
+                </div>
+                <div className="max-w-2xl mx-auto px-4 md:px-6 mt-6 space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <StatCard icon={Clock} label="Tâches à faire" value={stats.taches_a_faire}
+                            sub="en attente ou en cours"
+                            gradient="bg-gradient-to-br from-orange-400 to-orange-600"
+                            glow="bg-orange-400" />
+                        <StatCard icon={CheckCircle} label="Tâches terminées" value={stats.taches_terminees}
+                            sub="complétées"
+                            gradient="bg-gradient-to-br from-emerald-400 to-green-600"
+                            glow="bg-green-400" />
+                    </div>
+                    <Link to="/todo-lists"
+                        className="flex items-center gap-4 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-2xl border border-gray-100/50 dark:border-gray-700/50 shadow-xl shadow-gray-900/5 p-5 hover:shadow-2xl transition-all group">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg">
+                            <ListTodo size={22} className="text-white" />
+                        </div>
+                        <div>
+                            <p className="font-bold text-gray-900 dark:text-white">Voir mon planning du jour</p>
+                            <p className="text-sm text-gray-400">Consultez vos tâches assignées et mettez à jour leur statut</p>
+                        </div>
+                        <span className="ml-auto text-gray-300 group-hover:text-green-500 transition text-xl">→</span>
+                    </Link>
+                </div>
+            </div>
+        );
+    }
     const chartRef = useRef(null);
 
     useEffect(() => {
