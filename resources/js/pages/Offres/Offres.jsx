@@ -32,9 +32,10 @@ export default function Offres() {
         <div className="p-6">
             <div className="flex items-center justify-between mb-4">
                 <h1 className="text-2xl font-bold text-green-700">🛒 Marketplace</h1>
-                <button className="btn-primary" onClick={() => setShowForm(!showForm)}>+ Publier une offre</button>
+                {['agriculteur', 'manager'].includes(user?.role) && (
+                    <button className="btn-primary" onClick={() => setShowForm(!showForm)}>+ Publier une offre</button>
+                )}
             </div>
-
             {showForm && (
                 <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-6 mb-6 grid grid-cols-2 gap-4">
                     <select className="input col-span-2" value={form.plante_id} onChange={set('plante_id')}>

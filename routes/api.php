@@ -32,24 +32,22 @@ Route::middleware('auth:sanctum')->group(function () {
     ));
 
     // Accessible à tous les rôles
-    Route::apiResource('plantes', PlanteController::class);
-    Route::apiResource('biblios', BiblioController::class);
-    Route::apiResource('offres',  OffreController::class);
-    Route::post('offres/{offre}/accepter', [OffreController::class, 'accepter']);
-    Route::apiResource('messages', MessageController::class)->except(['show']);
-    Route::apiResource('abonnements', AbonnementController::class)->only(['index', 'store']);
+    Route::apiResource('plantes', PlanteController::class)->only(['index', 'show']);
+    Route::apiResource('biblios', BiblioController::class)->only(['index', 'show']);
 
-    // Favoris
-    Route::get('favoris',                        [PlanteFavoriController::class, 'index']);
-    Route::post('plantes/{plante}/favori',        [PlanteFavoriController::class, 'toggle']);
-
-    // Alertes arrosage
-    Route::get('alertes',                        [AlerteArrosageController::class, 'index']);
-    Route::post('alertes/marquer-lues',          [AlerteArrosageController::class, 'marquerLues']);
-
-    // Agriculteur + Manager
+    // Agriculteur + Manager uniquement
     Route::middleware('role:agriculteur,manager')->group(function () {
-        Route::post('suivi-plantes/calculer', [SuiviPlanteController::class, 'calculer']);
+        Route::apiResource('plantes', PlanteController::class)->except(['index', 'show']);
+        Route::apiResource('biblios', BiblioController::class)->except(['index', 'show']);
+        Route::apiResource('offres',  OffreController::class);
+        Route::post('offres/{offre}/accepter', [OffreController::class, 'accepter']);
+        Route::apiResource('messages', MessageController::class)->except(['show']);
+        Route::apiResource('abonnements', AbonnementController::class)->only(['index', 'store']);
+        Route::get('favoris',                     [PlanteFavoriController::class, 'index']);
+        Route::post('plantes/{plante}/favori',     [PlanteFavoriController::class, 'toggle']);
+        Route::get('alertes',                     [AlerteArrosageController::class, 'index']);
+        Route::post('alertes/marquer-lues',       [AlerteArrosageController::class, 'marquerLues']);
+        Route::post('suivi-plantes/calculer',     [SuiviPlanteController::class, 'calculer']);
         Route::apiResource('suivi-plantes', SuiviPlanteController::class);
         Route::apiResource('stocks', StockController::class);
     });

@@ -50,7 +50,7 @@ createRoot(document.getElementById('app')).render(
                     <Route path="/favoris" element={<PrivateRoute><Layout><Favoris /></Layout></PrivateRoute>} />
                     <Route path="/suivi" element={<PrivateRoute roles={['agriculteur', 'manager']}><Layout><SuiviPlantes /></Layout></PrivateRoute>} />
                     <Route path="/stocks" element={<PrivateRoute roles={['agriculteur', 'manager']}><Layout><Stocks /></Layout></PrivateRoute>} />
-                    <Route path="/offres" element={<PrivateRoute><Layout><Offres /></Layout></PrivateRoute>} />
+                    <Route path="/offres" element={<PrivateRoute roles={['agriculteur', 'manager']}><Layout><Offres /></Layout></PrivateRoute>} />
                     <Route path="/todo-lists" element={<PrivateRoute roles={['manager', 'ouvrier']}><Layout><TodoLists /></Layout></PrivateRoute>} />
                     <Route path="/alertes" element={<PrivateRoute><Layout><Alertes /></Layout></PrivateRoute>} />
 

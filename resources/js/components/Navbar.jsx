@@ -14,8 +14,10 @@ export default function Navbar() {
     const navItems = [
         { to: '/dashboard', icon: '🏠', label: 'Accueil' },
         { to: '/plantes', icon: '📚', label: 'Bibliothèque' },
-        { to: '/favoris', icon: '❤️', label: 'Favoris' },
-        { to: '/offres', icon: '🛒', label: 'Marketplace' },
+        ...(!['ouvrier'].includes(user?.role) ? [
+            { to: '/favoris', icon: '❤️', label: 'Favoris' },
+            { to: '/offres', icon: '🛒', label: 'Marketplace' },
+        ] : []),
         ...(['agriculteur', 'manager'].includes(user?.role)
             ? [{ to: '/suivi', icon: '🌿', label: 'Cultures' },
                { to: '/stocks', icon: '📦', label: 'Stocks' }]
@@ -23,7 +25,9 @@ export default function Navbar() {
         ...(['manager', 'ouvrier'].includes(user?.role)
             ? [{ to: '/todo-lists', icon: '📋', label: 'Tâches' }]
             : []),
-        { to: '/alertes', icon: '🔔', label: 'Alertes' },
+        ...(!['ouvrier'].includes(user?.role) ? [
+            { to: '/alertes', icon: '🔔', label: 'Alertes' },
+        ] : []),
     ];
 
     const isActive = (path) => location.pathname === path;
