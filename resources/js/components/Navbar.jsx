@@ -45,9 +45,10 @@ export default function Navbar() {
                 <nav className="flex items-center gap-1">
                     {navItems.map((item) => (
                         <Link key={item.to} to={item.to}
-                            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium transition-all
+                            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all
                                 ${isActive(item.to)
-                                    ? 'bg-green-600 text-white shadow-md shadow-green-200'
+                                    ? 'bg-green-600 text-white'
+                                    : 'text-gray-600 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-900 hover:text-green-700'}`}>
                                     : 'text-gray-600 hover:bg-green-50 hover:text-green-700'}`}>
                             <span>{item.icon}</span>
                             <span>{item.label}</span>

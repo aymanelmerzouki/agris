@@ -126,7 +126,12 @@ export default function TodoLists() {
 
                     
                     <div className="space-y-2">
-                        {lists.length === 0 && <p className="text-gray-400 text-sm text-center py-8">Aucune liste.</p>}
+                        {lists.length === 0 && (
+                        <div className="text-center py-12 text-gray-400 dark:text-green-600">
+                            <p className="text-3xl mb-2">📋</p>
+                            <p className="text-sm">Aucune liste.</p>
+                        </div>
+                    )}
                         {lists.map((l) => (
                             <button key={l.id} onClick={() => selectList(l)}
                                 className={`w-full text-left bg-white rounded-xl border p-3 hover:shadow-md transition ${selected?.id === l.id ? 'border-green-400 shadow-md' : 'border-gray-100 shadow-sm'}`}>

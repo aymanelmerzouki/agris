@@ -15,7 +15,7 @@ export default function Favoris() {
     };
 
     return (
-        <div className="p-6">
+        <div className="min-h-screen bg-gray-50 dark:bg-green-950 p-6">
             <h1 className="text-2xl font-bold text-green-700 mb-4">❤️ Mes favoris</h1>
             {plantes.length === 0 && <p className="text-gray-500">Aucune plante en favori.</p>}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

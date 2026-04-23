@@ -16,10 +16,10 @@ export default function PlanteDetail() {
         setFavori(data.favori);
     };
 
-    if (!plante) return <div className="p-6">Chargement...</div>;
+    if (!plante) return <div className="min-h-screen bg-gray-50 dark:bg-green-950 p-6">Chargement...</div>;
 
     return (
-        <div className="p-6 max-w-2xl mx-auto">
+        <div className="min-h-screen bg-gray-50 dark:bg-green-950 p-6 max-w-2xl mx-auto">
             {plante.imageUrl && <img src={plante.imageUrl} alt={plante.nom} className="w-full h-56 object-cover rounded-xl mb-4" />}
             <div className="flex items-center justify-between mb-2">
                 <h1 className="text-3xl font-bold text-green-700">{plante.nom}</h1>

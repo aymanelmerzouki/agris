@@ -14,7 +14,7 @@ export default function Alertes() {
     };
 
     return (
-        <div className="p-6 max-w-xl mx-auto">
+        <div className="min-h-screen bg-gray-50 dark:bg-green-950 p-6 max-w-xl mx-auto">
             <div className="flex items-center justify-between mb-4">
                 <h1 className="text-2xl font-bold text-green-700">🔔 Alertes arrosage</h1>
                 <button className="btn-secondary text-sm" onClick={marquerLues}>Tout marquer lu</button>
