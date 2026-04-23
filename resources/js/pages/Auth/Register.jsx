@@ -26,20 +26,20 @@ export default function Register() {
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow w-full max-w-sm space-y-4">
                 <h1 className="text-2xl font-bold text-green-700 text-center">Créer un compte</h1>
                 {error && <p className="text-red-500 text-sm">{error}</p>}
-                <input className="input" placeholder="Nom complet" value={form.name} onChange={set('name')} required />
-                <input className="input" type="email" placeholder="Email" value={form.email} onChange={set('email')} required />
-                <input className="input" type="password" placeholder="Mot de passe" value={form.password} onChange={set('password')} required />
-                <input className="input" type="password" placeholder="Confirmer le mot de passe" value={form.password_confirmation} onChange={set('password_confirmation')} required />
-                <select className="input" value={form.role} onChange={set('role')}>
+                <input className="w-full border border-green-200 rounded-lg px-3 py-2 text-sm bg-green-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" placeholder="Nom complet" value={form.name} onChange={set('name')} required />
+                <input className="w-full border border-green-200 rounded-lg px-3 py-2 text-sm bg-green-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" type="email" placeholder="Email" value={form.email} onChange={set('email')} required />
+                <input className="w-full border border-green-200 rounded-lg px-3 py-2 text-sm bg-green-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" type="password" placeholder="Mot de passe" value={form.password} onChange={set('password')} required />
+                <input className="w-full border border-green-200 rounded-lg px-3 py-2 text-sm bg-green-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" type="password" placeholder="Confirmer le mot de passe" value={form.password_confirmation} onChange={set('password_confirmation')} required />
+                <select className="w-full border border-green-200 rounded-lg px-3 py-2 text-sm bg-green-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400" value={form.role} onChange={set('role')}>
                     <option value="agriculteur">Agriculteur</option>
                     <option value="manager">Manager</option>
                     <option value="ouvrier">Ouvrier</option>
                 </select>
                 {form.role === 'manager' && (
-                    <input className="input" placeholder="Nom de l'entreprise" value={form.nomEntreprise} onChange={set('nomEntreprise')} />
+                    <input className="w-full border border-green-200 rounded-lg px-3 py-2 text-sm bg-green-50 text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-400" placeholder="Nom de l'entreprise" value={form.nomEntreprise} onChange={set('nomEntreprise')} />
                 )}
                 <button className="btn-primary w-full" type="submit">S'inscrire</button>
-                <p className="text-center text-sm">Déjà un compte ? <Link to="/login" className="text-green-600">Se connecter</Link></p>
+                <p className="text-center text-sm text-gray-600">Déjà un compte ? <Link to="/login" className="text-green-600 font-medium">Se connecter</Link></p>
             </form>
         </div>
     );
