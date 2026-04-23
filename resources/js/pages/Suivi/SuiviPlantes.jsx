@@ -113,7 +113,7 @@ export default function SuiviPlantes() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 pb-20 md:pb-8">
+        <div className="min-h-screen bg-gray-50 dark:bg-green-950 pb-20 md:pb-8">
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
@@ -129,7 +129,7 @@ export default function SuiviPlantes() {
 
             <div className="max-w-5xl mx-auto px-4 md:px-6 mt-6">
                 {showForm && (
-                    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 mb-6 space-y-6">
+                    <form onSubmit={handleSubmit} className="bg-white dark:bg-green-900 rounded-2xl shadow-md border border-gray-100 dark:border-green-800 p-6 mb-6 space-y-6">
                         <h2 className="font-bold text-gray-800 text-lg">Enregistrer une nouvelle culture</h2>
 
                         
@@ -194,11 +194,11 @@ export default function SuiviPlantes() {
                             <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-4 border border-green-100">
                                 <p className="text-sm font-semibold text-gray-700 mb-3">✅ Estimations calculées automatiquement</p>
                                 <div className="grid grid-cols-2 gap-3">
-                                    <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+                                    <div className="bg-white dark:bg-green-800 rounded-lg p-3 text-center shadow-sm">
                                         <p className="text-2xl font-extrabold text-blue-600">{calcul.BesoinsEau} L</p>
                                         <p className="text-xs text-gray-500">Besoins en eau / jour</p>
                                     </div>
-                                    <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+                                    <div className="bg-white dark:bg-green-800 rounded-lg p-3 text-center shadow-sm">
                                         <p className="text-2xl font-extrabold text-green-600">{calcul.phSol}</p>
                                         <p className="text-xs text-gray-500">pH du sol estimé</p>
                                     </div>
@@ -250,7 +250,7 @@ export default function SuiviPlantes() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {suivis.map((s) => (
-                            <div key={s.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition">
+                            <div key={s.id} className="bg-white dark:bg-green-900 rounded-2xl shadow-sm border border-gray-100 dark:border-green-800 p-5 hover:shadow-md transition">
                                 <div className="flex items-start justify-between mb-3">
                                     <div>
                                         <h3 className="font-bold text-gray-900">{s.plante?.nom}</h3>
