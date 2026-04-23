@@ -68,19 +68,19 @@ export default function Offres() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {offres.map((o) => (
-                    <div key={o.id} className="bg-white rounded-xl shadow p-4">
-                        <div className="flex justify-between items-start">
+                    <div key={o.id} className="bg-white dark:bg-green-900 rounded-2xl shadow-sm border border-gray-100 dark:border-green-800 p-4 hover:shadow-md transition">
+                        <div className="flex justify-between items-start mb-2">
                             <div>
-                                <p className="font-semibold text-gray-800 dark:text-white">{o.plante?.nom ?? 'Produit agricole'}</p>
-                                <p className="text-sm text-gray-500 dark:text-green-300">{o.user?.name} · {o.localisation}</p>
+                                <p className="font-bold text-gray-800 dark:text-white">{o.plante?.nom ?? 'Produit agricole'}</p>
+                                <p className="text-sm text-gray-500 dark:text-green-200/80">{o.user?.name} · {o.localisation}</p>
                             </div>
-                            <span className={`text-xs px-2 py-1 rounded-full ${o.statut === 'disponible' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${o.statut === 'disponible' ? 'bg-green-100 dark:bg-green-800/50 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-green-800/30 text-gray-500 dark:text-gray-400'}`}>
                                 {o.statut}
                             </span>
                         </div>
-                        <p className="text-lg font-bold text-green-700 mt-2">{o.prix} MAD / {o.unite}</p>
-                        <p className="text-sm text-gray-600">Qté: {o.quantite} {o.unite} {o.livraison && '· 🚚 Livraison'}</p>
-                        {o.description && <p className="text-xs text-gray-400 mt-1">{o.description}</p>}
+                        <p className="text-lg font-extrabold text-green-600 dark:text-green-400">{o.prix} MAD / {o.unite}</p>
+                        <p className="text-sm text-gray-500 dark:text-green-300 mt-0.5">Qté: {o.quantite} {o.unite} {o.livraison && '· 🚚 Livraison'}</p>
+                        {o.description && <p className="text-xs text-gray-400 dark:text-green-400/70 mt-1 line-clamp-2">{o.description}</p>}
                         {o.statut === 'disponible' && o.user_id !== user?.id && (
                             <button onClick={() => accepter(o.id)} className="btn-primary mt-3 w-full text-sm">
                                 Acheter / Accepter
