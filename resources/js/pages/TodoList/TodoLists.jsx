@@ -130,7 +130,9 @@ export default function TodoLists() {
                             <div className="w-full flex flex-col items-center justify-center min-h-[50vh] text-center text-gray-400 dark:text-green-300">
                                 <p className="text-4xl mb-3">📋</p>
                                 <p className="font-medium text-sm">Aucune liste de tâches</p>
-                                <p className="text-xs mt-1 opacity-70">Créez une liste pour commencer</p>
+                                {user?.role === 'manager' && (
+                                    <p className="text-xs mt-1 opacity-70">Créez une liste pour commencer</p>
+                                )}
                             </div>
                         )}
                         {lists.map((l) => (
