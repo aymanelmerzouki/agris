@@ -27,7 +27,9 @@ export default function Plantes() {
             </div>
 
             <div className="max-w-5xl mx-auto px-4 md:px-6 mt-6">
-                <input className="input mb-6 max-w-sm" placeholder="Rechercher une plante..."
+                <input
+                    className="mb-6 max-w-sm w-full bg-white/10 dark:bg-green-900/50 border border-white/20 dark:border-green-700 rounded-lg px-3 py-2 text-sm text-white placeholder-green-200 focus:outline-none focus:ring-2 focus:ring-green-300"
+                    placeholder="Rechercher une plante..."
                     value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -44,8 +46,8 @@ export default function Plantes() {
                             </div>
                             <div className="p-4">
                                 <h2 className="font-bold text-gray-900 dark:text-white text-base">{p.nom}</h2>
-                                <p className="text-sm text-gray-500 dark:text-green-300 mt-0.5">{p.espece} — {p.famille}</p>
-                                <p className="text-xs text-gray-400 dark:text-green-400 mt-2">
+                                <p className="text-sm text-gray-500 dark:text-green-200 mt-0.5">{p.espece} — {p.famille}</p>
+                                <p className="text-xs text-gray-400 dark:text-green-300 mt-2">
                                     🌡 {p.temperatureMin}°C / {p.temperatureMax}°C · ⏱ {p.dureePousseeJours}j
                                 </p>
                             </div>

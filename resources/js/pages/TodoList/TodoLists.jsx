@@ -127,9 +127,10 @@ export default function TodoLists() {
                     
                     <div className="space-y-2">
                         {lists.length === 0 && (
-                        <div className="text-center py-12 text-gray-400 dark:text-green-600">
-                            <p className="text-3xl mb-2">📋</p>
-                            <p className="text-sm">Aucune liste.</p>
+                        <div className="flex flex-col items-center justify-center text-center py-12 text-gray-400 dark:text-green-600">
+                            <p className="text-4xl mb-3">📋</p>
+                            <p className="font-medium text-sm">Aucune liste de tâches</p>
+                            <p className="text-xs mt-1">Créez une liste pour commencer</p>
                         </div>
                     )}
                         {lists.map((l) => (
@@ -149,9 +150,10 @@ export default function TodoLists() {
                 
                 <div className="flex-1">
                     {!selected ? (
-                        <div className="text-center py-20 text-gray-400">
+                    <div className="flex flex-col items-center justify-center text-center py-20 text-gray-400 dark:text-green-600">
                             <p className="text-4xl mb-3">📋</p>
-                            <p>Sélectionnez une liste pour voir les tâches.</p>
+                            <p className="font-medium">Sélectionnez une liste</p>
+                            <p className="text-sm mt-1">Cliquez sur une liste pour voir ses tâches</p>
                         </div>
                     ) : (
                         <>

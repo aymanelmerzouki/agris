@@ -49,7 +49,6 @@ export default function Navbar() {
                                 ${isActive(item.to)
                                     ? 'bg-green-600 text-white'
                                     : 'text-gray-600 dark:text-green-300 hover:bg-green-50 dark:hover:bg-green-900 hover:text-green-700'}`}>
-                                    : 'text-gray-600 hover:bg-green-50 hover:text-green-700'}`}>
                             <span>{item.icon}</span>
                             <span>{item.label}</span>
                         </Link>
