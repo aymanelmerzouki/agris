@@ -33,12 +33,13 @@ export default function Favoris() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {plantes.map((p) => (
-                            <div key={p.id} className="bg-white dark:bg-green-900 rounded-2xl shadow-sm border border-gray-100 dark:border-green-800 p-4">
-                                <Link to={`/plantes/${p.id}`} className="font-bold text-gray-800 dark:text-white text-base hover:text-green-600 dark:hover:text-green-300 transition">
+                            <div key={p.id} className="bg-white dark:bg-green-900 rounded-2xl shadow-sm border border-gray-100 dark:border-green-800 p-4 hover:shadow-md transition">
+                                <Link to={`/plantes/${p.id}`} className="font-bold text-gray-800 dark:text-white text-base hover:text-green-600 dark:hover:text-green-300 transition block">
                                     {p.nom}
                                 </Link>
-                                <p className="text-sm text-gray-500 dark:text-green-300 mt-0.5">{p.espece}</p>
-                                <button onClick={() => retirer(p.id)} className="mt-3 text-xs text-red-400 hover:text-red-600 transition">
+                                <p className="text-sm text-gray-500 dark:text-green-200/80 mt-0.5">{p.espece}</p>
+                                {p.famille && <p className="text-xs text-gray-400 dark:text-green-400/70 mt-0.5">{p.famille}</p>}
+                                <button onClick={() => retirer(p.id)} className="mt-3 text-xs text-red-400 dark:text-red-400/80 hover:text-red-600 transition">
                                     Retirer des favoris
                                 </button>
                             </div>
