@@ -36,7 +36,7 @@ export default function Navbar() {
     return (
         <>
             
-            <header className="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-700 shadow-sm hidden md:flex items-center justify-between px-6 py-3">
+            <header className="sticky top-0 z-50 bg-white/80 dark:bg-green-950/80 backdrop-blur-md border-b border-gray-100 dark:border-green-900 shadow-sm hidden md:flex items-center justify-between px-6 py-3">
                 <Link to="/dashboard" className="flex items-center gap-2">
                     <span className="text-2xl">🌱</span>
                     <span className="text-lg font-extrabold text-green-700 tracking-tight">Agris</span>

@@ -15,7 +15,7 @@
     </script>
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-green-950 text-gray-900 dark:text-green-100 transition-colors duration-300">
     <div id="app"></div>
 </body>
 </html>
