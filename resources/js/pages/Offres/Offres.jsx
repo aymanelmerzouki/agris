@@ -62,8 +62,8 @@ export default function Offres() {
                     <div key={o.id} className="bg-white rounded-xl shadow p-4">
                         <div className="flex justify-between items-start">
                             <div>
-                                <p className="font-semibold">{o.plante?.nom ?? 'Produit agricole'}</p>
-                                <p className="text-sm text-gray-500">{o.user?.name} · {o.localisation}</p>
+                                <p className="font-semibold text-gray-800 dark:text-white">{o.plante?.nom ?? 'Produit agricole'}</p>
+                                <p className="text-sm text-gray-500 dark:text-green-300">{o.user?.name} · {o.localisation}</p>
                             </div>
                             <span className={`text-xs px-2 py-1 rounded-full ${o.statut === 'disponible' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
                                 {o.statut}
