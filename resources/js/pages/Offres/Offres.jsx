@@ -29,13 +29,22 @@ export default function Offres() {
     };
 
     return (
-        <div className="p-6">
-            <div className="flex items-center justify-between mb-4">
-                <h1 className="text-2xl font-bold text-green-700">🛒 Marketplace</h1>
-                {['agriculteur', 'manager'].includes(user?.role) && (
-                    <button className="btn-primary" onClick={() => setShowForm(!showForm)}>+ Publier une offre</button>
-                )}
+        <div className="min-h-screen bg-gray-50 dark:bg-green-950 pb-20 md:pb-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
+                <div className="max-w-5xl mx-auto flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-extrabold text-white">Marketplace</h1>
+                        <p className="text-green-100 text-sm mt-1">Achetez et vendez en MAD</p>
+                    </div>
+                    {['agriculteur', 'manager'].includes(user?.role) && (
+                        <button className="bg-white text-green-700 font-semibold text-sm px-4 py-2 rounded-xl shadow hover:bg-green-50 transition"
+                            onClick={() => setShowForm(!showForm)}>
+                            + Publier une offre
+                        </button>
+                    )}
+                </div>
             </div>
+            <div className="max-w-5xl mx-auto px-4 md:px-6 mt-6">
             {showForm && (
                 <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-6 mb-6 grid grid-cols-2 gap-4">
                     <select className="input col-span-2" value={form.plante_id} onChange={set('plante_id')}>
@@ -79,6 +88,7 @@ export default function Offres() {
                         )}
                     </div>
                 ))}
+            </div>
             </div>
         </div>
     );
