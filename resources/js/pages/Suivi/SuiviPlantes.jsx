@@ -253,8 +253,8 @@ export default function SuiviPlantes() {
                             <div key={s.id} className="bg-white dark:bg-green-900 rounded-2xl shadow-sm border border-gray-100 dark:border-green-800 p-5 hover:shadow-md transition">
                                 <div className="flex items-start justify-between mb-3">
                                     <div>
-                                        <h3 className="font-bold text-gray-900">{s.plante?.nom}</h3>
-                                        <p className="text-xs text-gray-400">{s.plante?.espece}</p>
+                                        <h3 className="font-bold text-gray-900 dark:text-white">{s.plante?.nom}</h3>
+                                        <p className="text-xs text-gray-400 dark:text-green-200/80">{s.plante?.espece}</p>
                                     </div>
                                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUTS[s.statut]?.color}`}>
                                         {STATUTS[s.statut]?.label}
@@ -262,35 +262,35 @@ export default function SuiviPlantes() {
                                 </div>
                                 <div className="flex flex-wrap gap-2 mb-3">
                                     {s.stadeVegetatif && (
-                                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${STADE_COLORS[s.stadeVegetatif]}`}>
+                                        <span className="text-xs px-2 py-1 rounded-full font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
                                             {s.stadeVegetatif}
                                         </span>
                                     )}
                                     {s.natureSol && (
-                                        <span className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-full">
+                                        <span className="text-xs bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-1 rounded-full">
                                             🪨 {s.natureSol}
                                         </span>
                                     )}
                                     {s.parcelle && (
-                                        <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                                        <span className="text-xs bg-gray-100 dark:bg-green-800/50 text-gray-600 dark:text-green-300 px-2 py-1 rounded-full">
                                             📍 {s.parcelle}
                                         </span>
                                     )}
                                 </div>
-                                <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
-                                    <div className="bg-blue-50 rounded-lg p-2 text-center">
-                                        <p className="text-blue-600 font-bold text-base">{s.BesoinsEau}L</p>
-                                        <p>eau/jour</p>
+                                <div className="grid grid-cols-2 gap-2 text-xs">
+                                    <div className="bg-blue-50 dark:bg-black/20 rounded-lg p-2 text-center">
+                                        <p className="text-blue-600 dark:text-blue-400 font-bold text-base">{s.BesoinsEau}L</p>
+                                        <p className="text-gray-500 dark:text-gray-400">eau/jour</p>
                                     </div>
-                                    <div className="bg-green-50 rounded-lg p-2 text-center">
-                                        <p className="text-green-600 font-bold text-base">{s.phSol ?? '—'}</p>
-                                        <p>pH sol</p>
+                                    <div className="bg-green-50 dark:bg-black/20 rounded-lg p-2 text-center">
+                                        <p className="text-green-600 dark:text-green-400 font-bold text-base">{s.phSol ?? '—'}</p>
+                                        <p className="text-gray-500 dark:text-gray-400">pH sol</p>
                                     </div>
                                 </div>
                                 {s.notesAgriculteur && (
-                                    <p className="text-xs text-gray-400 mt-3 line-clamp-2 italic">"{s.notesAgriculteur}"</p>
+                                    <p className="text-xs text-gray-400 dark:text-green-300/70 mt-3 line-clamp-2 italic">"{s.notesAgriculteur}"</p>
                                 )}
-                                <p className="text-xs text-gray-300 mt-3">
+                                <p className="text-xs text-gray-300 dark:text-green-600 mt-3">
                                     Depuis le {new Date(s.dateDebut).toLocaleDateString('fr-FR')}
                                 </p>
                             </div>
