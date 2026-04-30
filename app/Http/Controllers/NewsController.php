@@ -10,7 +10,7 @@ class NewsController extends Controller
         $news = Cache::remember('agri_news', 3600, function () {
             $key = config('services.newsdata.key');
             if (!$key) return [];
-            $response = Http::get('https:
+            $response = Http::get('https://newsdata.io/api/1/news', [
                 'apikey'   => $key,
                 'q'        => 'agriculture',
                 'language' => 'fr',
