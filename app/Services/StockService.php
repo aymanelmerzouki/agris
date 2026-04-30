@@ -9,6 +9,18 @@ use Illuminate\Validation\ValidationException;
 
 class StockService
 {
+    public function annulerAchat(Vente $vente): void
+    {
+        DB::transaction(function () use ($vente) {
+            $offre = $vente->offre;
+            $offre->update([
+                'quantite' => $offre->quantite + $vente->quantite,
+                'statut'   => 'disponible',
+            ]);
+            $vente->delete();
+        });
+    }
+
     public function traiterAchat(Offre $offre, float $quantiteDemandee, int $acheteurId): Vente
     {
         if ($offre->statut !== 'disponible') {

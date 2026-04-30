@@ -30,7 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('plantes', PlanteController::class)->except(['index', 'show']);
         Route::apiResource('biblios', BiblioController::class)->except(['index', 'show']);
         Route::apiResource('offres',  OffreController::class);
-        Route::post('offres/{offre}/accepter', [OffreController::class, 'accepter']);
+        Route::post('offres/{offre}/accepter',   [OffreController::class, 'accepter']);
+        Route::delete('ventes/{vente}/annuler',  [OffreController::class, 'annulerAchat']);
         Route::apiResource('messages', MessageController::class)->except(['show']);
         Route::apiResource('abonnements', AbonnementController::class)->only(['index', 'store']);
         Route::get('favoris',                     [PlanteFavoriController::class, 'index']);

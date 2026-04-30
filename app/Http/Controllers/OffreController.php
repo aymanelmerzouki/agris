@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Offre;
+use App\Models\Vente;
 use App\Services\StockService;
 use Illuminate\Http\Request;
 
@@ -74,6 +75,16 @@ class OffreController extends Controller
         $vente = $this->stockService->traiterAchat($offre, $data['quantite'], $request->user()->id);
 
         return response()->json($vente->load('offre.plante', 'acheteur:id,name', 'vendeur:id,name'), 201);
+    }
+
+    public function annulerAchat(Request $request, Vente $vente)
+    {
+        if ($vente->acheteur_id !== $request->user()->id && $vente->vendeur_id !== $request->user()->id) {
+            return response()->json(['message' => 'Action non autorisée.'], 403);
+        }
+
+        $this->stockService->annulerAchat($vente);
+        return response()->json(['message' => 'Achat annulé, stock restauré.']);
     }
 
     public function destroy(Offre $offre)
