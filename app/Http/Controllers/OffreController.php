@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Offre;
+use App\Services\StockService;
 use Illuminate\Http\Request;
 
 class OffreController extends Controller
 {
+    public function __construct(private StockService $stockService) {}
     public function index(Request $request)
     {
         $query = Offre::with('user:id,name', 'plante:id,nom,espece');
@@ -63,15 +65,15 @@ class OffreController extends Controller
 
     public function accepter(Request $request, Offre $offre)
     {
-        if ($offre->statut !== 'disponible') {
-            return response()->json(['message' => 'Cette offre n\'est plus disponible.'], 422);
-        }
         if ($offre->user_id === $request->user()->id) {
             return response()->json(['message' => 'Vous ne pouvez pas acheter votre propre offre.'], 422);
         }
 
-        $offre->update(['statut' => 'vendu', 'acheteur_id' => $request->user()->id]);
-        return response()->json($offre->load('user:id,name', 'acheteur:id,name', 'plante:id,nom'));
+        $data = $request->validate(['quantite' => 'required|numeric|min:0.01']);
+
+        $vente = $this->stockService->traiterAchat($offre, $data['quantite'], $request->user()->id);
+
+        return response()->json($vente->load('offre.plante', 'acheteur:id,name', 'vendeur:id,name'), 201);
     }
 
     public function destroy(Offre $offre)
