@@ -27,22 +27,37 @@ export default function Offres() {
     };
 
     const accepter = async (offre) => {
-        const qte = parseFloat(qteAchat[offre.id] || offre.quantite);
-        if (!qte || qte <= 0) return alert('Entrez une quantité valide.');
+        const qte = parseFloat(qteAchat[offre.id]);
+        if (!qte || qte <= 0) return alert('Veuillez saisir une quantité.');
+        if (qte > offre.quantite) return alert(`Stock insuffisant. Maximum disponible : ${offre.quantite} ${offre.unite}.`);
         try {
             const { data } = await api.post(`/offres/${offre.id}/accepter`, { quantite: qte });
             setMesVentes((prev) => [data, ...prev]);
-            api.get('/offres').then((r) => setOffres(r.data.data));
-        } catch (e) {
-            alert(e.response?.data?.errors?.quantite?.[0] || e.response?.data?.message || 'Erreur');
+            setQteAchat((prev) => { const n = { ...prev }; delete n[offre.id]; return n; });
+            setOffres((prev) => prev.map((o) => o.id === offre.id
+                ? { ...o, quantite: o.quantite - qte, statut: o.quantite - qte <= 0 ? 'vendu' : 'disponible' }
+                : o
+            ));
+        } catch (err) {
+            const msg = err.response?.data?.errors?.quantite?.[0]
+                || err.response?.data?.message
+                || 'Erreur lors de l\'achat.';
+            alert(msg);
         }
     };
 
-    const annuler = async (venteId) => {
+    const annuler = async (venteId, qte, offreId, unite) => {
         if (!confirm('Annuler cet achat et restaurer le stock ?')) return;
-        await api.delete(`/ventes/${venteId}/annuler`);
-        setMesVentes((prev) => prev.filter((v) => v.id !== venteId));
-        api.get('/offres').then((r) => setOffres(r.data.data));
+        try {
+            await api.delete(`/ventes/${venteId}/annuler`);
+            setMesVentes((prev) => prev.filter((v) => v.id !== venteId));
+            setOffres((prev) => prev.map((o) => o.id === offreId
+                ? { ...o, quantite: o.quantite + qte, statut: 'disponible' }
+                : o
+            ));
+        } catch (err) {
+            alert(err.response?.data?.message || 'Erreur lors de l\'annulation.');
+        }
     };
 
     return (
@@ -128,7 +143,7 @@ export default function Offres() {
                                 <p className="font-bold text-gray-800 dark:text-white">{v.offre?.plante?.nom ?? 'Produit agricole'}</p>
                                 <p className="text-sm text-gray-500 dark:text-green-300 mt-1">{v.quantite} {v.unite} · {v.prix_total} MAD</p>
                                 <p className="text-xs text-gray-400 dark:text-green-400/70 mt-0.5">Vendeur : {v.vendeur?.name}</p>
-                                <button onClick={() => annuler(v.id)} className="mt-3 w-full text-sm bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-1.5 rounded-xl transition">
+                                <button onClick={() => annuler(v.id, v.quantite, v.offre_id, v.unite)} className="mt-3 w-full text-sm bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-1.5 rounded-xl transition">
                                     Annuler l'achat
                                 </button>
                             </div>
