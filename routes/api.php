@@ -31,6 +31,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('biblios', BiblioController::class)->except(['index', 'show']);
         Route::apiResource('offres',  OffreController::class);
         Route::post('offres/{offre}/accepter',   [OffreController::class, 'accepter']);
+        Route::get('ventes',                     [OffreController::class, 'mesVentes']);
         Route::delete('ventes/{vente}/annuler',  [OffreController::class, 'annulerAchat']);
         Route::apiResource('messages', MessageController::class)->except(['show']);
         Route::apiResource('abonnements', AbonnementController::class)->only(['index', 'store']);

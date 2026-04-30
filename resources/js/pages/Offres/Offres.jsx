@@ -7,11 +7,14 @@ export default function Offres() {
     const [offres, setOffres] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [plantes, setPlantes] = useState([]);
+    const [mesVentes, setMesVentes] = useState([]);
+    const [qteAchat, setQteAchat] = useState({});
     const [form, setForm] = useState({ plante_id: '', prix: '', quantite: '', unite: 'kg', localisation: '', description: '', livraison: false, dateCreation: new Date().toISOString().split('T')[0], dateExpiration: '' });
 
     useEffect(() => {
         api.get('/offres').then((r) => setOffres(r.data.data));
         api.get('/plantes?per_page=100').then((r) => setPlantes(r.data.data));
+        api.get('/ventes').then((r) => setMesVentes(r.data)).catch(() => {});
     }, []);
 
     const set = (k) => (e) => setForm({ ...form, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value });
@@ -23,9 +26,23 @@ export default function Offres() {
         setShowForm(false);
     };
 
-    const accepter = async (id) => {
-        const { data } = await api.post(`/offres/${id}/accepter`);
-        setOffres((prev) => prev.map((o) => (o.id === id ? data : o)));
+    const accepter = async (offre) => {
+        const qte = parseFloat(qteAchat[offre.id] || offre.quantite);
+        if (!qte || qte <= 0) return alert('Entrez une quantité valide.');
+        try {
+            const { data } = await api.post(`/offres/${offre.id}/accepter`, { quantite: qte });
+            setMesVentes((prev) => [data, ...prev]);
+            api.get('/offres').then((r) => setOffres(r.data.data));
+        } catch (e) {
+            alert(e.response?.data?.errors?.quantite?.[0] || e.response?.data?.message || 'Erreur');
+        }
+    };
+
+    const annuler = async (venteId) => {
+        if (!confirm('Annuler cet achat et restaurer le stock ?')) return;
+        await api.delete(`/ventes/${venteId}/annuler`);
+        setMesVentes((prev) => prev.filter((v) => v.id !== venteId));
+        api.get('/offres').then((r) => setOffres(r.data.data));
     };
 
     return (
@@ -82,13 +99,43 @@ export default function Offres() {
                         <p className="text-sm text-gray-500 dark:text-green-300 mt-0.5">Qté: {o.quantite} {o.unite} {o.livraison && '· 🚚 Livraison'}</p>
                         {o.description && <p className="text-xs text-gray-400 dark:text-green-400/70 mt-1 line-clamp-2">{o.description}</p>}
                         {o.statut === 'disponible' && o.user_id !== user?.id && (
-                            <button onClick={() => accepter(o.id)} className="btn-primary mt-3 w-full text-sm">
-                                Acheter / Accepter
-                            </button>
+                            <div className="mt-3 flex gap-2">
+                                <input
+                                    type="number"
+                                    min="0.01"
+                                    max={o.quantite}
+                                    step="0.01"
+                                    placeholder={`Qté (max ${o.quantite})`}
+                                    value={qteAchat[o.id] || ''}
+                                    onChange={(e) => setQteAchat({ ...qteAchat, [o.id]: e.target.value })}
+                                    className="input flex-1 text-sm"
+                                />
+                                <button onClick={() => accepter(o)} className="btn-primary text-sm px-3">
+                                    Acheter
+                                </button>
+                            </div>
                         )}
                     </div>
                 ))}
             </div>
+
+            {mesVentes.length > 0 && (
+                <div className="mt-10">
+                    <h2 className="text-lg font-bold text-gray-700 dark:text-white mb-3">Mes achats</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {mesVentes.map((v) => (
+                            <div key={v.id} className="bg-white dark:bg-green-900 rounded-2xl shadow-sm border border-gray-100 dark:border-green-800 p-4">
+                                <p className="font-bold text-gray-800 dark:text-white">{v.offre?.plante?.nom ?? 'Produit agricole'}</p>
+                                <p className="text-sm text-gray-500 dark:text-green-300 mt-1">{v.quantite} {v.unite} · {v.prix_total} MAD</p>
+                                <p className="text-xs text-gray-400 dark:text-green-400/70 mt-0.5">Vendeur : {v.vendeur?.name}</p>
+                                <button onClick={() => annuler(v.id)} className="mt-3 w-full text-sm bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-1.5 rounded-xl transition">
+                                    Annuler l'achat
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
             </div>
         </div>
     );

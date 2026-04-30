@@ -77,6 +77,15 @@ class OffreController extends Controller
         return response()->json($vente->load('offre.plante', 'acheteur:id,name', 'vendeur:id,name'), 201);
     }
 
+    public function mesVentes(Request $request)
+    {
+        return response()->json(
+            Vente::with('offre.plante', 'vendeur:id,name')
+                ->where('acheteur_id', $request->user()->id)
+                ->latest()->get()
+        );
+    }
+
     public function annulerAchat(Request $request, Vente $vente)
     {
         if ($vente->acheteur_id !== $request->user()->id && $vente->vendeur_id !== $request->user()->id) {
