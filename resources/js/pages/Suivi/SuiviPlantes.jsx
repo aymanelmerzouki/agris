@@ -172,7 +172,7 @@ export default function SuiviPlantes() {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="text-sm font-medium text-gray-700 mb-1 block">Superficie (ha) *</label>
-                                <input className="input" type="number" step="0.1" min="0.01" placeholder="ex: 2.5"
+                                <input className="input" type="number" step="0.01" min="0.01" placeholder="ex: 2.5"
                                     value={form.superficieHa}
                                     onChange={(e) => set('superficieHa')(e.target.value)} required />
                             </div>
@@ -246,11 +246,14 @@ export default function SuiviPlantes() {
                     <div className="text-center py-20 text-gray-400">
                         <p className="text-5xl mb-3">🌱</p>
                         <p className="font-medium">Aucune culture enregistrée.</p>
+                        <a href="/plantes" className="mt-4 inline-block text-sm text-green-600 border border-green-300 px-4 py-2 rounded-xl hover:bg-green-50 transition">
+                            Consulter la bibliothèque
+                        </a>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {suivis.map((s) => (
-                            <div key={s.id} className="bg-white dark:bg-green-900 rounded-2xl shadow-sm border border-gray-100 dark:border-green-800 p-5 hover:shadow-md transition">
+                            <div key={s.id} className="relative rounded-2xl border border-gray-100 dark:border-green-700/40 p-5 hover:shadow-lg transition bg-white dark:bg-white/10 dark:backdrop-blur-md shadow-sm">
                                 <div className="flex items-start justify-between mb-3">
                                     <div>
                                         <h3 className="font-bold text-gray-900 dark:text-white">{s.plante?.nom}</h3>
@@ -278,19 +281,32 @@ export default function SuiviPlantes() {
                                     )}
                                 </div>
                                 <div className="grid grid-cols-2 gap-2 text-xs">
-                                    <div className="bg-blue-50 dark:bg-black/20 rounded-lg p-2 text-center">
-                                        <p className="text-blue-600 dark:text-blue-400 font-bold text-base">{s.BesoinsEau}L</p>
+                                    <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2 text-center">
+                                        <div className="flex items-center justify-center gap-1 mb-0.5">
+                                            <svg className="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+                                                <path d="M12 2a10 10 0 00-7.07 17.07C6.39 20.56 9.08 21.5 12 21.5s5.61-.94 7.07-2.43A10 10 0 0012 2zm0 17c-3.87 0-7-3.13-7-7 0-2.38 1.19-4.47 3-5.74V14h2V8.26A6.97 6.97 0 0119 12c0 3.87-3.13 7-7 7z"/>
+                                            </svg>
+                                            <p className="text-blue-600 dark:text-blue-400 font-bold text-base">
+                                                {Number(s.BesoinsEau).toLocaleString('fr-FR')} L
+                                            </p>
+                                        </div>
                                         <p className="text-gray-500 dark:text-gray-400">eau/jour</p>
                                     </div>
-                                    <div className="bg-green-50 dark:bg-black/20 rounded-lg p-2 text-center">
-                                        <p className="text-green-600 dark:text-green-400 font-bold text-base">{s.phSol ?? '—'}</p>
+                                    <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-2 text-center">
+                                        <div className="flex items-center justify-center gap-1 mb-0.5">
+                                            <svg className="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
+                                            </svg>
+                                            <p className="text-green-600 dark:text-green-400 font-bold text-base">{s.phSol ?? '—'}</p>
+                                        </div>
                                         <p className="text-gray-500 dark:text-gray-400">pH sol</p>
                                     </div>
                                 </div>
                                 {s.notesAgriculteur && (
                                     <p className="text-xs text-gray-400 dark:text-green-300/70 mt-3 line-clamp-2 italic">"{s.notesAgriculteur}"</p>
                                 )}
-                                <p className="text-xs text-gray-300 dark:text-green-600 mt-3">
+                                <p className="text-xs text-gray-300 dark:text-green-500/70 mt-3">
                                     Depuis le {new Date(s.dateDebut).toLocaleDateString('fr-FR')}
                                 </p>
                             </div>
