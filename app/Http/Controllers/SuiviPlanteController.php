@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Plante;
 use App\Models\SuiviPlante;
 use App\Services\SolCalculator;
+use App\Services\CalculateurService;
 use Illuminate\Http\Request;
 
 class SuiviPlanteController extends Controller
 {
+    public function __construct(private CalculateurService $calculateurService) {}
     public function index(Request $request)
     {
         $query = SuiviPlante::with('plante:id,nom,espece', 'user:id,name,role')
@@ -47,14 +49,17 @@ class SuiviPlanteController extends Controller
             'statut'           => 'in:en_cours,recolte,abandonne',
         ]);
 
-        $plante = Plante::find($data['plante_id']);
-        $calcul = SolCalculator::calculer($data['natureSol'], $data['superficieHa'], $plante->typeIrrigation);
+        $calcul = $this->calculateurService->calculerBesoins(
+            $data['plante_id'], $data['natureSol'], $data['superficieHa']
+        );
 
         $suivi = SuiviPlante::create([
             ...$data,
-            'user_id'    => $request->user()->id,
-            'phSol'      => $calcul['phSol'],
-            'BesoinsEau' => $calcul['BesoinsEau'],
+            'user_id'            => $request->user()->id,
+            'phSol'              => $calcul['ph_estime'],
+            'BesoinsEau'         => $calcul['besoin_eau_calcule'],
+            'besoin_eau_calcule' => $calcul['besoin_eau_calcule'],
+            'ph_estime'          => $calcul['ph_estime'],
         ]);
 
         return response()->json($suivi->load('plante'), 201);

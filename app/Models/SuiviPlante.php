@@ -13,6 +13,7 @@ class SuiviPlante extends Model
         'user_id', 'plante_id', 'dateDebut', 'DateAgriculte', 'BesoinsEau',
         'superficieHa', 'parcelle', 'stadeVegetatif', 'tauxHumidite',
         'phSol', 'notesAgriculteur', 'statut', 'natureSol',
+        'besoin_eau_calcule', 'ph_estime',
     ];
 
     protected $casts = ['dateDebut' => 'date', 'DateAgriculte' => 'date'];
