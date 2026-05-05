@@ -1,21 +1,51 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { ShoppingCart, Plus, X, Save, Search, MapPin, User, Truck, Tag } from 'lucide-react';
 import api from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 
+const UNITES = ['kg', 'tonne', 'caisse', 'litre', 'unite'];
+const INPUT = "bg-gray-50/50 border border-gray-200 text-gray-800 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block w-full p-3 transition-all outline-none";
+const LABEL = "block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider";
+
 export default function Offres() {
     const { user } = useAuth();
+    const [searchParams] = useSearchParams();
     const [offres, setOffres] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [plantes, setPlantes] = useState([]);
     const [mesVentes, setMesVentes] = useState([]);
     const [qteAchat, setQteAchat] = useState({});
-    const [form, setForm] = useState({ plante_id: '', prix: '', quantite: '', unite: 'kg', localisation: '', description: '', livraison: false, dateCreation: new Date().toISOString().split('T')[0], dateExpiration: '' });
+    const [searchQuery, setSearchQuery] = useState('');
+    const [form, setForm] = useState({
+        plante_id: '', prix: '', quantite: '', unite: 'kg',
+        localisation: '', description: '', livraison: false,
+        dateCreation: new Date().toISOString().split('T')[0], dateExpiration: '',
+    });
 
     useEffect(() => {
         api.get('/offres').then((r) => setOffres(r.data.data));
         api.get('/plantes?per_page=100').then((r) => setPlantes(r.data.data));
         api.get('/ventes').then((r) => setMesVentes(r.data)).catch(() => {});
     }, []);
+
+    useEffect(() => {
+        const action = searchParams.get('action');
+        const produit = searchParams.get('produit') || searchParams.get('recherche');
+        const qteMax = searchParams.get('qte_max');
+        const unite = searchParams.get('unite');
+
+        if (produit) setSearchQuery(produit);
+        if (action === 'vendre') {
+            setShowForm(true);
+            setForm((prev) => ({
+                ...prev,
+                description: produit ?? '',
+                quantite: qteMax ?? '',
+                unite: unite ?? 'kg',
+            }));
+        }
+    }, [searchParams]);
 
     const set = (k) => (e) => setForm({ ...form, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value });
 
@@ -29,7 +59,7 @@ export default function Offres() {
     const accepter = async (offre) => {
         const qte = parseFloat(qteAchat[offre.id]);
         if (!qte || qte <= 0) return alert('Veuillez saisir une quantité.');
-        if (qte > offre.quantite) return alert(`Stock insuffisant. Maximum disponible : ${offre.quantite} ${offre.unite}.`);
+        if (qte > offre.quantite) return alert(`Stock insuffisant. Maximum : ${offre.quantite} ${offre.unite}.`);
         try {
             const { data } = await api.post(`/offres/${offre.id}/accepter`, { quantite: qte });
             setMesVentes((prev) => [data, ...prev]);
@@ -39,14 +69,11 @@ export default function Offres() {
                 : o
             ));
         } catch (err) {
-            const msg = err.response?.data?.errors?.quantite?.[0]
-                || err.response?.data?.message
-                || 'Erreur lors de l\'achat.';
-            alert(msg);
+            alert(err.response?.data?.errors?.quantite?.[0] || err.response?.data?.message || 'Erreur lors de l\'achat.');
         }
     };
 
-    const annuler = async (venteId, qte, offreId, unite) => {
+    const annuler = async (venteId, qte, offreId) => {
         if (!confirm('Annuler cet achat et restaurer le stock ?')) return;
         try {
             await api.delete(`/ventes/${venteId}/annuler`);
@@ -60,97 +87,149 @@ export default function Offres() {
         }
     };
 
+    const offresFiltrees = offres.filter((o) =>
+        !searchQuery || (o.plante?.nom ?? '').toLowerCase().includes(searchQuery.toLowerCase())
+            || (o.description ?? '').toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-green-950 pb-20 md:pb-8">
+            {/* Header */}
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-extrabold text-white">Marketplace</h1>
+                        <h1 className="text-2xl font-extrabold text-white flex items-center gap-3">
+                            <ShoppingCart size={28} /> Marketplace
+                        </h1>
                         <p className="text-green-100 text-sm mt-1">Achetez et vendez en MAD</p>
                     </div>
                     {['agriculteur', 'manager'].includes(user?.role) && (
-                        <button className="bg-white text-green-700 font-semibold text-sm px-4 py-2 rounded-xl shadow hover:bg-green-50 transition"
-                            onClick={() => setShowForm(!showForm)}>
-                            + Publier une offre
+                        <button onClick={() => setShowForm(!showForm)}
+                            className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition">
+                            {showForm ? <X size={18} /> : <Plus size={18} />}
+                            {showForm ? 'Annuler' : 'Publier une offre'}
                         </button>
                     )}
                 </div>
             </div>
-            <div className="max-w-5xl mx-auto px-4 md:px-6 mt-6">
-            {showForm && (
-                <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow p-6 mb-6 grid grid-cols-2 gap-4">
-                    <select className="input col-span-2" value={form.plante_id} onChange={set('plante_id')}>
-                        <option value="">Plante (optionnel)</option>
-                        {plantes.map((p) => <option key={p.id} value={p.id}>{p.nom}</option>)}
-                    </select>
-                    <input className="input" type="number" placeholder="Prix" value={form.prix} onChange={set('prix')} required />
-                    <input className="input" type="number" placeholder="Quantité" value={form.quantite} onChange={set('quantite')} required />
-                    <select className="input" value={form.unite} onChange={set('unite')}>
-                        {['kg', 'tonne', 'caisse', 'litre', 'unite'].map((u) => <option key={u} value={u}>{u}</option>)}
-                    </select>
-                    <input className="input" placeholder="Localisation" value={form.localisation} onChange={set('localisation')} />
-                    <input className="input" type="date" value={form.dateExpiration} onChange={set('dateExpiration')} placeholder="Date expiration" />
-                    <label className="flex items-center gap-2 text-sm">
-                        <input type="checkbox" checked={form.livraison} onChange={set('livraison')} /> Livraison disponible
-                    </label>
-                    <textarea className="input col-span-2" placeholder="Description" value={form.description} onChange={set('description')} />
-                    <button className="btn-primary col-span-2" type="submit">Publier</button>
-                </form>
-            )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {offres.map((o) => (
-                    <div key={o.id} className="bg-white dark:bg-green-900 rounded-2xl shadow-sm border border-gray-100 dark:border-green-800 p-4 hover:shadow-md transition">
-                        <div className="flex justify-between items-start mb-2">
-                            <div>
-                                <p className="font-bold text-gray-800 dark:text-white">{o.plante?.nom ?? 'Produit agricole'}</p>
-                                <p className="text-sm text-gray-500 dark:text-green-200/80">{o.user?.name} · {o.localisation}</p>
-                            </div>
-                            <span className={`text-xs px-2 py-1 rounded-full font-medium ${o.statut === 'disponible' ? 'bg-green-100 dark:bg-green-800/50 text-green-700 dark:text-green-400' : 'bg-gray-100 dark:bg-green-800/30 text-gray-500 dark:text-gray-400'}`}>
-                                {o.statut}
-                            </span>
-                        </div>
-                        <p className="text-lg font-extrabold text-green-600 dark:text-green-400">{o.prix} MAD / {o.unite}</p>
-                        <p className="text-sm text-gray-500 dark:text-green-300 mt-0.5">Qté: {o.quantite} {o.unite} {o.livraison && '· 🚚 Livraison'}</p>
-                        {o.description && <p className="text-xs text-gray-400 dark:text-green-400/70 mt-1 line-clamp-2">{o.description}</p>}
-                        {o.statut === 'disponible' && o.user_id !== user?.id && (
-                            <div className="mt-3 flex gap-2">
-                                <input
-                                    type="number"
-                                    min="0.01"
-                                    max={o.quantite}
-                                    step="0.01"
-                                    placeholder={`Qté (max ${o.quantite})`}
-                                    value={qteAchat[o.id] || ''}
-                                    onChange={(e) => setQteAchat({ ...qteAchat, [o.id]: e.target.value })}
-                                    className="input flex-1 text-sm"
-                                />
-                                <button onClick={() => accepter(o)} className="btn-primary text-sm px-3">
-                                    Acheter
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
-
-            {mesVentes.length > 0 && (
-                <div className="mt-10">
-                    <h2 className="text-lg font-bold text-gray-700 dark:text-white mb-3">Mes achats</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {mesVentes.map((v) => (
-                            <div key={v.id} className="bg-white dark:bg-green-900 rounded-2xl shadow-sm border border-gray-100 dark:border-green-800 p-4">
-                                <p className="font-bold text-gray-800 dark:text-white">{v.offre?.plante?.nom ?? 'Produit agricole'}</p>
-                                <p className="text-sm text-gray-500 dark:text-green-300 mt-1">{v.quantite} {v.unite} · {v.prix_total} MAD</p>
-                                <p className="text-xs text-gray-400 dark:text-green-400/70 mt-0.5">Vendeur : {v.vendeur?.name}</p>
-                                <button onClick={() => annuler(v.id, v.quantite, v.offre_id, v.unite)} className="mt-3 w-full text-sm bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-1.5 rounded-xl transition">
-                                    Annuler l'achat
-                                </button>
-                            </div>
-                        ))}
-                    </div>
+            <div className="max-w-5xl mx-auto px-4 md:px-6">
+                {/* Barre de recherche */}
+                <div className="mt-6 mb-6 relative">
+                    <Search className="absolute left-4 top-3.5 text-gray-400" size={20} />
+                    <input type="text" placeholder="Rechercher un produit, une plante..."
+                        value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-12 pr-4 py-3 bg-white border border-gray-100 rounded-xl shadow-sm focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 transition-all outline-none text-gray-800" />
                 </div>
-            )}
+
+                {/* Formulaire */}
+                {showForm && (
+                    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 space-y-5">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="md:col-span-2">
+                                <label className={LABEL}>Plante associée</label>
+                                <select className={INPUT} value={form.plante_id} onChange={set('plante_id')}>
+                                    <option value="">Aucune</option>
+                                    {plantes.map((p) => <option key={p.id} value={p.id}>{p.nom}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className={LABEL}>Prix (MAD) *</label>
+                                <input className={INPUT} type="number" min="0" step="0.01" placeholder="ex: 150" value={form.prix} onChange={set('prix')} required />
+                            </div>
+                            <div>
+                                <label className={LABEL}>Quantité *</label>
+                                <input className={INPUT} type="number" min="0" step="0.01" placeholder="ex: 200" value={form.quantite} onChange={set('quantite')} required />
+                            </div>
+                            <div>
+                                <label className={LABEL}>Unité</label>
+                                <select className={INPUT} value={form.unite} onChange={set('unite')}>
+                                    {UNITES.map((u) => <option key={u} value={u}>{u}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className={LABEL}>Localisation</label>
+                                <input className={INPUT} placeholder="ex: Agadir" value={form.localisation} onChange={set('localisation')} />
+                            </div>
+                            <div>
+                                <label className={LABEL}>Date d'expiration</label>
+                                <input className={INPUT} type="date" value={form.dateExpiration} onChange={set('dateExpiration')} />
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <input type="checkbox" id="livraison" checked={form.livraison} onChange={set('livraison')} className="w-4 h-4 accent-emerald-600" />
+                                <label htmlFor="livraison" className="text-sm text-gray-700 font-medium">Livraison disponible</label>
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className={LABEL}>Description</label>
+                                <textarea className={INPUT} placeholder="Détails de l'offre..." value={form.description} onChange={set('description')} rows={2} />
+                            </div>
+                        </div>
+                        <button type="submit"
+                            className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition-all shadow-sm">
+                            <Save size={18} /> Publier l'offre
+                        </button>
+                    </form>
+                )}
+
+                {/* Grille des offres */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {offresFiltrees.map((o) => (
+                        <div key={o.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow flex flex-col gap-3">
+                            <div className="flex items-start justify-between">
+                                <p className="font-bold text-gray-800 text-base">{o.plante?.nom ?? 'Produit agricole'}</p>
+                                <span className={`text-xs px-2 py-1 rounded-full font-medium ${o.statut === 'disponible' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                                    {o.statut}
+                                </span>
+                            </div>
+
+                            <p className="text-2xl font-black text-emerald-600">{o.prix} <span className="text-sm font-medium text-gray-400">MAD / {o.unite}</span></p>
+
+                            <div className="flex flex-col gap-1.5 text-sm text-gray-500">
+                                <p className="flex items-center gap-2"><User size={14} className="text-gray-400" /> {o.user?.name}</p>
+                                {o.localisation && <p className="flex items-center gap-2"><MapPin size={14} className="text-gray-400" /> {o.localisation}</p>}
+                                {o.livraison && <p className="flex items-center gap-2"><Truck size={14} className="text-gray-400" /> Livraison disponible</p>}
+                            </div>
+
+                            <p className="text-xs text-gray-400">Qté disponible : {o.quantite} {o.unite}</p>
+
+                            {o.description && <p className="text-xs text-gray-400 line-clamp-2 italic">{o.description}</p>}
+
+                            {o.statut === 'disponible' && o.user_id !== user?.id && (
+                                <div className="flex gap-2 mt-auto pt-3 border-t border-gray-100">
+                                    <input type="number" min="0.01" max={o.quantite} step="0.01"
+                                        placeholder={`Max ${o.quantite}`}
+                                        value={qteAchat[o.id] || ''}
+                                        onChange={(e) => setQteAchat({ ...qteAchat, [o.id]: e.target.value })}
+                                        className="bg-gray-50 border border-gray-200 text-gray-800 text-sm rounded-xl p-2.5 flex-1 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
+                                    <button onClick={() => accepter(o)}
+                                        className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 rounded-xl transition-all text-sm">
+                                        <ShoppingCart size={14} /> Acheter
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                {/* Mes achats */}
+                {mesVentes.length > 0 && (
+                    <div className="mt-10">
+                        <h2 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">Mes achats</h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {mesVentes.map((v) => (
+                                <div key={v.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex flex-col gap-3">
+                                    <p className="font-bold text-gray-800">{v.offre?.plante?.nom ?? 'Produit agricole'}</p>
+                                    <p className="text-sm text-gray-500">{v.quantite} {v.unite} · <span className="font-semibold text-emerald-600">{v.prix_total} MAD</span></p>
+                                    <p className="flex items-center gap-2 text-xs text-gray-400"><User size={12} /> {v.vendeur?.name}</p>
+                                    <button onClick={() => annuler(v.id, v.quantite, v.offre_id)}
+                                        className="mt-auto w-full text-sm bg-red-50 hover:bg-red-100 text-red-600 font-semibold py-2 rounded-xl transition">
+                                        Annuler l'achat
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
