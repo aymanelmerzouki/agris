@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Sprout } from 'lucide-react';
+import { Sprout, Map, X, Plus } from 'lucide-react';
 import api from '../../api';
 
 const STADES = ['germination', 'croissance', 'floraison', 'fructification', 'recolte'];
@@ -124,12 +124,13 @@ export default function SuiviPlantes() {
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-extrabold text-white flex items-center gap-3"><Sprout size={28} /> Mes cultures</h1>
+                        <h1 className="text-2xl font-extrabold text-white flex items-center gap-3"><Map size={28} /> Mes cultures</h1>
                         <p className="text-green-200 text-sm mt-1">{suivis.length} culture(s) suivie(s)</p>
                     </div>
                     <button onClick={() => setShowForm(!showForm)}
-                        className="bg-white text-green-700 font-semibold text-sm px-4 py-2 rounded-xl shadow hover:bg-green-50 transition">
-                        {showForm ? 'Annuler' : '+ Nouvelle culture'}
+                        className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition">
+                        {showForm ? <X size={18} /> : <Plus size={18} />}
+                        {showForm ? 'Annuler' : 'Nouvelle culture'}
                     </button>
                 </div>
             </div>
