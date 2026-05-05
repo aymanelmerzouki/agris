@@ -21,7 +21,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 60000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/tomate.webp',
             ],
             [
                 'nom' => 'Blé dur',
@@ -37,7 +37,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 3500,
                 'typeIrrigation' => 'pluviale',
                 'estBio' => false,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/ble-dur.webp',
             ],
             [
                 'nom' => 'Olivier',
@@ -53,7 +53,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 8000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => true,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/olivier.webp',
             ],
             [
                 'nom' => 'Arganier',
@@ -69,7 +69,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 500,
                 'typeIrrigation' => 'pluviale',
                 'estBio' => true,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/arganier.webp',
             ],
             [
                 'nom' => 'Clémentine',
@@ -85,7 +85,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 25000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/clementine.webp',
             ],
             [
                 'nom' => 'Pomme de terre',
@@ -101,7 +101,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 25000,
                 'typeIrrigation' => 'aspersion',
                 'estBio' => false,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/pomme-de-terre.webp',
             ],
             [
                 'nom' => 'Menthe poivrée',
@@ -117,7 +117,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 15000,
                 'typeIrrigation' => 'aspersion',
                 'estBio' => true,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/menthe-poivree.webp',
             ],
             [
                 'nom' => 'Cactus figuier de Barbarie',
@@ -133,7 +133,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 20000,
                 'typeIrrigation' => 'pluviale',
                 'estBio' => true,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/cactus-figuier.webp',
             ],
             [
                 'nom' => 'Oignon',
@@ -149,7 +149,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 30000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/oignon.webp',
             ],
             [
                 'nom' => 'Safran',
@@ -165,7 +165,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 6,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => true,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/safran.webp',
             ],
             [
                 'nom' => 'Pastèque',
@@ -181,7 +181,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 35000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/pasteque.webp',
             ],
             [
                 'nom' => 'Dattier',
@@ -197,7 +197,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 10000,
                 'typeIrrigation' => 'submersion',
                 'estBio' => true,
-                'imageUrl' => 'https:
+                'imageUrl' => '/images/plantes/dattier.webp',
             ],
         ];
         foreach ($plantes as $data) {
