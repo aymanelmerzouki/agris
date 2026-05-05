@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ShoppingCart, Plus, X, Save, Search, MapPin, User, Truck, Tag } from 'lucide-react';
+import { ShoppingCart, Plus, X, Save, Search, MapPin, User, Truck, Tag, Heart, MessageSquare, Edit2, Trash2 } from 'lucide-react';
 import api from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -17,6 +17,10 @@ export default function Offres() {
     const [mesVentes, setMesVentes] = useState([]);
     const [qteAchat, setQteAchat] = useState({});
     const [searchQuery, setSearchQuery] = useState('');
+    const [activeTab, setActiveTab] = useState('toutes');
+    const [suivies, setSuivies] = useState([]);
+    const [negociationItem, setNegociationItem] = useState(null);
+    const [negocForm, setNegocForm] = useState({ prix: '', message: '' });
     const [form, setForm] = useState({
         plante_id: '', prix: '', quantite: '', unite: 'kg',
         localisation: '', description: '', livraison: false,
@@ -87,10 +91,20 @@ export default function Offres() {
         }
     };
 
-    const offresFiltrees = offres.filter((o) =>
-        !searchQuery || (o.plante?.nom ?? '').toLowerCase().includes(searchQuery.toLowerCase())
-            || (o.description ?? '').toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const toggleSuivie = (id) => setSuivies((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
+
+    const supprimerOffre = async (id) => {
+        if (!confirm('Supprimer cette offre ?')) return;
+        await api.delete(`/offres/${id}`);
+        setOffres((prev) => prev.filter((o) => o.id !== id));
+    };
+
+    const offresFiltrees = offres.filter((o) => {
+        const matchSearch = !searchQuery || (o.plante?.nom ?? '').toLowerCase().includes(searchQuery.toLowerCase()) || (o.description ?? '').toLowerCase().includes(searchQuery.toLowerCase());
+        if (activeTab === 'mes_offres') return matchSearch && o.user_id === user?.id;
+        if (activeTab === 'suivies') return matchSearch && suivies.includes(o.id);
+        return matchSearch;
+    });
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-green-950 pb-20 md:pb-8">
@@ -122,7 +136,22 @@ export default function Offres() {
                         className="w-full pl-12 pr-4 py-3 bg-white border border-gray-100 rounded-xl shadow-sm focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 transition-all outline-none text-gray-800" />
                 </div>
 
-                {/* Formulaire */}
+                {/* Onglets */}
+                <div className="max-w-5xl mx-auto flex gap-6 border-b border-gray-200 mb-6">
+                    {[
+                        { key: 'toutes', label: 'Toutes les offres' },
+                        { key: 'mes_offres', label: `Mes offres`, badge: offres.filter((o) => o.user_id === user?.id).length },
+                        { key: 'suivies', label: 'Offres suivies', badge: suivies.length },
+                    ].map(({ key, label, badge }) => (
+                        <button key={key} onClick={() => setActiveTab(key)}
+                            className={activeTab === key
+                                ? 'pb-3 text-sm font-bold text-emerald-600 border-b-2 border-emerald-600 flex items-center gap-2'
+                                : 'pb-3 text-sm font-medium text-gray-500 hover:text-gray-700 transition-colors flex items-center gap-2'}>
+                            {label}
+                            {badge > 0 && <span className="bg-emerald-100 text-emerald-700 text-xs font-bold px-1.5 py-0.5 rounded-full">{badge}</span>}
+                        </button>
+                    ))}
+                </div>
                 {showForm && (
                     <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 space-y-5">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -177,9 +206,16 @@ export default function Offres() {
                         <div key={o.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow flex flex-col gap-3">
                             <div className="flex items-start justify-between">
                                 <p className="font-bold text-gray-800 text-base">{o.plante?.nom ?? 'Produit agricole'}</p>
-                                <span className={`text-xs px-2 py-1 rounded-full font-medium ${o.statut === 'disponible' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
-                                    {o.statut}
-                                </span>
+                                <div className="flex items-center gap-2">
+                                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${o.statut === 'disponible' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+                                        {o.statut}
+                                    </span>
+                                    {activeTab !== 'mes_offres' && (
+                                        <button onClick={() => toggleSuivie(o.id)} className="transition-colors">
+                                            <Heart size={18} className={suivies.includes(o.id) ? 'text-red-500 fill-red-500' : 'text-gray-300 hover:text-red-400'} />
+                                        </button>
+                                    )}
+                                </div>
                             </div>
 
                             <p className="text-2xl font-black text-emerald-600">{o.prix} <span className="text-sm font-medium text-gray-400">MAD / {o.unite}</span></p>
@@ -191,25 +227,73 @@ export default function Offres() {
                             </div>
 
                             <p className="text-xs text-gray-400">Qté disponible : {o.quantite} {o.unite}</p>
-
                             {o.description && <p className="text-xs text-gray-400 line-clamp-2 italic">{o.description}</p>}
 
-                            {o.statut === 'disponible' && o.user_id !== user?.id && (
+                            {activeTab === 'mes_offres' ? (
                                 <div className="flex gap-2 mt-auto pt-3 border-t border-gray-100">
-                                    <input type="number" min="0.01" max={o.quantite} step="0.01"
-                                        placeholder={`Max ${o.quantite}`}
-                                        value={qteAchat[o.id] || ''}
-                                        onChange={(e) => setQteAchat({ ...qteAchat, [o.id]: e.target.value })}
-                                        className="bg-gray-50 border border-gray-200 text-gray-800 text-sm rounded-xl p-2.5 flex-1 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
-                                    <button onClick={() => accepter(o)}
-                                        className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 rounded-xl transition-all text-sm">
-                                        <ShoppingCart size={14} /> Acheter
+                                    <button className="flex items-center gap-2 text-emerald-600 hover:bg-emerald-50 px-3 py-2 rounded-lg text-sm font-medium transition">
+                                        <Edit2 size={16} /> Modifier
+                                    </button>
+                                    <button onClick={() => supprimerOffre(o.id)} className="flex items-center gap-2 text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg text-sm font-medium transition">
+                                        <Trash2 size={16} /> Supprimer
                                     </button>
                                 </div>
+                            ) : (
+                                o.statut === 'disponible' && o.user_id !== user?.id && (
+                                    <div className="flex flex-col gap-2 mt-auto pt-3 border-t border-gray-100">
+                                        <div className="flex gap-2">
+                                            <input type="number" min="0.01" max={o.quantite} step="0.01"
+                                                placeholder={`Max ${o.quantite}`}
+                                                value={qteAchat[o.id] || ''}
+                                                onChange={(e) => setQteAchat({ ...qteAchat, [o.id]: e.target.value })}
+                                                className="bg-gray-50 border border-gray-200 text-gray-800 text-sm rounded-xl p-2.5 flex-1 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
+                                            <button onClick={() => accepter(o)}
+                                                className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 rounded-xl transition-all text-sm">
+                                                <ShoppingCart size={14} /> Acheter
+                                            </button>
+                                        </div>
+                                        <button onClick={() => { setNegociationItem(o); setNegocForm({ prix: '', message: '' }); }}
+                                            className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-xl transition-colors shadow-sm">
+                                            <MessageSquare size={16} /> Négocier
+                                        </button>
+                                    </div>
+                                )
                             )}
                         </div>
                     ))}
                 </div>
+
+                {/* Modale négociation */}
+                {negociationItem && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+                        <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md space-y-4">
+                            <div className="flex items-center justify-between">
+                                <h3 className="font-bold text-gray-800">Négocier — {negociationItem.plante?.nom ?? 'Produit'}</h3>
+                                <button onClick={() => setNegociationItem(null)}><X size={20} className="text-gray-400 hover:text-gray-600" /></button>
+                            </div>
+                            <div>
+                                <label className={LABEL}>Prix proposé (MAD)</label>
+                                <input className={INPUT} type="number" min="0" step="0.01" placeholder={`Prix actuel : ${negociationItem.prix} MAD`}
+                                    value={negocForm.prix} onChange={(e) => setNegocForm({ ...negocForm, prix: e.target.value })} />
+                            </div>
+                            <div>
+                                <label className={LABEL}>Message au vendeur</label>
+                                <textarea className={INPUT} rows={3} placeholder="Votre proposition..."
+                                    value={negocForm.message} onChange={(e) => setNegocForm({ ...negocForm, message: e.target.value })} />
+                            </div>
+                            <div className="flex gap-3">
+                                <button onClick={() => setNegociationItem(null)}
+                                    className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition">
+                                    Annuler
+                                </button>
+                                <button onClick={() => { alert('Négociation envoyée (fonctionnalité à brancher sur l\'API).'); setNegociationItem(null); }}
+                                    className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition">
+                                    Envoyer
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 {/* Mes achats */}
                 {mesVentes.length > 0 && (
