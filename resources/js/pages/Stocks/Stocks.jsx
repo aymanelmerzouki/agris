@@ -76,11 +76,11 @@ export default function Stocks() {
                             </div>
                             <div>
                                 <label className={LABEL}>Quantité *</label>
-                                <input className={INPUT} type="number" placeholder="ex: 500" value={form.quantite} onChange={set('quantite')} required />
+                                <input className={INPUT} type="number" min="0" step="0.01" placeholder="ex: 500" value={form.quantite} onChange={set('quantite')} required />
                             </div>
                             <div>
                                 <label className={LABEL}>Seuil d'alerte</label>
-                                <input className={INPUT} type="number" placeholder="ex: 100" value={form.seuilAlerte} onChange={set('seuilAlerte')} />
+                                <input className={INPUT} type="number" min="0" step="0.01" placeholder="ex: 100" value={form.seuilAlerte} onChange={set('seuilAlerte')} />
                             </div>
                             <div>
                                 <label className={LABEL}>Localisation</label>
