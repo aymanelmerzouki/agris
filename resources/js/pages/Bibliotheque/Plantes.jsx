@@ -31,7 +31,7 @@ export default function Plantes() {
                 <div className="relative mb-6 max-w-sm">
                     <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
                     <input
-                        className="w-full bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-green-500 focus:border-green-500 block pl-9 p-2.5 placeholder-gray-400 dark:bg-green-900 dark:border-green-700 dark:text-white dark:placeholder-green-400"
+                        className="w-full bg-white border border-gray-200 text-gray-800 text-sm rounded-xl shadow-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 block p-3 pl-10 placeholder-gray-400 transition-all duration-200 dark:bg-green-900 dark:border-green-700 dark:text-white dark:placeholder-green-400"
                         placeholder="Rechercher une plante..."
                         value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} />
                 </div>
