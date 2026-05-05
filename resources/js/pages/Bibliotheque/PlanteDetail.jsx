@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Bookmark, BookmarkCheck } from 'lucide-react';
 import api from '../../api';
 
 export default function PlanteDetail() {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [plante, setPlante] = useState(null);
+    const [favori, setFavori] = useState(false);
 
     useEffect(() => {
-        api.get(`/plantes/${id}`).then((r) => setPlante(r.data));
+        api.get(`/plantes/${id}`).then((r) => {
+            setPlante(r.data);
+            setFavori(r.data.favori ?? false);
+        });
     }, [id]);
+
+    const toggleFavori = async () => {
+        const { data } = await api.post(`/plantes/${id}/favori`);
+        setFavori(data.favori);
+    };
 
     if (!plante) return <div className="min-h-screen bg-gray-50 dark:bg-green-950 p-6">Chargement...</div>;
 
@@ -19,13 +28,20 @@ export default function PlanteDetail() {
                 <div className="max-w-2xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-extrabold text-white">{plante.nom}</h1>
-                        <p className="text-green-100 italic mt-1">{plante.espece} · {plante.famille}</p>
+                        <p className="text-green-100 italic mt-1">
+                            Espèce : {plante.espece} | Famille : {plante.famille}
+                        </p>
                     </div>
                     <button
-                        onClick={() => navigate(`/suivi/create?plante_id=${plante.id}`)}
-                        className="bg-white text-green-700 font-semibold text-sm px-4 py-2 rounded-xl shadow hover:bg-green-50 transition"
+                        onClick={toggleFavori}
+                        title={favori ? 'Retirer de ma sélection' : 'Ajouter à ma sélection'}
+                        className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition"
                     >
-                        + Démarrer cette culture
+                        {favori
+                            ? <BookmarkCheck size={18} className="text-white" />
+                            : <Bookmark size={18} className="text-white" />
+                        }
+                        {favori ? 'Sélectionnée' : 'Ajouter à ma sélection'}
                     </button>
                 </div>
             </div>
