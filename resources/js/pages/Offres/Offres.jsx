@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ShoppingCart, Plus, X, Save, Search, MapPin, User, Truck, Tag, Heart, MessageSquare, Edit2, Trash2 } from 'lucide-react';
+import { ShoppingCart, Plus, X, Save, Search, MapPin, User, Truck, Tag, Bookmark, MessageSquare, Edit2, Trash2, Handshake } from 'lucide-react';
 import api from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -212,7 +212,7 @@ export default function Offres() {
                                     </span>
                                     {activeTab !== 'mes_offres' && (
                                         <button onClick={() => toggleSuivie(o.id)} className="transition-colors">
-                                            <Heart size={18} className={suivies.includes(o.id) ? 'text-red-500 fill-red-500' : 'text-gray-300 hover:text-red-400'} />
+                                            <Bookmark size={18} className={suivies.includes(o.id) ? 'text-emerald-500 fill-emerald-500' : 'text-gray-300 hover:text-gray-400'} />
                                         </button>
                                     )}
                                 </div>
@@ -239,22 +239,24 @@ export default function Offres() {
                                     </button>
                                 </div>
                             ) : (
-                                o.statut === 'disponible' && o.user_id !== user?.id && (
-                                    <div className="flex flex-col gap-2 mt-auto pt-3 border-t border-gray-100">
-                                        <div className="flex gap-2">
-                                            <input type="number" min="0.01" max={o.quantite} step="0.01"
-                                                placeholder={`Max ${o.quantite}`}
-                                                value={qteAchat[o.id] || ''}
-                                                onChange={(e) => setQteAchat({ ...qteAchat, [o.id]: e.target.value })}
-                                                className="bg-gray-50 border border-gray-200 text-gray-800 text-sm rounded-xl p-2.5 flex-1 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
-                                            <button onClick={() => accepter(o)}
-                                                className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 rounded-xl transition-all text-sm">
-                                                <ShoppingCart size={14} /> Acheter
-                                            </button>
-                                        </div>
+                                o.user_id !== user?.id && (
+                                    <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
+                                        {o.statut === 'disponible' && (
+                                            <div className="flex gap-2">
+                                                <input type="number" min="0.01" max={o.quantite} step="0.01"
+                                                    placeholder={`Max ${o.quantite}`}
+                                                    value={qteAchat[o.id] || ''}
+                                                    onChange={(e) => setQteAchat({ ...qteAchat, [o.id]: e.target.value })}
+                                                    className="bg-gray-50 border border-gray-200 text-gray-800 text-sm rounded-xl p-2.5 flex-1 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
+                                                <button onClick={() => accepter(o)}
+                                                    className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 rounded-xl transition-all text-sm">
+                                                    <ShoppingCart size={14} /> Acheter
+                                                </button>
+                                            </div>
+                                        )}
                                         <button onClick={() => { setNegociationItem(o); setNegocForm({ prix: '', message: '' }); }}
                                             className="flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-sm font-semibold rounded-xl transition-colors shadow-sm">
-                                            <MessageSquare size={16} /> Négocier
+                                            <Handshake size={16} /> Négocier
                                         </button>
                                     </div>
                                 )
