@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Package, Plus, X, Save } from 'lucide-react';
 import api from '../../api';
 
 const UNITES = ['kg', 'tonne', 'caisse', 'litre', 'unite'];
+const INPUT = "w-full bg-gray-50/50 border border-gray-200 text-gray-800 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none";
+const LABEL = "block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider";
 
 export default function Stocks() {
     const [stocks, setStocks] = useState([]);
@@ -36,44 +39,85 @@ export default function Stocks() {
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-extrabold text-white">📦 Gestion des stocks</h1>
+                        <h1 className="text-2xl font-extrabold text-white flex items-center gap-3">
+                            <Package size={28} /> Gestion des stocks
+                        </h1>
                         <p className="text-green-200 text-sm mt-1">{stocks.length} produit(s) en stock</p>
                     </div>
                     <button onClick={() => setShowForm(!showForm)}
-                        className="bg-white text-green-700 font-semibold text-sm px-4 py-2 rounded-xl shadow hover:bg-green-50 transition">
-                        + Ajouter
+                        className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition">
+                        {showForm ? <X size={18} /> : <Plus size={18} />}
+                        {showForm ? 'Annuler' : 'Ajouter'}
                     </button>
                 </div>
             </div>
 
             <div className="max-w-5xl mx-auto px-4 md:px-6 mt-6">
                 {showForm && (
-                    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-md border border-gray-100 p-6 mb-6 grid grid-cols-2 gap-4">
-                        <input className="input col-span-2" placeholder="Nom du produit *" value={form.produit} onChange={set('produit')} required />
-                        <select className="input" value={form.plante_id} onChange={set('plante_id')}>
-                            <option value="">Plante associée (optionnel)</option>
-                            {plantes.map((p) => <option key={p.id} value={p.id}>{p.nom}</option>)}
-                        </select>
-                        <select className="input" value={form.unite} onChange={set('unite')}>
-                            {UNITES.map((u) => <option key={u} value={u}>{u}</option>)}
-                        </select>
-                        <input className="input" type="number" placeholder="Quantité *" value={form.quantite} onChange={set('quantite')} required />
-                        <input className="input" type="number" placeholder="Seuil d'alerte" value={form.seuilAlerte} onChange={set('seuilAlerte')} />
-                        <input className="input" placeholder="Localisation" value={form.localisation} onChange={set('localisation')} />
-                        <input className="input" type="date" value={form.dateEntree} onChange={set('dateEntree')} />
-                        <input className="input" type="date" placeholder="Date expiration" value={form.dateExpiration} onChange={set('dateExpiration')} />
-                        <textarea className="input col-span-2" placeholder="Notes" value={form.notes} onChange={set('notes')} rows={2} />
-                        <div className="col-span-2 flex gap-3">
-                            <button className="btn-primary flex-1" type="submit">Enregistrer</button>
-                            <button type="button" onClick={() => setShowForm(false)} className="btn-secondary flex-1">Annuler</button>
+                    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 space-y-5">
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div className="md:col-span-2">
+                                <label className={LABEL}>Nom du produit *</label>
+                                <input className={INPUT} placeholder="ex: Engrais NPK" value={form.produit} onChange={set('produit')} required />
+                            </div>
+                            <div>
+                                <label className={LABEL}>Plante associée</label>
+                                <select className={INPUT} value={form.plante_id} onChange={set('plante_id')}>
+                                    <option value="">Aucune</option>
+                                    {plantes.map((p) => <option key={p.id} value={p.id}>{p.nom}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className={LABEL}>Unité</label>
+                                <select className={INPUT} value={form.unite} onChange={set('unite')}>
+                                    {UNITES.map((u) => <option key={u} value={u}>{u}</option>)}
+                                </select>
+                            </div>
+                            <div>
+                                <label className={LABEL}>Quantité *</label>
+                                <input className={INPUT} type="number" placeholder="ex: 500" value={form.quantite} onChange={set('quantite')} required />
+                            </div>
+                            <div>
+                                <label className={LABEL}>Seuil d'alerte</label>
+                                <input className={INPUT} type="number" placeholder="ex: 100" value={form.seuilAlerte} onChange={set('seuilAlerte')} />
+                            </div>
+                            <div>
+                                <label className={LABEL}>Localisation</label>
+                                <input className={INPUT} placeholder="ex: Entrepôt A" value={form.localisation} onChange={set('localisation')} />
+                            </div>
+                            <div>
+                                <label className={LABEL}>Date d'entrée</label>
+                                <input className={INPUT} type="date" value={form.dateEntree} onChange={set('dateEntree')} />
+                            </div>
+                            <div>
+                                <label className={LABEL}>Date d'expiration</label>
+                                <input className={INPUT} type="date" value={form.dateExpiration} onChange={set('dateExpiration')} />
+                            </div>
+                            <div className="md:col-span-2">
+                                <label className={LABEL}>Notes</label>
+                                <textarea className={INPUT} placeholder="Observations..." value={form.notes} onChange={set('notes')} rows={2} />
+                            </div>
+                        </div>
+
+                        <div className="flex gap-3 pt-2">
+                            <button type="submit"
+                                className="flex items-center justify-center gap-2 flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition-all shadow-sm">
+                                <Save size={18} /> Enregistrer
+                            </button>
+                            <button type="button" onClick={() => setShowForm(false)}
+                                className="flex items-center justify-center gap-2 flex-1 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium py-3 rounded-xl transition-all shadow-sm">
+                                <X size={18} /> Annuler
+                            </button>
                         </div>
                     </form>
                 )}
 
                 {stocks.length === 0 ? (
-                    <div className="text-center py-20 text-gray-400 dark:text-green-300">
-                        <p className="text-4xl mb-3">📦</p>
-                        <p>Aucun stock enregistré.</p>
+                    <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
+                        <Package size={56} className="text-gray-300 mb-4" />
+                        <p className="font-semibold text-gray-600 dark:text-green-300">Aucun stock enregistré.</p>
+                        <p className="text-sm text-gray-400 mt-1">Ajoutez votre premier produit en stock.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -82,10 +126,10 @@ export default function Stocks() {
                                 <div className="flex items-start justify-between mb-3">
                                     <div>
                                         <h3 className="font-bold text-gray-900">{s.produit}</h3>
-                                        {s.plante && <p className="text-xs text-green-600 mt-0.5">🌿 {s.plante.nom}</p>}
+                                        {s.plante && <p className="text-xs text-green-600 mt-0.5">{s.plante.nom}</p>}
                                     </div>
                                     {isAlerte(s) && (
-                                        <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-medium">⚠️ Stock bas</span>
+                                        <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-medium">Stock bas</span>
                                     )}
                                 </div>
                                 <div className="text-2xl font-extrabold text-green-700 mb-1">
@@ -98,8 +142,8 @@ export default function Stocks() {
                                     </div>
                                 )}
                                 <div className="text-xs text-gray-400 space-y-0.5">
-                                    {s.localisation && <p>📍 {s.localisation}</p>}
-                                    {s.dateExpiration && <p>📅 Expire le {new Date(s.dateExpiration).toLocaleDateString('fr-FR')}</p>}
+                                    {s.localisation && <p>{s.localisation}</p>}
+                                    {s.dateExpiration && <p>Expire le {new Date(s.dateExpiration).toLocaleDateString('fr-FR')}</p>}
                                 </div>
                                 <button onClick={() => handleDelete(s.id)}
                                     className="mt-3 text-xs text-red-400 hover:text-red-600 transition">
