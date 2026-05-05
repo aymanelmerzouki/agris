@@ -55,7 +55,7 @@ export default function Favoris() {
                                     {p.famille && <p className="text-xs text-gray-400 dark:text-green-400/70 mt-0.5">{p.famille}</p>}
 
                                     <div className="flex items-center justify-between mt-4">
-                                        <Link to={`/suivi/create?plante_id=${p.id}`}
+                                        <Link to={`/suivi?plante_id=${p.id}`}
                                             className="bg-green-600 hover:bg-green-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition">
                                             + Démarrer cette culture
                                         </Link>

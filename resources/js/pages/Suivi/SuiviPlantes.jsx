@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import api from '../../api';
 
 const STADES = ['germination', 'croissance', 'floraison', 'fructification', 'recolte'];
@@ -67,10 +68,15 @@ export default function SuiviPlantes() {
     const [loading, setLoading] = useState(true);
     const [calcul, setCalcul] = useState(null);
     const [calcLoading, setCalcLoading] = useState(false);
+    const [searchParams] = useSearchParams();
     const [form, setForm] = useState({
-        plante_id: '', dateDebut: '', natureSol: '',
+        plante_id: searchParams.get('plante_id') ?? '', dateDebut: '', natureSol: '',
         superficieHa: '', parcelle: '', stadeVegetatif: 'germination', notesAgriculteur: '',
     });
+
+    useEffect(() => {
+        if (searchParams.get('plante_id')) setShowForm(true);
+    }, []);
 
     useEffect(() => {
         Promise.all([
@@ -246,9 +252,9 @@ export default function SuiviPlantes() {
                     <div className="text-center py-20 text-gray-400">
                         <p className="text-5xl mb-3">🌱</p>
                         <p className="font-medium">Aucune culture enregistrée.</p>
-                        <a href="/plantes" className="mt-4 inline-block text-sm text-green-600 border border-green-300 px-4 py-2 rounded-xl hover:bg-green-50 transition">
+                        <Link to="/plantes" className="mt-4 inline-block text-sm text-green-600 border border-green-300 px-4 py-2 rounded-xl hover:bg-green-50 transition">
                             Consulter la bibliothèque
-                        </a>
+                        </Link>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
