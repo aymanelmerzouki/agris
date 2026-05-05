@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Package, Plus, X, Save } from 'lucide-react';
+import { Package, Plus, X, Save, Trash2, MapPin, Calendar, AlertTriangle } from 'lucide-react';
 import api from '../../api';
 
 const UNITES = ['kg', 'tonne', 'caisse', 'litre', 'unite'];
@@ -122,33 +122,50 @@ export default function Stocks() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {stocks.map((s) => (
-                            <div key={s.id} className={`bg-white rounded-2xl shadow-sm border p-5 hover:shadow-md transition ${isAlerte(s) ? 'border-red-200 bg-red-50' : 'border-gray-100'}`}>
-                                <div className="flex items-start justify-between mb-3">
+                            <div key={s.id} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3 relative">
+                                <div className="flex items-start justify-between">
                                     <div>
-                                        <h3 className="font-bold text-gray-900">{s.produit}</h3>
-                                        {s.plante && <p className="text-xs text-green-600 mt-0.5">{s.plante.nom}</p>}
+                                        <h3 className="text-lg font-bold text-gray-800 capitalize">{s.produit}</h3>
+                                        {s.plante && <p className="text-xs text-emerald-600 mt-0.5">{s.plante.nom}</p>}
                                     </div>
+                                    <button onClick={() => handleDelete(s.id)}
+                                        className="text-gray-400 hover:text-red-500 transition-colors">
+                                        <Trash2 size={18} />
+                                    </button>
+                                </div>
+
+                                <div className="flex items-end gap-2">
+                                    <span className={`text-2xl font-black ${isAlerte(s) ? 'text-red-600' : 'text-emerald-600'}`}>
+                                        {s.quantite}
+                                    </span>
+                                    <span className="text-sm font-medium text-gray-500 mb-0.5">{s.unite}</span>
                                     {isAlerte(s) && (
-                                        <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full font-medium">Stock bas</span>
+                                        <span className="ml-auto flex items-center gap-1 text-xs bg-red-50 text-red-500 border border-red-100 px-2 py-0.5 rounded-full font-medium">
+                                            <AlertTriangle size={12} /> Stock faible
+                                        </span>
                                     )}
                                 </div>
-                                <div className="text-2xl font-extrabold text-green-700 mb-1">
-                                    {s.quantite} <span className="text-sm font-normal text-gray-400">{s.unite}</span>
-                                </div>
-                                {s.seuilAlerte && (
-                                    <div className="w-full bg-gray-100 rounded-full h-1.5 mb-3">
-                                        <div className={`h-1.5 rounded-full ${isAlerte(s) ? 'bg-red-400' : 'bg-green-400'}`}
+
+                                {s.seuilAlerte > 0 && (
+                                    <div className="w-full bg-gray-100 rounded-full h-1.5">
+                                        <div className={`h-1.5 rounded-full transition-all ${isAlerte(s) ? 'bg-red-400' : 'bg-emerald-400'}`}
                                             style={{ width: `${Math.min((s.quantite / (s.seuilAlerte * 2)) * 100, 100)}%` }} />
                                     </div>
                                 )}
-                                <div className="text-xs text-gray-400 space-y-0.5">
-                                    {s.localisation && <p>{s.localisation}</p>}
-                                    {s.dateExpiration && <p>Expire le {new Date(s.dateExpiration).toLocaleDateString('fr-FR')}</p>}
+
+                                <div className="flex flex-col gap-1.5 mt-auto">
+                                    {s.localisation && (
+                                        <p className="flex items-center gap-2 text-sm text-gray-500">
+                                            <MapPin size={16} className="text-gray-400 shrink-0" /> {s.localisation}
+                                        </p>
+                                    )}
+                                    {s.dateExpiration && (
+                                        <p className="flex items-center gap-2 text-sm text-gray-500">
+                                            <Calendar size={16} className="text-gray-400 shrink-0" />
+                                            Expire le {new Date(s.dateExpiration).toLocaleDateString('fr-FR')}
+                                        </p>
+                                    )}
                                 </div>
-                                <button onClick={() => handleDelete(s.id)}
-                                    className="mt-3 text-xs text-red-400 hover:text-red-600 transition">
-                                    Supprimer
-                                </button>
                             </div>
                         ))}
                     </div>
