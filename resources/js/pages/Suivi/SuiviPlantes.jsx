@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Sprout, Map, X, Plus } from 'lucide-react';
+import { Map, X, Plus, Save } from 'lucide-react';
 import api from '../../api';
 
 const STADES = ['germination', 'croissance', 'floraison', 'fructification', 'recolte'];
@@ -143,7 +143,7 @@ export default function SuiviPlantes() {
                         
                         <div>
                             <label className="text-sm font-medium text-gray-700 mb-1 block">Plante *</label>
-                            <select className="input" value={form.plante_id}
+                            <select className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 block p-3 transition-all outline-none" value={form.plante_id}
                                 onChange={(e) => set('plante_id')(e.target.value)} required>
                                 <option value="">Choisir une plante</option>
                                 {plantes.map((p) => <option key={p.id} value={p.id}>{p.nom} — {p.espece}</option>)}
@@ -159,7 +159,7 @@ export default function SuiviPlantes() {
                                 {NATURES_SOL.map((sol) => (
                                     <button key={sol.value} type="button"
                                         onClick={() => set('natureSol')(sol.value)}
-                                        className={`rounded-xl border-2 overflow-hidden transition-all ${form.natureSol === sol.value ? sol.color + ' shadow-md scale-105' : 'border-gray-200 hover:border-gray-300'}`}>
+                                        className={`rounded-xl border-2 overflow-hidden transition-all ${form.natureSol === sol.value ? 'border-green-500 ring-4 ring-green-50 opacity-100 shadow-sm' : 'border-gray-200 hover:border-gray-300 opacity-80 hover:opacity-100'}`}>
                                         <img src={sol.img} alt={sol.label}
                                             className="w-full h-20 object-cover bg-gray-200"
                                             onError={(e) => { e.target.onerror=null; e.target.src=sol.fallback; }}
@@ -169,7 +169,7 @@ export default function SuiviPlantes() {
                                             <p className="text-xs text-gray-400 leading-tight">{sol.desc}</p>
                                         </div>
                                         {form.natureSol === sol.value && (
-                                            <div className="bg-green-500 text-white text-xs text-center py-0.5">✓ Sélectionné</div>
+                                            <div className="bg-green-600 text-white text-xs font-medium text-center py-1">Sélectionné</div>
                                         )}
                                     </button>
                                 ))}
@@ -180,13 +180,13 @@ export default function SuiviPlantes() {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="text-sm font-medium text-gray-700 mb-1 block">Superficie (ha) *</label>
-                                <input className="input" type="number" step="0.01" min="0.01" placeholder="ex: 2.5"
+                                <input className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 block p-3 transition-all outline-none" type="number" step="0.01" min="0.01" placeholder="ex: 2.5"
                                     value={form.superficieHa}
                                     onChange={(e) => set('superficieHa')(e.target.value)} required />
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-gray-700 mb-1 block">Parcelle</label>
-                                <input className="input" placeholder="ex: P-12"
+                                <input className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 block p-3 transition-all outline-none" placeholder="ex: P-12"
                                     value={form.parcelle}
                                     onChange={(e) => set('parcelle')(e.target.value)} />
                             </div>
@@ -218,12 +218,12 @@ export default function SuiviPlantes() {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="text-sm font-medium text-gray-700 mb-1 block">Date de début *</label>
-                                <input className="input" type="date" value={form.dateDebut}
+                                <input className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 block p-3 transition-all outline-none" type="date" value={form.dateDebut}
                                     onChange={(e) => set('dateDebut')(e.target.value)} required />
                             </div>
                             <div>
                                 <label className="text-sm font-medium text-gray-700 mb-1 block">Stade végétatif</label>
-                                <select className="input" value={form.stadeVegetatif}
+                                <select className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 block p-3 transition-all outline-none" value={form.stadeVegetatif}
                                     onChange={(e) => set('stadeVegetatif')(e.target.value)}>
                                     {STADES.map((s) => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
                                 </select>
@@ -232,14 +232,15 @@ export default function SuiviPlantes() {
 
                         <div>
                             <label className="text-sm font-medium text-gray-700 mb-1 block">Notes</label>
-                            <textarea className="input" rows={2} placeholder="Observations..."
+                            <textarea className="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 block p-3 transition-all outline-none" rows={2} placeholder="Observations..."
                                 value={form.notesAgriculteur}
                                 onChange={(e) => set('notesAgriculteur')(e.target.value)} />
                         </div>
 
-                        <button className="btn-primary w-full py-3 text-base" type="submit"
-                            disabled={!form.natureSol || !calcul}>
-                            ✅ Enregistrer la culture
+                        <button type="submit" disabled={!form.natureSol || !calcul}
+                            className="flex items-center justify-center gap-2 w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-xl transition-colors disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed">
+                            <Save size={20} />
+                            Enregistrer la culture
                         </button>
                         {!calcul && <p className="text-xs text-center text-gray-400">Sélectionnez une plante, un sol et une superficie pour continuer</p>}
                     </form>
