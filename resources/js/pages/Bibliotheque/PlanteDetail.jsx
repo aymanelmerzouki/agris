@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Bookmark, BookmarkCheck } from 'lucide-react';
 import api from '../../api';
 
@@ -32,17 +32,25 @@ export default function PlanteDetail() {
                             Espèce : {plante.espece} | Famille : {plante.famille}
                         </p>
                     </div>
-                    <button
-                        onClick={toggleFavori}
-                        title={favori ? 'Retirer de ma sélection' : 'Ajouter à ma sélection'}
-                        className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition"
-                    >
-                        {favori
-                            ? <BookmarkCheck size={18} className="text-white" />
-                            : <Bookmark size={18} className="text-white" />
-                        }
-                        {favori ? 'Sélectionnée' : 'Ajouter à ma sélection'}
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <Link
+                            to={`/suivi?plante_id=${plante.id}`}
+                            className="bg-white text-green-700 hover:bg-green-50 px-5 py-2 rounded-xl text-sm font-bold shadow-sm transition"
+                        >
+                            + Démarrer cette culture
+                        </Link>
+                        <button
+                            onClick={toggleFavori}
+                            title={favori ? 'Retirer de ma sélection' : 'Ajouter à ma sélection'}
+                            className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition"
+                        >
+                            {favori
+                                ? <BookmarkCheck size={18} className="text-white" />
+                                : <Bookmark size={18} className="text-white" />
+                            }
+                            {favori ? 'Sélectionnée' : 'Ajouter à ma sélection'}
+                        </button>
+                    </div>
                 </div>
             </div>
 
