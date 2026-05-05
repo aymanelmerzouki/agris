@@ -10,3 +10,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::job(new EnvoyerAlertesArrosage)->dailyAt('07:00');
+Schedule::command('app:check-cultures')->daily();
