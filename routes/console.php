@@ -11,3 +11,4 @@ Artisan::command('inspire', function () {
 
 Schedule::job(new EnvoyerAlertesArrosage)->dailyAt('07:00');
 Schedule::command('app:check-cultures')->daily();
+Schedule::command('agris:generer-alertes')->dailyAt('06:00');
