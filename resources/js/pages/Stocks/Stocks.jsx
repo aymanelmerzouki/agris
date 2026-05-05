@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Package, Plus, X, Save, Trash2, MapPin, Calendar, AlertTriangle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Package, Plus, X, Save, Trash2, MapPin, Calendar, AlertTriangle, ShoppingCart } from 'lucide-react';
 import api from '../../api';
 
 const UNITES = ['kg', 'tonne', 'caisse', 'litre', 'unite'];
@@ -165,6 +166,15 @@ export default function Stocks() {
                                             Expire le {new Date(s.dateExpiration).toLocaleDateString('fr-FR')}
                                         </p>
                                     )}
+                                </div>
+                                <div className="pt-4 mt-2 border-t border-gray-100">
+                                    <Link
+                                        to={`/offres?recherche=${encodeURIComponent(s.produit)}`}
+                                        className={`flex items-center justify-center gap-2 w-full font-semibold py-2.5 rounded-xl transition-colors text-sm ${isAlerte(s) ? 'bg-orange-50 hover:bg-orange-100 text-orange-700' : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700'}`}
+                                    >
+                                        <ShoppingCart size={16} />
+                                        Réapprovisionner
+                                    </Link>
                                 </div>
                             </div>
                         ))}
