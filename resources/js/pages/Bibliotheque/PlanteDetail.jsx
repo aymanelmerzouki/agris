@@ -1,20 +1,15 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../api';
 
 export default function PlanteDetail() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const [plante, setPlante] = useState(null);
-    const [favori, setFavori] = useState(false);
 
     useEffect(() => {
         api.get(`/plantes/${id}`).then((r) => setPlante(r.data));
     }, [id]);
-
-    const toggleFavori = async () => {
-        const { data } = await api.post(`/plantes/${id}/favori`);
-        setFavori(data.favori);
-    };
 
     if (!plante) return <div className="min-h-screen bg-gray-50 dark:bg-green-950 p-6">Chargement...</div>;
 
@@ -26,8 +21,11 @@ export default function PlanteDetail() {
                         <h1 className="text-3xl font-extrabold text-white">{plante.nom}</h1>
                         <p className="text-green-100 italic mt-1">{plante.espece} · {plante.famille}</p>
                     </div>
-                    <button onClick={toggleFavori} className="text-3xl" title="Ajouter aux favoris">
-                        {favori ? '❤️' : '🤍'}
+                    <button
+                        onClick={() => navigate(`/suivi/create?plante_id=${plante.id}`)}
+                        className="bg-white text-green-700 font-semibold text-sm px-4 py-2 rounded-xl shadow hover:bg-green-50 transition"
+                    >
+                        + Démarrer cette culture
                     </button>
                 </div>
             </div>
@@ -45,7 +43,7 @@ export default function PlanteDetail() {
                     <Info label="Température" value={`${plante.temperatureMin}°C – ${plante.temperatureMax}°C`} />
                     <Info label="Durée pousse" value={`${plante.dureePousseeJours} jours`} />
                     <Info label="Rendement" value={`${plante.rendementMoyenKgHa} kg/ha`} />
-                    <Info label="Irrigation" value={plante.typeIrrigation} />
+                    <Info label="Irrigation" value={plante.type_irrigation_formate} />
                     <Info label="Bio" value={plante.estBio ? 'Oui' : 'Non'} />
                 </div>
 

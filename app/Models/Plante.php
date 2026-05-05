@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,15 @@ class Plante extends Model
     ];
 
     protected $casts = ['estBio' => 'boolean'];
+
+    protected $appends = ['type_irrigation_formate'];
+
+    protected function typeIrrigationFormate(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => ucfirst(str_replace('_', ' ', $this->typeIrrigation ?? ''))
+        );
+    }
 
     public function suiviPlantes() { return $this->hasMany(SuiviPlante::class); }
     public function biblios() { return $this->belongsToMany(Biblio::class, 'biblio_plante'); }
