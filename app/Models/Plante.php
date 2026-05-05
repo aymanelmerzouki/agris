@@ -27,6 +27,7 @@ class Plante extends Model
         );
     }
 
+    public function stades() { return $this->hasMany(PlanteStade::class); }
     public function suiviPlantes() { return $this->hasMany(SuiviPlante::class); }
     public function biblios() { return $this->belongsToMany(Biblio::class, 'biblio_plante'); }
     public function offres() { return $this->hasMany(Offre::class); }
