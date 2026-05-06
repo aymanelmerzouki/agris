@@ -339,14 +339,14 @@ function CultureCard({ s, onDelete }) {
 
             {/* Live data block */}
             {liveData && (
-                <div className="mt-4 p-4 bg-gray-50 rounded-xl space-y-3">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Thermometer size={16} className="text-orange-500" />
+                <div className="mt-4 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs space-y-2">
+                    <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-medium">
+                        <Thermometer size={14} className="text-orange-500" />
                         {liveData.meteo.temperature}°C — {liveData.meteo.description}
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <Droplets size={16} className="text-blue-500" />
-                        Besoin : <span className="font-bold text-blue-700">{Number(liveData.besoin_eau_live).toLocaleString('fr-FR')} L/jour</span>
+                    <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-medium">
+                        <Droplets size={14} className="text-emerald-500" />
+                        Besoin : <span className="font-bold text-emerald-600 dark:text-emerald-400">{Number(liveData.besoin_eau_live).toLocaleString('fr-FR')} L/jour</span>
                     </div>
                 </div>
             )}
