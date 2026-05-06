@@ -16,7 +16,7 @@ export default function Alertes() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-slate-800 dark:to-slate-800 dark:border-b dark:border-slate-700 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-700 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
@@ -43,7 +43,7 @@ export default function Alertes() {
                 ) : (
                     <div className="space-y-3">
                         {alertes.map((a) => (
-                            <div key={a.id} className={`rounded-2xl p-4 shadow-sm border ${a.read_at ? 'bg-white dark:bg-slate-800 border-gray-100 dark:border-slate-700' : 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700'}`}>
+                            <div key={a.id} className={`rounded-2xl p-4 shadow-sm border ${a.read_at ? 'bg-white dark:bg-zinc-800 border-gray-100 dark:border-zinc-700' : 'bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700'}`}>
                                 <p className="font-medium text-gray-800 dark:text-gray-100">{a.data?.message}</p>
                                 <p className="text-xs text-gray-400 dark:text-gray-400 mt-1">{new Date(a.created_at).toLocaleDateString('fr-FR')}</p>
                             </div>

@@ -121,7 +121,7 @@ export default function SuiviPlantes() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-slate-800 dark:to-slate-800 dark:border-b dark:border-slate-700 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-700 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold text-white flex items-center gap-3"><Map size={28} /> Mes cultures</h1>
@@ -140,9 +140,9 @@ export default function SuiviPlantes() {
                     <form onSubmit={handleSubmit} className="mb-6 space-y-4">
 
                         {/* Card 1 — Plante */}
-                        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm">
+                        <div className="bg-white dark:bg-zinc-800 p-6 rounded-2xl border border-gray-100 dark:border-zinc-700 shadow-sm">
                             <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Plante *</label>
-                            <select className="w-full bg-gray-50/50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none"
+                            <select className="w-full bg-gray-50/50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none"
                                 value={form.plante_id} onChange={(e) => set('plante_id')(e.target.value)} required>
                                 <option value="">Choisir une plante</option>
                                 {plantes.map((p) => <option key={p.id} value={p.id}>{p.nom} — {p.espece}</option>)}
@@ -150,7 +150,7 @@ export default function SuiviPlantes() {
                         </div>
 
                         {/* Card 2 — Nature du sol */}
-                        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm">
+                        <div className="bg-white dark:bg-zinc-800 p-6 rounded-2xl border border-gray-100 dark:border-zinc-700 shadow-sm">
                             <label className="block mb-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
                                 Nature du sol *
                             </label>
@@ -174,15 +174,15 @@ export default function SuiviPlantes() {
                         </div>
 
                         {/* Card 3 — Parcelle */}
-                        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm">
+                        <div className="bg-white dark:bg-zinc-800 p-6 rounded-2xl border border-gray-100 dark:border-zinc-700 shadow-sm">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Superficie *</label>
                                     <div className="flex gap-2">
-                                        <input className="w-full bg-gray-50/50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
+                                        <input className="w-full bg-gray-50/50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
                                             type="number" step="0.01" min="0.01" placeholder="ex: 2.5"
                                             value={form.superficie} onChange={(e) => set('superficie')(e.target.value)} required />
-                                        <select className="bg-gray-50/50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 p-3 transition-all outline-none"
+                                        <select className="bg-gray-50/50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 p-3 transition-all outline-none"
                                             value={form.unite_superficie} onChange={(e) => set('unite_superficie')(e.target.value)}>
                                             <option value="ha">ha</option>
                                             <option value="m2">m²</option>
@@ -192,7 +192,7 @@ export default function SuiviPlantes() {
                                 </div>
                                 <div>
                                     <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Parcelle</label>
-                                    <input className="w-full bg-gray-50/50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
+                                    <input className="w-full bg-gray-50/50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
                                         placeholder="ex: P-12"
                                         value={form.parcelle} onChange={(e) => set('parcelle')(e.target.value)} />
                                 </div>
@@ -222,17 +222,17 @@ export default function SuiviPlantes() {
                         )}
 
                         {/* Card 4 — Planification */}
-                        <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-gray-100 dark:border-slate-700 shadow-sm">
+                        <div className="bg-white dark:bg-zinc-800 p-6 rounded-2xl border border-gray-100 dark:border-zinc-700 shadow-sm">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Date de début *</label>
-                                    <input className="w-full bg-gray-50/50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none"
+                                    <input className="w-full bg-gray-50/50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none"
                                         type="date" value={form.dateDebut} onChange={(e) => set('dateDebut')(e.target.value)} required />
                                 </div>
                             </div>
                             <div className="mt-6">
                                 <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Notes</label>
-                                <textarea className="w-full bg-gray-50/50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
+                                <textarea className="w-full bg-gray-50/50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
                                     rows={2} placeholder="Observations agronomiques..."
                                     value={form.notesAgriculteur} onChange={(e) => set('notesAgriculteur')(e.target.value)} />
                             </div>
@@ -290,7 +290,7 @@ function CultureCard({ s, onDelete }) {
     };
 
     if (loading) return (
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-100 dark:border-slate-700 shadow-sm animate-pulse space-y-3">
+        <div className="bg-white dark:bg-zinc-800 rounded-2xl p-5 border border-gray-100 dark:border-zinc-700 shadow-sm animate-pulse space-y-3">
             <div className="h-4 bg-gray-200 rounded w-2/3" />
             <div className="h-3 bg-gray-100 rounded w-1/2" />
             <div className="h-20 bg-gray-100 rounded-xl mt-4" />
@@ -299,7 +299,7 @@ function CultureCard({ s, onDelete }) {
     );
 
     return (
-        <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-gray-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all relative">
+        <div className="bg-white dark:bg-zinc-800 rounded-2xl p-5 border border-gray-100 dark:border-zinc-700 shadow-sm hover:shadow-md transition-all relative">
             {/* Header */}
             <div className="flex items-start justify-between">
                 <div>
@@ -339,12 +339,12 @@ function CultureCard({ s, onDelete }) {
 
             {/* Live data block */}
             {liveData && (
-                <div className="mt-4 p-3 rounded-lg bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-xs space-y-2">
-                    <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-medium">
+                <div className="mt-4 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-800/80 border border-zinc-200 dark:border-zinc-700 text-xs space-y-2">
+                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-300 font-medium">
                         <Thermometer size={14} className="text-orange-500" />
                         {liveData.meteo.temperature}°C — {liveData.meteo.description}
                     </div>
-                    <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300 font-medium">
+                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-300 font-medium">
                         <Droplets size={14} className="text-emerald-500" />
                         Besoin : <span className="font-bold text-emerald-600 dark:text-emerald-400">{Number(liveData.besoin_eau_live).toLocaleString('fr-FR')} L/jour</span>
                     </div>

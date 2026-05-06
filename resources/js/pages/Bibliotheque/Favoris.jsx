@@ -17,7 +17,7 @@ export default function Favoris() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-slate-800 dark:to-slate-800 dark:border-b dark:border-slate-700 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-700 px-6 py-8">
                 <div className="max-w-5xl mx-auto">
                     <h1 className="text-2xl font-extrabold text-white">Ma sélection</h1>
                     <p className="text-green-100 text-sm mt-1">{plantes.length} plante(s) sélectionnée(s)</p>
@@ -40,7 +40,7 @@ export default function Favoris() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {plantes.map((p) => (
-                            <div key={p.id} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden hover:shadow-md transition">
+                            <div key={p.id} className="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-700 overflow-hidden hover:shadow-md transition">
                                 {p.imageUrl && (
                                     <img src={p.imageUrl} alt={p.nom}
                                         className="w-full h-48 object-cover"

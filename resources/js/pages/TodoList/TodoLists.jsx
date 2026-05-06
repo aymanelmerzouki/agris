@@ -67,7 +67,7 @@ export default function TodoLists() {
     return (
         <div className="min-h-screen pb-20 md:pb-8">
             
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-slate-800 dark:to-slate-800 dark:border-b dark:border-slate-700 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-700 px-6 py-8">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold text-white">📋 Todo Lists</h1>
@@ -87,7 +87,7 @@ export default function TodoLists() {
                 <div className="w-72 flex-shrink-0">
                     
                     {showListForm && user?.role === 'manager' && (
-                        <form onSubmit={handleCreateList} className="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-gray-100 dark:border-slate-700 p-4 mb-4 space-y-3">
+                        <form onSubmit={handleCreateList} className="bg-white dark:bg-zinc-800 rounded-2xl shadow-md border border-gray-100 dark:border-zinc-700 p-4 mb-4 space-y-3">
                             <h3 className="font-bold text-gray-800 dark:text-gray-100 text-sm">Nouvelle liste</h3>
 
                             <input className="input" placeholder="Titre *" value={listForm.titre} onChange={setL('titre')} required />
@@ -137,7 +137,7 @@ export default function TodoLists() {
                     <div className="space-y-2">
                         {lists.map((l) => (
                             <button key={l.id} onClick={() => selectList(l)}
-                                className={`w-full text-left bg-white dark:bg-slate-800 rounded-xl border p-3 hover:shadow-md transition ${selected?.id === l.id ? 'border-green-400 shadow-md' : 'border-gray-100 dark:border-slate-700 shadow-sm'}`}>
+                                className={`w-full text-left bg-white dark:bg-zinc-800 rounded-xl border p-3 hover:shadow-md transition ${selected?.id === l.id ? 'border-green-400 shadow-md' : 'border-gray-100 dark:border-zinc-700 shadow-sm'}`}>
                                 <div className="flex items-center justify-between mb-1">
                                     <p className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate">{l.titre}</p>
                                     <span className={`text-xs px-1.5 py-0.5 rounded-full ${PRIORITE_COLORS[l.priorite]}`}>{l.priorite}</span>
@@ -178,7 +178,7 @@ export default function TodoLists() {
 
                             
                             {showTacheForm && (
-                                <form onSubmit={handleCreateTache} className="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-gray-100 dark:border-slate-700 p-4 mb-4 grid grid-cols-2 gap-3">
+                                <form onSubmit={handleCreateTache} className="bg-white dark:bg-zinc-800 rounded-2xl shadow-md border border-gray-100 dark:border-zinc-700 p-4 mb-4 grid grid-cols-2 gap-3">
                                     <input className="input col-span-2" placeholder="Nom de la tâche *" value={tacheForm.nomTache} onChange={setT('nomTache')} required />
 
                                     
@@ -208,7 +208,7 @@ export default function TodoLists() {
                             <div className="space-y-2">
                                 {taches.length === 0 && <p className="text-gray-400 text-sm text-center py-10">Aucune tâche dans cette liste.</p>}
                                 {taches.map((t) => (
-                                    <div key={t.id} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm p-4 flex items-center justify-between hover:shadow-md transition">
+                                    <div key={t.id} className="bg-white dark:bg-zinc-800 rounded-xl border border-gray-100 dark:border-zinc-700 shadow-sm p-4 flex items-center justify-between hover:shadow-md transition">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2 mb-1">
                                                 <p className="font-medium text-gray-900 dark:text-gray-100">{t.nomTache}</p>

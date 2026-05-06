@@ -20,7 +20,7 @@ export default function Plantes() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-slate-800 dark:to-slate-800 dark:border-b dark:border-slate-700 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-700 px-6 py-8">
                 <div className="max-w-5xl mx-auto">
                     <h1 className="text-2xl font-extrabold text-white">Bibliothèque des plantes</h1>
                     <p className="text-green-100 text-sm mt-1">{meta?.total ?? '—'} plantes référencées</p>
@@ -29,9 +29,9 @@ export default function Plantes() {
 
             <div className="max-w-5xl mx-auto px-4 md:px-6 mt-6">
                 <div className="relative mb-6 max-w-sm">
-                    <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                    <Search size={16} className="absolute left-3 top-1/2 -tranzinc-y-1/2 text-gray-400 pointer-events-none" />
                     <input
-                        className="w-full bg-white border border-gray-200 text-gray-800 text-sm rounded-xl shadow-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 block p-3 pl-10 placeholder-gray-400 transition-all duration-200 dark:bg-slate-800 dark:border-green-700 dark:text-gray-100 dark:placeholder-green-400"
+                        className="w-full bg-white border border-gray-200 text-gray-800 text-sm rounded-xl shadow-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 block p-3 pl-10 placeholder-gray-400 transition-all duration-200 dark:bg-zinc-800 dark:border-green-700 dark:text-gray-100 dark:placeholder-green-400"
                         placeholder="Rechercher une plante..."
                         value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} />
                 </div>
@@ -39,8 +39,8 @@ export default function Plantes() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {plantes.map((p) => (
                         <Link key={p.id} to={`/plantes/${p.id}`}
-                            className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden hover:shadow-md transition group">
-                            <div className="h-40 overflow-hidden bg-gray-100 dark:bg-slate-700">
+                            className="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-700 overflow-hidden hover:shadow-md transition group">
+                            <div className="h-40 overflow-hidden bg-gray-100 dark:bg-zinc-700">
                                 <img
                                     src={p.imageUrl || FALLBACK}
                                     alt={p.nom}

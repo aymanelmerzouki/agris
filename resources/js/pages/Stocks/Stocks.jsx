@@ -4,7 +4,7 @@ import { Package, Plus, X, Save, Trash2, MapPin, Calendar, AlertTriangle, Shoppi
 import api from '../../api';
 
 const UNITES = ['kg', 'tonne', 'caisse', 'litre', 'unite'];
-const INPUT = "w-full bg-gray-50/50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none";
+const INPUT = "w-full bg-gray-50/50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none";
 const LABEL = "block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider";
 
 export default function Stocks() {
@@ -37,7 +37,7 @@ export default function Stocks() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-slate-800 dark:to-slate-800 dark:border-b dark:border-slate-700 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-700 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold text-white flex items-center gap-3">
@@ -55,7 +55,7 @@ export default function Stocks() {
 
             <div className="max-w-5xl mx-auto px-4 md:px-6 mt-6">
                 {showForm && (
-                    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 p-6 mb-6 space-y-5">
+                    <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-700 p-6 mb-6 space-y-5">
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div className="md:col-span-2">
