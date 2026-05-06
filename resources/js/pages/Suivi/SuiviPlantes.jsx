@@ -324,23 +324,16 @@ function CultureCard({ s, onDelete }) {
                     </div>
                     <div className="flex items-center gap-2 text-sm text-gray-600">
                         <Droplets size={16} className="text-blue-500" />
-                        Besoin : <span className="font-bold text-blue-700">{liveData.besoin_eau_live} L/jour</span>
+                        Besoin : <span className="font-bold text-blue-700">{Number(liveData.besoin_eau_live).toLocaleString('fr-FR')} L/jour</span>
                     </div>
                 </div>
             )}
-
-            {/* Infos secondaires */}
-            <div className="flex flex-wrap gap-2 mt-3">
-                {s.natureSol && <span className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-full">{s.natureSol}</span>}
-                {s.parcelle && <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">{s.parcelle}</span>}
-                <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUTS[s.statut]?.color}`}>{STATUTS[s.statut]?.label}</span>
-            </div>
 
             {s.notesAgriculteur && <p className="text-xs text-gray-400 mt-3 line-clamp-2 italic">"{s.notesAgriculteur}"</p>}
 
             {/* Footer */}
             <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
-                <span>Jour {liveData?.progression_jours ?? '—'} de culture</span>
+                <span>Jour {Math.floor(liveData?.progression_jours ?? 0)} de culture</span>
                 <span>{new Date(s.dateDebut).toLocaleDateString('fr-FR')}</span>
             </div>
         </div>
