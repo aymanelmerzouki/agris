@@ -5,7 +5,7 @@ import api from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 
 const UNITES = ['kg', 'tonne', 'caisse', 'litre', 'unite'];
-const INPUT = "bg-gray-50/50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block w-full p-3 transition-all outline-none";
+const INPUT = "bg-gray-50/50 dark:bg-emerald-900 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-emerald-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block w-full p-3 transition-all outline-none";
 const LABEL = "block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider";
 
 export default function Offres() {
@@ -109,7 +109,7 @@ export default function Offres() {
     return (
         <div className="min-h-screen pb-20 md:pb-8">
             {/* Header */}
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-700 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-emerald-800 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold text-white flex items-center gap-3">
@@ -133,7 +133,7 @@ export default function Offres() {
                     <Search className="absolute left-4 top-3.5 text-gray-400" size={20} />
                     <input type="text" placeholder="Rechercher un produit, une plante..."
                         value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3 bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-700 rounded-xl shadow-sm focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 transition-all outline-none text-gray-800" />
+                        className="w-full pl-12 pr-4 py-3 bg-white dark:bg-emerald-950 border border-gray-100 dark:border-emerald-800 rounded-xl shadow-sm focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 transition-all outline-none text-gray-800" />
                 </div>
 
                 {/* Onglets */}
@@ -153,7 +153,7 @@ export default function Offres() {
                     ))}
                 </div>
                 {showForm && (
-                    <form onSubmit={handleSubmit} className="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-700 p-6 mb-6 space-y-5">
+                    <form onSubmit={handleSubmit} className="bg-white dark:bg-emerald-900 rounded-2xl shadow-sm border border-gray-100 dark:border-emerald-800 p-6 mb-6 space-y-5">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div className="md:col-span-2">
                                 <label className={LABEL}>Plante associée</label>
@@ -194,7 +194,7 @@ export default function Offres() {
                             </div>
                         </div>
                         <button type="submit"
-                            className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition-all shadow-sm">
+                            className="flex items-center justify-center gap-2 w-full bg-emerald-600 dark:bg-emerald-700 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-semibold py-3 rounded-xl transition-all shadow-sm">
                             <Save size={18} /> Publier l'offre
                         </button>
                     </form>
@@ -203,9 +203,9 @@ export default function Offres() {
                 {/* Grille des offres */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {offresFiltrees.map((o) => (
-                        <div key={o.id} className="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-700 p-5 hover:shadow-md transition-shadow flex flex-col gap-3">
+                        <div key={o.id} className="bg-white dark:bg-emerald-900 rounded-2xl shadow-sm border border-gray-100 dark:border-emerald-800 p-5 hover:shadow-md transition-shadow flex flex-col gap-3">
                             <div className="flex items-start justify-between">
-                                <p className="font-bold text-gray-800 dark:text-gray-100 text-base">{o.plante?.nom ?? 'Produit agricole'}</p>
+                                <p className="font-bold text-gray-800 dark:text-emerald-100 text-base">{o.plante?.nom ?? 'Produit agricole'}</p>
                                 <div className="flex items-center gap-2">
                                     <span className={`text-xs px-2 py-1 rounded-full font-medium ${o.statut === 'disponible' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
                                         {o.statut}
@@ -247,9 +247,9 @@ export default function Offres() {
                                                     placeholder={`Max ${o.quantite}`}
                                                     value={qteAchat[o.id] || ''}
                                                     onChange={(e) => setQteAchat({ ...qteAchat, [o.id]: e.target.value })}
-                                                    className="bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl p-2.5 flex-1 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
+                                                    className="bg-gray-50 dark:bg-emerald-900 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-emerald-100 text-sm rounded-xl p-2.5 flex-1 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all" />
                                                 <button onClick={() => accepter(o)}
-                                                    className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 rounded-xl transition-all text-sm">
+                                                    className="flex items-center gap-1.5 bg-emerald-600 dark:bg-emerald-700 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-semibold px-4 rounded-xl transition-all text-sm">
                                                     <ShoppingCart size={14} /> Acheter
                                                 </button>
                                             </div>
@@ -289,7 +289,7 @@ export default function Offres() {
                                     Annuler
                                 </button>
                                 <button onClick={() => { alert('Négociation envoyée (fonctionnalité à brancher sur l\'API).'); setNegociationItem(null); }}
-                                    className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition">
+                                    className="flex-1 py-2.5 rounded-xl bg-emerald-600 dark:bg-emerald-700 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white text-sm font-semibold transition">
                                     Envoyer
                                 </button>
                             </div>
@@ -303,7 +303,7 @@ export default function Offres() {
                         <h2 className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">Mes achats</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             {mesVentes.map((v) => (
-                                <div key={v.id} className="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-700 p-5 flex flex-col gap-3">
+                                <div key={v.id} className="bg-white dark:bg-emerald-900 rounded-2xl shadow-sm border border-gray-100 dark:border-emerald-800 p-5 flex flex-col gap-3">
                                     <p className="font-bold text-gray-800">{v.offre?.plante?.nom ?? 'Produit agricole'}</p>
                                     <p className="text-sm text-gray-500">{v.quantite} {v.unite} · <span className="font-semibold text-emerald-600">{v.prix_total} MAD</span></p>
                                     <p className="flex items-center gap-2 text-xs text-gray-400"><User size={12} /> {v.vendeur?.name}</p>

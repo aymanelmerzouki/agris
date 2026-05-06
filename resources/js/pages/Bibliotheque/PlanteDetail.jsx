@@ -24,7 +24,7 @@ export default function PlanteDetail() {
 
     return (
         <div className="min-h-screen pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-700 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-emerald-800 px-6 py-8">
                 <div className="max-w-2xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-3xl font-extrabold text-white">{plante.nom}</h1>
@@ -70,16 +70,16 @@ export default function PlanteDetail() {
                 </div>
 
                 {plante.description && (
-                    <div className="bg-white dark:bg-zinc-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-zinc-700">
-                        <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">Description</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">{plante.description}</p>
+                    <div className="bg-white dark:bg-emerald-900 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-emerald-800">
+                        <h3 className="font-semibold text-gray-800 dark:text-emerald-100 mb-2">Description</h3>
+                        <p className="text-sm text-gray-600 dark:text-emerald-300">{plante.description}</p>
                     </div>
                 )}
 
                 {plante.conditionsCulture && (
-                    <div className="bg-white dark:bg-zinc-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-zinc-700">
-                        <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">Conditions de culture</h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">{plante.conditionsCulture}</p>
+                    <div className="bg-white dark:bg-emerald-900 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-emerald-800">
+                        <h3 className="font-semibold text-gray-800 dark:text-emerald-100 mb-2">Conditions de culture</h3>
+                        <p className="text-sm text-gray-600 dark:text-emerald-300">{plante.conditionsCulture}</p>
                     </div>
                 )}
             </div>
@@ -89,9 +89,9 @@ export default function PlanteDetail() {
 
 function Info({ label, value }) {
     return (
-        <div className="bg-white dark:bg-zinc-800 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-zinc-700">
-            <span className="text-gray-400 dark:text-gray-400 text-xs">{label}</span>
-            <p className="font-semibold text-gray-800 dark:text-gray-100 mt-0.5">{value ?? '—'}</p>
+        <div className="bg-white dark:bg-emerald-900 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-emerald-800">
+            <span className="text-gray-400 dark:text-emerald-300 text-xs">{label}</span>
+            <p className="font-semibold text-gray-800 dark:text-emerald-100 mt-0.5">{value ?? '—'}</p>
         </div>
     );
 }

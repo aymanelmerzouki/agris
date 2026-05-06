@@ -21,7 +21,7 @@ export default function DarkModeToggle() {
 
     return (
         <button onClick={() => setDark(!dark)}
-            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 text-gray-600 dark:text-gray-300 transition-colors">
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-emerald-900 text-gray-600 dark:text-emerald-400 transition-colors">
             {dark ? <Sun size={20} /> : <Moon size={20} />}
         </button>
     );

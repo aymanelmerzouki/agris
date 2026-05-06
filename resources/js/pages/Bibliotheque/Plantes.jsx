@@ -20,7 +20,7 @@ export default function Plantes() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-700 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-emerald-800 px-6 py-8">
                 <div className="max-w-5xl mx-auto">
                     <h1 className="text-2xl font-extrabold text-white">Bibliothèque des plantes</h1>
                     <p className="text-green-100 text-sm mt-1">{meta?.total ?? '—'} plantes référencées</p>
@@ -31,7 +31,7 @@ export default function Plantes() {
                 <div className="relative mb-6 max-w-sm">
                     <Search size={16} className="absolute left-3 top-1/2 -tranzinc-y-1/2 text-gray-400 pointer-events-none" />
                     <input
-                        className="w-full bg-white border border-gray-200 text-gray-800 text-sm rounded-xl shadow-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 block p-3 pl-10 placeholder-gray-400 transition-all duration-200 dark:bg-zinc-800 dark:border-green-700 dark:text-gray-100 dark:placeholder-green-400"
+                        className="w-full bg-white border border-gray-200 text-gray-800 text-sm rounded-xl shadow-sm focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 block p-3 pl-10 placeholder-gray-400 transition-all duration-200 dark:bg-emerald-900 dark:border-green-700 dark:text-emerald-100 dark:placeholder-green-400"
                         placeholder="Rechercher une plante..."
                         value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} />
                 </div>
@@ -39,8 +39,8 @@ export default function Plantes() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {plantes.map((p) => (
                         <Link key={p.id} to={`/plantes/${p.id}`}
-                            className="bg-white dark:bg-zinc-800 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-700 overflow-hidden hover:shadow-md transition group">
-                            <div className="h-40 overflow-hidden bg-gray-100 dark:bg-zinc-700">
+                            className="bg-white dark:bg-emerald-900 rounded-2xl shadow-sm border border-gray-100 dark:border-emerald-800 overflow-hidden hover:shadow-md transition group">
+                            <div className="h-40 overflow-hidden bg-gray-100 dark:bg-emerald-800">
                                 <img
                                     src={p.imageUrl || FALLBACK}
                                     alt={p.nom}
@@ -49,9 +49,9 @@ export default function Plantes() {
                                 />
                             </div>
                             <div className="p-4">
-                                <h2 className="font-bold text-gray-900 dark:text-gray-100 text-base">{p.nom}</h2>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{p.espece} — {p.famille}</p>
-                                <p className="text-xs text-gray-400 dark:text-gray-400 mt-2">
+                                <h2 className="font-bold text-gray-900 dark:text-emerald-100 text-base">{p.nom}</h2>
+                                <p className="text-sm text-gray-500 dark:text-emerald-300 mt-0.5">{p.espece} — {p.famille}</p>
+                                <p className="text-xs text-gray-400 dark:text-emerald-300 mt-2">
                                     🌡 {p.temperatureMin}°C / {p.temperatureMax}°C · ⏱ {p.dureePousseeJours}j
                                 </p>
                             </div>
@@ -62,7 +62,7 @@ export default function Plantes() {
                 {meta && (
                     <div className="flex gap-2 mt-6 justify-center">
                         <button className="btn-secondary" disabled={page === 1} onClick={() => setPage(page - 1)}>Précédent</button>
-                        <span className="py-2 px-3 text-sm text-gray-600 dark:text-gray-400">{page} / {meta.last_page}</span>
+                        <span className="py-2 px-3 text-sm text-gray-600 dark:text-emerald-300">{page} / {meta.last_page}</span>
                         <button className="btn-secondary" disabled={page === meta.last_page} onClick={() => setPage(page + 1)}>Suivant</button>
                     </div>
                 )}

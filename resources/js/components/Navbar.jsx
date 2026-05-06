@@ -41,7 +41,7 @@ export default function Navbar() {
     return (
         <>
             {/* Desktop */}
-            <header className="sticky top-0 z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md border-b border-gray-100 dark:border-zinc-800 shadow-sm hidden md:flex items-center justify-between px-6 py-3">
+            <header className="sticky top-0 z-50 bg-white/80 dark:bg-emerald-950/80 backdrop-blur-md border-b border-gray-100 dark:border-emerald-800 shadow-sm hidden md:flex items-center justify-between px-6 py-3">
                 <Link to="/dashboard" className="flex items-center gap-2">
                     <Leaf size={22} className="text-green-600" />
                     <span className="text-lg font-extrabold text-green-700 tracking-tight">Agris</span>
@@ -53,7 +53,7 @@ export default function Navbar() {
                             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200
                                 ${isActive(to)
                                     ? 'bg-green-600 text-white'
-                                    : 'text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-white hover:bg-green-50 dark:hover:bg-zinc-800}'}`}>
+                                    : 'text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-white hover:bg-green-50 dark:hover:bg-emerald-900}'}`}>
                             <Icon size={16} />
                             <span>{label}</span>
                         </Link>
@@ -77,7 +77,7 @@ export default function Navbar() {
             </header>
 
             {/* Mobile bottom nav */}
-            <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-t border-gray-100 dark:border-zinc-800 flex md:hidden">
+            <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-emerald-950/90 backdrop-blur-md border-t border-gray-100 dark:border-emerald-800 flex md:hidden">
                 {navItems.slice(0, 5).map(({ to, icon: Icon, label }) => (
                     <Link key={to} to={to}
                         className={`flex-1 flex flex-col items-center justify-center py-2.5 transition-colors duration-200

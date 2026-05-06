@@ -23,7 +23,7 @@ import '../css/app.css';
 function Layout({ children }) {
     const location = useRouterLocation();
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-zinc-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+        <div className="min-h-screen bg-gray-50 dark:bg-emerald-950 text-gray-900 dark:text-emerald-100 transition-colors duration-200">
             <Navbar />
             <main key={location.pathname} className="animate-fadeIn">
                 {children}
