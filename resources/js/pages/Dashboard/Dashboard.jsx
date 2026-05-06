@@ -40,7 +40,7 @@ function formatDate(d) {
 
 function Skeleton() {
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-green-950 pb-20 md:pb-8">
+        <div className="min-h-screen pb-20 md:pb-8">
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-6xl mx-auto space-y-2">
                     <div className="h-3 w-28 bg-green-400/40 rounded animate-pulse" />
@@ -70,7 +70,7 @@ export default function Dashboard() {
 
     if (stats.role === 'ouvrier') {
         return (
-            <div className="min-h-screen bg-gray-50 dark:bg-green-950 pb-20 md:pb-8">
+            <div className="min-h-screen pb-20 md:pb-8">
                 <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                     <div className="max-w-2xl mx-auto">
                         <p className="text-green-100 text-sm">Bienvenue sur Agris</p>
@@ -143,7 +143,7 @@ export default function Dashboard() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-green-950 pb-20 md:pb-8">
+        <div className="min-h-screen pb-20 md:pb-8">
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-6xl mx-auto">
                     <p className="text-green-100 text-sm">Bienvenue sur Agris</p>

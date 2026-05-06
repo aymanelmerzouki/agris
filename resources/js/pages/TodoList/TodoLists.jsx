@@ -65,7 +65,7 @@ export default function TodoLists() {
     const ouvrierSelectionne = ouvriers.find((o) => o.id == listForm.ouvrier_id);
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-green-950 pb-20 md:pb-8">
+        <div className="min-h-screen pb-20 md:pb-8">
             
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
@@ -87,8 +87,8 @@ export default function TodoLists() {
                 <div className="w-72 flex-shrink-0">
                     
                     {showListForm && user?.role === 'manager' && (
-                        <form onSubmit={handleCreateList} className="bg-white dark:bg-green-900 rounded-2xl shadow-md border border-gray-100 dark:border-green-800 p-4 mb-4 space-y-3">
-                            <h3 className="font-bold text-gray-800 dark:text-white text-sm">Nouvelle liste</h3>
+                        <form onSubmit={handleCreateList} className="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-gray-100 dark:border-slate-700 p-4 mb-4 space-y-3">
+                            <h3 className="font-bold text-gray-800 dark:text-gray-100 text-sm">Nouvelle liste</h3>
 
                             <input className="input" placeholder="Titre *" value={listForm.titre} onChange={setL('titre')} required />
 
@@ -126,7 +126,7 @@ export default function TodoLists() {
 
                     
                     {lists.length === 0 ? (
-                        <div className="w-full flex flex-col items-center justify-center min-h-[50vh] text-center text-gray-400 dark:text-green-300">
+                        <div className="w-full flex flex-col items-center justify-center min-h-[50vh] text-center text-gray-400 dark:text-gray-400">
                             <p className="text-4xl mb-3">📋</p>
                             <p className="font-medium text-sm">Aucune liste de tâches</p>
                             {user?.role === 'manager' && (
@@ -137,12 +137,12 @@ export default function TodoLists() {
                     <div className="space-y-2">
                         {lists.map((l) => (
                             <button key={l.id} onClick={() => selectList(l)}
-                                className={`w-full text-left bg-white dark:bg-green-900 rounded-xl border p-3 hover:shadow-md transition ${selected?.id === l.id ? 'border-green-400 shadow-md' : 'border-gray-100 dark:border-green-800 shadow-sm'}`}>
+                                className={`w-full text-left bg-white dark:bg-slate-800 rounded-xl border p-3 hover:shadow-md transition ${selected?.id === l.id ? 'border-green-400 shadow-md' : 'border-gray-100 dark:border-slate-700 shadow-sm'}`}>
                                 <div className="flex items-center justify-between mb-1">
-                                    <p className="font-semibold text-sm text-gray-900 dark:text-white truncate">{l.titre}</p>
+                                    <p className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate">{l.titre}</p>
                                     <span className={`text-xs px-1.5 py-0.5 rounded-full ${PRIORITE_COLORS[l.priorite]}`}>{l.priorite}</span>
                                 </div>
-                                <p className="text-xs text-gray-400 dark:text-green-300">{l.nbreTaches} tâche(s) · {l.statut}</p>
+                                <p className="text-xs text-gray-400 dark:text-gray-400">{l.nbreTaches} tâche(s) · {l.statut}</p>
                                 {l.dateEcheance && <p className="text-xs text-gray-300 mt-0.5">📅 {new Date(l.dateEcheance).toLocaleDateString('fr-FR')}</p>}
                             </button>
                         ))}
@@ -153,7 +153,7 @@ export default function TodoLists() {
                 
                 <div className="flex-1">
                     {lists.length === 0 ? null : !selected ? (
-                        <div className="flex flex-col items-center justify-center min-h-[50vh] text-center text-gray-500 dark:text-green-800/60">
+                        <div className="flex flex-col items-center justify-center min-h-[50vh] text-center text-gray-500 dark:text-gray-400/60">
                             <p className="text-4xl mb-3">📋</p>
                             <p className="font-medium">Sélectionnez une liste</p>
                             <p className="text-sm mt-1">Cliquez sur une liste pour voir ses tâches</p>
@@ -178,7 +178,7 @@ export default function TodoLists() {
 
                             
                             {showTacheForm && (
-                                <form onSubmit={handleCreateTache} className="bg-white dark:bg-green-900 rounded-2xl shadow-md border border-gray-100 dark:border-green-800 p-4 mb-4 grid grid-cols-2 gap-3">
+                                <form onSubmit={handleCreateTache} className="bg-white dark:bg-slate-800 rounded-2xl shadow-md border border-gray-100 dark:border-slate-700 p-4 mb-4 grid grid-cols-2 gap-3">
                                     <input className="input col-span-2" placeholder="Nom de la tâche *" value={tacheForm.nomTache} onChange={setT('nomTache')} required />
 
                                     
@@ -208,10 +208,10 @@ export default function TodoLists() {
                             <div className="space-y-2">
                                 {taches.length === 0 && <p className="text-gray-400 text-sm text-center py-10">Aucune tâche dans cette liste.</p>}
                                 {taches.map((t) => (
-                                    <div key={t.id} className="bg-white dark:bg-green-900 rounded-xl border border-gray-100 dark:border-green-800 shadow-sm p-4 flex items-center justify-between hover:shadow-md transition">
+                                    <div key={t.id} className="bg-white dark:bg-slate-800 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm p-4 flex items-center justify-between hover:shadow-md transition">
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2 mb-1">
-                                                <p className="font-medium text-gray-900 dark:text-white">{t.nomTache}</p>
+                                                <p className="font-medium text-gray-900 dark:text-gray-100">{t.nomTache}</p>
                                                 <span className={`text-xs px-2 py-0.5 rounded-full ${PRIORITE_COLORS[t.priorite]}`}>{t.priorite}</span>
                                             </div>
                                             <div className="flex items-center gap-2 text-xs text-gray-400">

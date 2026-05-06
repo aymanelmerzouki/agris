@@ -20,10 +20,10 @@ export default function PlanteDetail() {
         setFavori(data.favori);
     };
 
-    if (!plante) return <div className="min-h-screen bg-gray-50 dark:bg-green-950 p-6">Chargement...</div>;
+    if (!plante) return <div className="min-h-screen p-6">Chargement...</div>;
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-green-950 pb-8">
+        <div className="min-h-screen pb-8">
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-2xl mx-auto flex items-center justify-between">
                     <div>
@@ -70,16 +70,16 @@ export default function PlanteDetail() {
                 </div>
 
                 {plante.description && (
-                    <div className="bg-white dark:bg-green-900 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-green-800">
-                        <h3 className="font-semibold text-gray-800 dark:text-white mb-2">Description</h3>
-                        <p className="text-sm text-gray-600 dark:text-green-100">{plante.description}</p>
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-slate-700">
+                        <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">Description</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{plante.description}</p>
                     </div>
                 )}
 
                 {plante.conditionsCulture && (
-                    <div className="bg-white dark:bg-green-900 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-green-800">
-                        <h3 className="font-semibold text-gray-800 dark:text-white mb-2">Conditions de culture</h3>
-                        <p className="text-sm text-gray-600 dark:text-green-100">{plante.conditionsCulture}</p>
+                    <div className="bg-white dark:bg-slate-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-slate-700">
+                        <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-2">Conditions de culture</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{plante.conditionsCulture}</p>
                     </div>
                 )}
             </div>
@@ -89,9 +89,9 @@ export default function PlanteDetail() {
 
 function Info({ label, value }) {
     return (
-        <div className="bg-white dark:bg-green-900 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-green-800">
-            <span className="text-gray-400 dark:text-green-400 text-xs">{label}</span>
-            <p className="font-semibold text-gray-800 dark:text-white mt-0.5">{value ?? '—'}</p>
+        <div className="bg-white dark:bg-slate-800 rounded-xl p-3 shadow-sm border border-gray-100 dark:border-slate-700">
+            <span className="text-gray-400 dark:text-gray-400 text-xs">{label}</span>
+            <p className="font-semibold text-gray-800 dark:text-gray-100 mt-0.5">{value ?? '—'}</p>
         </div>
     );
 }

@@ -36,7 +36,7 @@ export default function Stocks() {
     const isAlerte = (s) => s.seuilAlerte && s.quantite <= s.seuilAlerte;
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-green-950 pb-20 md:pb-8">
+        <div className="min-h-screen pb-20 md:pb-8">
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
@@ -117,7 +117,7 @@ export default function Stocks() {
                 {stocks.length === 0 ? (
                     <div className="flex flex-col items-center justify-center min-h-[50vh] text-center">
                         <Package size={56} className="text-gray-300 mb-4" />
-                        <p className="font-semibold text-gray-600 dark:text-green-300">Aucun stock enregistré.</p>
+                        <p className="font-semibold text-gray-600 dark:text-gray-400">Aucun stock enregistré.</p>
                         <p className="text-sm text-gray-400 mt-1">Ajoutez votre premier produit en stock.</p>
                     </div>
                 ) : (

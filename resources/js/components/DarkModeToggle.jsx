@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Sun, Moon } from 'lucide-react';
 
 export default function DarkModeToggle() {
     const [dark, setDark] = useState(() => {
@@ -20,8 +21,8 @@ export default function DarkModeToggle() {
 
     return (
         <button onClick={() => setDark(!dark)}
-            className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-green-800 flex items-center justify-center text-lg hover:bg-gray-200 dark:hover:bg-green-800 transition">
-            {dark ? '🌙' : '☀️'}
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-slate-800 text-gray-600 dark:text-gray-300 transition-colors">
+            {dark ? <Sun size={20} /> : <Moon size={20} />}
         </button>
     );
 }

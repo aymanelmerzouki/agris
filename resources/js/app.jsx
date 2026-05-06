@@ -23,12 +23,12 @@ import '../css/app.css';
 function Layout({ children }) {
     const location = useRouterLocation();
     return (
-        <>
+        <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
             <Navbar />
             <main key={location.pathname} className="animate-fadeIn">
                 {children}
             </main>
-        </>
+        </div>
     );
 }
 
