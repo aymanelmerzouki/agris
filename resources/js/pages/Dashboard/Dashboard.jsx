@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import api from '../../api';
 import { Sprout, ShoppingCart, BookOpen, TrendingUp, CheckCircle, Clock, ListTodo } from 'lucide-react';

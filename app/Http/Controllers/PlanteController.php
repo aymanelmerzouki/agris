@@ -43,7 +43,9 @@ class PlanteController extends Controller
 
     public function show(Plante $plante)
     {
-        return response()->json($plante->load('biblios', 'suiviPlantes.user', 'offres'));
+        $data = $plante->load('biblios', 'suiviPlantes.user', 'offres')->toArray();
+        $data['favori'] = $plante->favorisParUsers()->where('user_id', request()->user()->id)->exists();
+        return response()->json($data);
     }
 
     public function update(Request $request, Plante $plante)

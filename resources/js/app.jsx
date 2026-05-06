@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useLocation } from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate, useLocation as useRouterLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
