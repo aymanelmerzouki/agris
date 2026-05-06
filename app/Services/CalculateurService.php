@@ -28,6 +28,7 @@ class CalculateurService
             'besoin_eau_live'  => $besoinLive,
             'stade_dynamique'  => $stade ? $stade->nom_stade : 'Fin de cycle',
             'progression_jours'=> $joursEcoules,
+            'plan_etapes'      => $culture->plante->stades()->orderBy('jour_debut')->get(['nom_stade', 'jour_debut', 'jour_fin']),
         ];
     }
 
@@ -41,6 +42,14 @@ class CalculateurService
                 ->first();
 
             if (!$stade) return false;
+
+            // Notification si premier jour d'un nouveau stade
+            if ((int)$joursEcoules === (int)$stade->jour_debut) {
+                $culture->user->notify(new CultureAlertNotification(
+                    $culture,
+                    "Votre parcelle de {$culture->plante->nom} vient d'entrer en phase de {$stade->nom_stade}. Les besoins en eau vont être ajustés."
+                ));
+            }
 
             $meteo = $this->weatherService->getDailyWeather($culture->parcelle ?? 'Casablanca');
             $base = match($culture->plante->typeIrrigation) {

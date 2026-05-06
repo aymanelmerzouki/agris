@@ -315,6 +315,27 @@ function CultureCard({ s, onDelete }) {
                 {liveData ? liveData.stade_dynamique : (s.stadeVegetatif ?? 'Fin de cycle')}
             </span>
 
+            {/* Timeline plan */}
+            {liveData?.plan_etapes?.length > 0 && (
+                <div className="mt-3 mb-1">
+                    <p className="text-[10px] font-bold text-gray-400 uppercase mb-2">Avancement du plan</p>
+                    <div className="flex items-start gap-1">
+                        {liveData.plan_etapes.map((etape, index) => {
+                            const estPasse = liveData.progression_jours >= etape.jour_fin;
+                            const estActif = liveData.progression_jours >= etape.jour_debut && liveData.progression_jours <= etape.jour_fin;
+                            return (
+                                <div key={index} className="flex-1">
+                                    <div className={`h-1.5 rounded-full ${estPasse ? 'bg-emerald-500' : estActif ? 'bg-emerald-400 animate-pulse' : 'bg-gray-100'}`} />
+                                    <p className={`text-[9px] mt-1 truncate ${estActif ? 'font-bold text-emerald-700' : 'text-gray-400'}`}>
+                                        {etape.nom_stade}
+                                    </p>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+
             {/* Live data block */}
             {liveData && (
                 <div className="mt-4 p-4 bg-gray-50 rounded-xl space-y-3">
