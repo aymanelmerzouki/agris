@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('plantes/{plante}/favori',     [PlanteFavoriController::class, 'toggle']);
         Route::get('alertes',                     [AlerteArrosageController::class, 'index']);
         Route::post('alertes/marquer-lues',       [AlerteArrosageController::class, 'marquerLues']);
+        Route::get('suivi-plantes/{suiviPlante}/live',  [SuiviPlanteController::class, 'getLiveStats']);
         Route::post('suivi-plantes/calculer',     [SuiviPlanteController::class, 'calculer']);
         Route::apiResource('suivi-plantes', SuiviPlanteController::class);
         Route::apiResource('stocks', StockController::class);

@@ -11,6 +11,26 @@ class CalculateurService
 {
     public function __construct(protected WeatherService $weatherService) {}
 
+    public function getLiveData(SuiviPlante $culture): array
+    {
+        $joursEcoules = \Carbon\Carbon::parse($culture->dateDebut)->diffInDays(now());
+        $stade = $culture->plante->stades()
+            ->where('jour_debut', '<=', $joursEcoules)
+            ->where('jour_fin', '>=', $joursEcoules)
+            ->first();
+
+        $meteo = $this->weatherService->getDailyWeather($culture->parcelle ?? 'Casablanca');
+        $multiplicateur = $stade ? $stade->multiplicateur_eau : 1.0;
+        $besoinLive = round(($culture->BesoinsEau ?? 10) * $multiplicateur);
+
+        return [
+            'meteo'            => $meteo,
+            'besoin_eau_live'  => $besoinLive,
+            'stade_dynamique'  => $stade ? $stade->nom_stade : 'Fin de cycle',
+            'progression_jours'=> $joursEcoules,
+        ];
+    }
+
     public function genererRecommandation(SuiviPlante $culture): bool
     {
         try {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Map, X, Plus, Save } from 'lucide-react';
+import { Map, X, Plus, Save, Trash2, Thermometer } from 'lucide-react';
 import api from '../../api';
 
 const STADES = ['germination', 'croissance', 'floraison', 'fructification', 'recolte'];
@@ -262,67 +262,74 @@ export default function SuiviPlantes() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {suivis.map((s) => (
-                            <div key={s.id} className="relative rounded-2xl border border-gray-100 dark:border-green-700/40 p-5 hover:shadow-lg transition bg-white dark:bg-white/10 dark:backdrop-blur-md shadow-sm">
-                                <div className="flex items-start justify-between mb-3">
-                                    <div>
-                                        <h3 className="font-bold text-gray-900 dark:text-white">{s.plante?.nom}</h3>
-                                        <p className="text-xs text-gray-400 dark:text-green-200/80">{s.plante?.espece}</p>
-                                    </div>
-                                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUTS[s.statut]?.color}`}>
-                                        {STATUTS[s.statut]?.label}
-                                    </span>
-                                </div>
-                                <div className="flex flex-wrap gap-2 mb-3">
-                                    {s.stadeVegetatif && (
-                                        <span className="text-xs px-2 py-1 rounded-full font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
-                                            {s.stadeVegetatif}
-                                        </span>
-                                    )}
-                                    {s.natureSol && (
-                                        <span className="text-xs bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-2 py-1 rounded-full">
-                                            🪨 {s.natureSol}
-                                        </span>
-                                    )}
-                                    {s.parcelle && (
-                                        <span className="text-xs bg-gray-100 dark:bg-green-800/50 text-gray-600 dark:text-green-300 px-2 py-1 rounded-full">
-                                            📍 {s.parcelle}
-                                        </span>
-                                    )}
-                                </div>
-                                <div className="grid grid-cols-2 gap-2 text-xs">
-                                    <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2 text-center">
-                                        <div className="flex items-center justify-center gap-1 mb-0.5">
-                                            <svg className="w-4 h-4 text-blue-500" viewBox="0 0 24 24" fill="currentColor">
-                                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
-                                                <path d="M12 2a10 10 0 00-7.07 17.07C6.39 20.56 9.08 21.5 12 21.5s5.61-.94 7.07-2.43A10 10 0 0012 2zm0 17c-3.87 0-7-3.13-7-7 0-2.38 1.19-4.47 3-5.74V14h2V8.26A6.97 6.97 0 0119 12c0 3.87-3.13 7-7 7z"/>
-                                            </svg>
-                                            <p className="text-blue-600 dark:text-blue-400 font-bold text-base">
-                                                {Number(s.BesoinsEau).toLocaleString('fr-FR')} L
-                                            </p>
-                                        </div>
-                                        <p className="text-gray-500 dark:text-gray-400">eau/jour</p>
-                                    </div>
-                                    <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-2 text-center">
-                                        <div className="flex items-center justify-center gap-1 mb-0.5">
-                                            <svg className="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                                <path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/>
-                                            </svg>
-                                            <p className="text-green-600 dark:text-green-400 font-bold text-base">{s.phSol ?? '—'}</p>
-                                        </div>
-                                        <p className="text-gray-500 dark:text-gray-400">pH sol</p>
-                                    </div>
-                                </div>
-                                {s.notesAgriculteur && (
-                                    <p className="text-xs text-gray-400 dark:text-green-300/70 mt-3 line-clamp-2 italic">"{s.notesAgriculteur}"</p>
-                                )}
-                                <p className="text-xs text-gray-300 dark:text-green-500/70 mt-3">
-                                    Depuis le {new Date(s.dateDebut).toLocaleDateString('fr-FR')}
-                                </p>
-                            </div>
+                            <CultureCard key={s.id} s={s} onDelete={(id) => setSuivis((prev) => prev.filter((x) => x.id !== id))} />
                         ))}
                     </div>
                 )}
             </div>
+        </div>
+    );
+}
+
+function CultureCard({ s, onDelete }) {
+    const [liveData, setLiveData] = useState(null);
+
+    useEffect(() => {
+        api.get(`/suivi-plantes/${s.id}/live`).then((r) => setLiveData(r.data)).catch(() => {});
+    }, [s.id]);
+
+    const handleDelete = async () => {
+        if (!confirm('Supprimer cette culture ?')) return;
+        await api.delete(`/suivi-plantes/${s.id}`);
+        onDelete(s.id);
+    };
+
+    return (
+        <div className="relative rounded-2xl border border-gray-100 dark:border-green-700/40 p-5 hover:shadow-lg transition bg-white dark:bg-white/10 dark:backdrop-blur-md shadow-sm">
+            <div className="flex items-start justify-between mb-3">
+                <div>
+                    <h3 className="font-bold text-gray-900 dark:text-white">{s.plante?.nom}</h3>
+                    <p className="text-xs text-gray-400 dark:text-green-200/80">{s.plante?.espece}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                    {liveData && (
+                        <span className="flex items-center gap-1 text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
+                            <Thermometer size={12} /> {liveData.meteo.temperature}°C
+                        </span>
+                    )}
+                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUTS[s.statut]?.color}`}>
+                        {STATUTS[s.statut]?.label}
+                    </span>
+                    <button onClick={handleDelete} className="text-gray-300 hover:text-red-500 transition-colors">
+                        <Trash2 size={16} />
+                    </button>
+                </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mb-3">
+                <span className="text-xs px-2 py-1 rounded-full font-medium bg-orange-100 text-orange-700">
+                    {liveData ? liveData.stade_dynamique : (s.stadeVegetatif ?? '…')}
+                </span>
+                {s.natureSol && <span className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-full">{s.natureSol}</span>}
+                {s.parcelle && <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">{s.parcelle}</span>}
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 text-xs">
+                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2 text-center">
+                    <p className="text-blue-600 font-bold text-base">
+                        {liveData ? Number(liveData.besoin_eau_live).toLocaleString('fr-FR') : Number(s.BesoinsEau).toLocaleString('fr-FR')} L
+                    </p>
+                    <p className="text-gray-500">eau/jour</p>
+                </div>
+                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-2 text-center">
+                    <p className="text-green-600 font-bold text-base">{s.phSol ?? '—'}</p>
+                    <p className="text-gray-500">pH sol</p>
+                </div>
+            </div>
+
+            {liveData && <p className="text-xs text-gray-400 mt-2">Jour {liveData.progression_jours} de culture</p>}
+            {s.notesAgriculteur && <p className="text-xs text-gray-400 mt-2 line-clamp-2 italic">"{s.notesAgriculteur}"</p>}
+            <p className="text-xs text-gray-300 mt-2">Depuis le {new Date(s.dateDebut).toLocaleDateString('fr-FR')}</p>
         </div>
     );
 }
