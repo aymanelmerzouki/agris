@@ -72,7 +72,7 @@ export default function SuiviPlantes() {
     const [searchParams] = useSearchParams();
     const [form, setForm] = useState({
         plante_id: searchParams.get('plante_id') ?? '', dateDebut: '', natureSol: '',
-        superficieHa: '', parcelle: '', stadeVegetatif: 'germination', notesAgriculteur: '',
+        superficie: '', unite_superficie: 'ha', parcelle: '', stadeVegetatif: 'germination', notesAgriculteur: '',
     });
 
     useEffect(() => {
@@ -92,7 +92,7 @@ export default function SuiviPlantes() {
     const set = (k) => (v) => {
         const newForm = { ...form, [k]: v };
         setForm(newForm);
-        if (newForm.plante_id && newForm.natureSol && newForm.superficieHa > 0) {
+        if (newForm.plante_id && newForm.natureSol && newForm.superficie > 0) {
             calculerAuto(newForm);
         }
     };
@@ -103,7 +103,7 @@ export default function SuiviPlantes() {
             const { data } = await api.post('/suivi-plantes/calculer', {
                 plante_id: f.plante_id,
                 natureSol: f.natureSol,
-                superficieHa: f.superficieHa,
+                superficieHa: f.superficie,
             });
             setCalcul(data);
         } catch {}
@@ -116,7 +116,7 @@ export default function SuiviPlantes() {
         setSuivis((prev) => [data, ...prev]);
         setShowForm(false);
         setCalcul(null);
-        setForm({ plante_id: '', dateDebut: '', natureSol: '', superficieHa: '', parcelle: '', stadeVegetatif: 'germination', notesAgriculteur: '' });
+        setForm({ plante_id: '', dateDebut: '', natureSol: '', superficie: '', unite_superficie: 'ha', parcelle: '', stadeVegetatif: 'germination', notesAgriculteur: '' });
     };
 
     return (
@@ -177,10 +177,18 @@ export default function SuiviPlantes() {
                         <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Superficie (ha) *</label>
-                                    <input className="w-full bg-gray-50/50 border border-gray-200 text-gray-800 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
-                                        type="number" step="0.01" min="0.01" placeholder="ex: 2.5"
-                                        value={form.superficieHa} onChange={(e) => set('superficieHa')(e.target.value)} required />
+                                    <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Superficie *</label>
+                                    <div className="flex gap-2">
+                                        <input className="w-full bg-gray-50/50 border border-gray-200 text-gray-800 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
+                                            type="number" step="0.01" min="0.01" placeholder="ex: 2.5"
+                                            value={form.superficie} onChange={(e) => set('superficie')(e.target.value)} required />
+                                        <select className="bg-gray-50/50 border border-gray-200 text-gray-800 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 p-3 transition-all outline-none"
+                                            value={form.unite_superficie} onChange={(e) => set('unite_superficie')(e.target.value)}>
+                                            <option value="ha">ha</option>
+                                            <option value="m2">m²</option>
+                                            <option value="unite">Pots/Fûts</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div>
                                     <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Parcelle</label>

@@ -21,7 +21,14 @@ class CalculateurService
 
         $meteo = $this->weatherService->getDailyWeather($culture->parcelle ?? 'Casablanca');
         $multiplicateur = $stade ? $stade->multiplicateur_eau : 1.0;
-        $besoinLive = round(($culture->BesoinsEau ?? 10) * $multiplicateur);
+
+        $surfaceM2 = match($culture->unite_superficie ?? 'ha') {
+            'ha'    => ($culture->superficie ?? 1) * 10000,
+            'm2'    => ($culture->superficie ?? 1),
+            'unite' => ($culture->superficie ?? 1) * 0.25,
+            default => ($culture->superficie ?? 1) * 10000,
+        };
+        $besoinLive = round(($culture->BesoinsEau ?? 10) * $multiplicateur * ($surfaceM2 / 10000));
 
         return [
             'meteo'            => $meteo,

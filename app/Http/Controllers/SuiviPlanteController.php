@@ -41,6 +41,7 @@ class SuiviPlanteController extends Controller
             'dateDebut'        => 'required|date',
             'natureSol'        => 'required|in:argileux,sableux,limoneux,calcaire,humifere',
             'superficieHa'     => 'required|numeric|min:0.01',
+            'unite_superficie' => 'required|in:ha,m2,unite',
             'parcelle'         => 'nullable|string',
             'notesAgriculteur' => 'nullable|string',
             'statut'           => 'in:en_cours,recolte,abandonne',
