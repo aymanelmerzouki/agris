@@ -1,0 +1,14 @@
+<?php
+
+use App\Jobs\EnvoyerAlertesArrosage;
+use Illuminate\Foundation\Inspiring;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Schedule;
+
+Artisan::command('inspire', function () {
+    $this->comment(Inspiring::quote());
+})->purpose('Display an inspiring quote');
+
+Schedule::job(new EnvoyerAlertesArrosage)->dailyAt('07:00');
+Schedule::command('app:check-cultures')->daily();
+Schedule::command('agris:generer-alertes')->dailyAt('06:00');
