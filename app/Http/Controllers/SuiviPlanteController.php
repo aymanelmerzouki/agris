@@ -42,7 +42,6 @@ class SuiviPlanteController extends Controller
             'natureSol'        => 'required|in:argileux,sableux,limoneux,calcaire,humifere',
             'superficieHa'     => 'required|numeric|min:0.01',
             'parcelle'         => 'nullable|string',
-            'stadeVegetatif'   => 'nullable|in:germination,croissance,floraison,fructification,recolte',
             'notesAgriculteur' => 'nullable|string',
             'statut'           => 'in:en_cours,recolte,abandonne',
         ]);
@@ -52,9 +51,10 @@ class SuiviPlanteController extends Controller
 
         $suivi = SuiviPlante::create([
             ...$data,
-            'user_id'    => $request->user()->id,
-            'phSol'      => $calcul['phSol'],
-            'BesoinsEau' => $calcul['BesoinsEau'],
+            'user_id'        => $request->user()->id,
+            'stadeVegetatif' => null,
+            'phSol'          => $calcul['phSol'],
+            'BesoinsEau'     => $calcul['BesoinsEau'],
         ]);
 
         return response()->json($suivi->load('plante'), 201);

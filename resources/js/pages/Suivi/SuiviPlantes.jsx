@@ -221,13 +221,6 @@ export default function SuiviPlantes() {
                                     <input className="w-full bg-gray-50/50 border border-gray-200 text-gray-800 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none"
                                         type="date" value={form.dateDebut} onChange={(e) => set('dateDebut')(e.target.value)} required />
                                 </div>
-                                <div>
-                                    <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Stade végétatif</label>
-                                    <select className="w-full bg-gray-50/50 border border-gray-200 text-gray-800 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none"
-                                        value={form.stadeVegetatif} onChange={(e) => set('stadeVegetatif')(e.target.value)}>
-                                        {STADES.map((s) => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
-                                    </select>
-                                </div>
                             </div>
                             <div className="mt-6">
                                 <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Notes</label>
