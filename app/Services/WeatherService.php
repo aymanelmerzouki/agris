@@ -12,7 +12,7 @@ class WeatherService
 
     public function __construct()
     {
-        $this->apiKey = env('OPENWEATHER_API_KEY', '');
+        $this->apiKey = config('services.openweather.key', '');
     }
 
     public function getDailyWeather(string $city = 'Casablanca'): array
