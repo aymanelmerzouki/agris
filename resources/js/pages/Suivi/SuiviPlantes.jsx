@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Map, X, Plus, Save, Trash2, Thermometer } from 'lucide-react';
+import { Map, X, Plus, Save, Trash2, Thermometer, Droplets } from 'lucide-react';
 import api from '../../api';
 
 const STADES = ['germination', 'croissance', 'floraison', 'fructification', 'recolte'];
@@ -260,7 +260,7 @@ export default function SuiviPlantes() {
                         </Link>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                         {suivis.map((s) => (
                             <CultureCard key={s.id} s={s} onDelete={(id) => setSuivis((prev) => prev.filter((x) => x.id !== id))} />
                         ))}
@@ -273,9 +273,13 @@ export default function SuiviPlantes() {
 
 function CultureCard({ s, onDelete }) {
     const [liveData, setLiveData] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        api.get(`/suivi-plantes/${s.id}/live`).then((r) => setLiveData(r.data)).catch(() => {});
+        api.get(`/suivi-plantes/${s.id}/live`)
+            .then((r) => setLiveData(r.data))
+            .catch(() => {})
+            .finally(() => setLoading(false));
     }, [s.id]);
 
     const handleDelete = async () => {
@@ -284,52 +288,61 @@ function CultureCard({ s, onDelete }) {
         onDelete(s.id);
     };
 
+    if (loading) return (
+        <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm animate-pulse space-y-3">
+            <div className="h-4 bg-gray-200 rounded w-2/3" />
+            <div className="h-3 bg-gray-100 rounded w-1/2" />
+            <div className="h-20 bg-gray-100 rounded-xl mt-4" />
+            <div className="h-3 bg-gray-100 rounded w-full mt-4" />
+        </div>
+    );
+
     return (
-        <div className="relative rounded-2xl border border-gray-100 dark:border-green-700/40 p-5 hover:shadow-lg transition bg-white dark:bg-white/10 dark:backdrop-blur-md shadow-sm">
-            <div className="flex items-start justify-between mb-3">
+        <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-all relative">
+            {/* Header */}
+            <div className="flex items-start justify-between">
                 <div>
-                    <h3 className="font-bold text-gray-900 dark:text-white">{s.plante?.nom}</h3>
-                    <p className="text-xs text-gray-400 dark:text-green-200/80">{s.plante?.espece}</p>
+                    <h3 className="text-lg font-bold text-gray-800">{s.plante?.nom}</h3>
+                    <p className="text-xs text-gray-400 mt-0.5">{s.plante?.espece}</p>
                 </div>
-                <div className="flex items-center gap-2">
-                    {liveData && (
-                        <span className="flex items-center gap-1 text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
-                            <Thermometer size={12} /> {liveData.meteo.temperature}°C
-                        </span>
-                    )}
-                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUTS[s.statut]?.color}`}>
-                        {STATUTS[s.statut]?.label}
-                    </span>
-                    <button onClick={handleDelete} className="text-gray-300 hover:text-red-500 transition-colors">
-                        <Trash2 size={16} />
-                    </button>
-                </div>
+                <button onClick={handleDelete} className="text-gray-300 hover:text-red-500 transition-colors mt-0.5">
+                    <Trash2 size={16} />
+                </button>
             </div>
 
-            <div className="flex flex-wrap gap-2 mb-3">
-                <span className="text-xs px-2 py-1 rounded-full font-medium bg-orange-100 text-orange-700">
-                    {liveData ? liveData.stade_dynamique : (s.stadeVegetatif ?? '…')}
-                </span>
+            {/* Badge stade */}
+            <span className="inline-block mt-2 px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-100">
+                {liveData ? liveData.stade_dynamique : (s.stadeVegetatif ?? 'Fin de cycle')}
+            </span>
+
+            {/* Live data block */}
+            {liveData && (
+                <div className="mt-4 p-4 bg-gray-50 rounded-xl space-y-3">
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Thermometer size={16} className="text-orange-500" />
+                        {liveData.meteo.temperature}°C — {liveData.meteo.description}
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <Droplets size={16} className="text-blue-500" />
+                        Besoin : <span className="font-bold text-blue-700">{liveData.besoin_eau_live} L/jour</span>
+                    </div>
+                </div>
+            )}
+
+            {/* Infos secondaires */}
+            <div className="flex flex-wrap gap-2 mt-3">
                 {s.natureSol && <span className="text-xs bg-amber-50 text-amber-700 px-2 py-1 rounded-full">{s.natureSol}</span>}
                 {s.parcelle && <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">{s.parcelle}</span>}
+                <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUTS[s.statut]?.color}`}>{STATUTS[s.statut]?.label}</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-2 text-center">
-                    <p className="text-blue-600 font-bold text-base">
-                        {liveData ? Number(liveData.besoin_eau_live).toLocaleString('fr-FR') : Number(s.BesoinsEau).toLocaleString('fr-FR')} L
-                    </p>
-                    <p className="text-gray-500">eau/jour</p>
-                </div>
-                <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-2 text-center">
-                    <p className="text-green-600 font-bold text-base">{s.phSol ?? '—'}</p>
-                    <p className="text-gray-500">pH sol</p>
-                </div>
-            </div>
+            {s.notesAgriculteur && <p className="text-xs text-gray-400 mt-3 line-clamp-2 italic">"{s.notesAgriculteur}"</p>}
 
-            {liveData && <p className="text-xs text-gray-400 mt-2">Jour {liveData.progression_jours} de culture</p>}
-            {s.notesAgriculteur && <p className="text-xs text-gray-400 mt-2 line-clamp-2 italic">"{s.notesAgriculteur}"</p>}
-            <p className="text-xs text-gray-300 mt-2">Depuis le {new Date(s.dateDebut).toLocaleDateString('fr-FR')}</p>
+            {/* Footer */}
+            <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+                <span>Jour {liveData?.progression_jours ?? '—'} de culture</span>
+                <span>{new Date(s.dateDebut).toLocaleDateString('fr-FR')}</span>
+            </div>
         </div>
     );
 }
