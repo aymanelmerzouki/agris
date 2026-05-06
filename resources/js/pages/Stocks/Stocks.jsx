@@ -4,7 +4,7 @@ import { Package, Plus, X, Save, Trash2, MapPin, Calendar, AlertTriangle, Shoppi
 import api from '../../api';
 
 const UNITES = ['kg', 'tonne', 'caisse', 'litre', 'unite'];
-const INPUT = "w-full bg-gray-50/50 border border-gray-200 text-gray-800 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none";
+const INPUT = "w-full bg-gray-50/50 dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-800 dark:text-gray-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none";
 const LABEL = "block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider";
 
 export default function Stocks() {
@@ -37,7 +37,7 @@ export default function Stocks() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-slate-800 dark:to-slate-800 dark:border-b dark:border-slate-700 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold text-white flex items-center gap-3">
@@ -55,7 +55,7 @@ export default function Stocks() {
 
             <div className="max-w-5xl mx-auto px-4 md:px-6 mt-6">
                 {showForm && (
-                    <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6 space-y-5">
+                    <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700 p-6 mb-6 space-y-5">
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div className="md:col-span-2">
@@ -126,7 +126,7 @@ export default function Stocks() {
                             <div key={s.id} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3 relative">
                                 <div className="flex items-start justify-between">
                                     <div>
-                                        <h3 className="text-lg font-bold text-gray-800 capitalize">{s.produit}</h3>
+                                        <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 capitalize">{s.produit}</h3>
                                         {s.plante && <p className="text-xs text-emerald-600 mt-0.5">{s.plante.nom}</p>}
                                     </div>
                                     <button onClick={() => handleDelete(s.id)}

@@ -16,7 +16,7 @@ export default function Alertes() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-slate-800 dark:to-slate-800 dark:border-b dark:border-slate-700 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
@@ -37,7 +37,7 @@ export default function Alertes() {
                         <div className="w-16 h-16 bg-gray-50 flex items-center justify-center rounded-full mb-4 text-gray-400">
                             <BellOff size={32} />
                         </div>
-                        <p className="text-lg font-bold text-gray-800 dark:text-gray-100">Aucune alerte pour le moment</p>
+                        <p className="text-lg font-bold text-gray-800 dark:text-gray-100 dark:text-gray-100">Aucune alerte pour le moment</p>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Vous êtes à jour. Les nouvelles alertes apparaîtront ici.</p>
                     </div>
                 ) : (

@@ -67,7 +67,7 @@ export default function TodoLists() {
     return (
         <div className="min-h-screen pb-20 md:pb-8">
             
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-slate-800 dark:to-slate-800 dark:border-b dark:border-slate-700 px-6 py-8">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold text-white">📋 Todo Lists</h1>

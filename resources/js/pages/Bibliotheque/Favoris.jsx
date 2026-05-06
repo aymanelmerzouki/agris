@@ -17,7 +17,7 @@ export default function Favoris() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-slate-800 dark:to-slate-800 dark:border-b dark:border-slate-700 px-6 py-8">
                 <div className="max-w-5xl mx-auto">
                     <h1 className="text-2xl font-extrabold text-white">Ma sélection</h1>
                     <p className="text-green-100 text-sm mt-1">{plantes.length} plante(s) sélectionnée(s)</p>
