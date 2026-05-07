@@ -19,23 +19,43 @@ class CalculateurService
             ->where('jour_fin', '>=', $joursEcoules)
             ->first();
 
-        $meteo = $this->weatherService->getDailyWeather($culture->parcelle ?? 'Casablanca');
+        $meteo = $this->weatherService->getDailyWeather($culture->parcelle ?? 'Rabat');
         $multiplicateur = $stade ? $stade->multiplicateur_eau : 1.0;
 
+        // Surface en m²
         $surfaceM2 = match($culture->unite_superficie ?? 'ha') {
             'ha'    => ($culture->superficie ?? 1) * 10000,
             'm2'    => ($culture->superficie ?? 1),
             'unite' => ($culture->superficie ?? 1) * 0.25,
             default => ($culture->superficie ?? 1) * 10000,
         };
-        $besoinLive = round(($culture->BesoinsEau ?? 10) * $multiplicateur * ($surfaceM2 / 10000));
+
+        // Besoin de base en L/m² selon type d'irrigation
+        $besoinBaseParM2 = match($culture->plante->typeIrrigation ?? 'pluviale') {
+            'goutte_a_goutte' => 0.003,
+            'aspersion'       => 0.004,
+            'submersion'      => 0.006,
+            default           => 0.002,
+        };
+
+        // A = Besoin brut (L)
+        $besoinBrut = $besoinBaseParM2 * $multiplicateur * $surfaceM2;
+
+        // B = Apport naturel (1mm pluie = 1L/m²)
+        $pluieMm = $meteo['pluie_mm'] ?? 0;
+        $apportPluie = $pluieMm * $surfaceM2;
+
+        // C = Recommandation finale
+        $besoinNet = max(0, round($besoinBrut - $apportPluie));
 
         return [
-            'meteo'            => $meteo,
-            'besoin_eau_live'  => $besoinLive,
-            'stade_dynamique'  => $stade ? $stade->nom_stade : 'Fin de cycle',
-            'progression_jours'=> $joursEcoules,
-            'plan_etapes'      => $culture->plante->stades()->orderBy('jour_debut')->get(['nom_stade', 'jour_debut', 'jour_fin']),
+            'meteo'             => $meteo,
+            'besoin_eau_live'   => $besoinNet,
+            'besoin_brut'       => round($besoinBrut),
+            'pluie_mm'          => $pluieMm,
+            'stade_dynamique'   => $stade ? $stade->nom_stade : 'Fin de cycle',
+            'progression_jours' => $joursEcoules,
+            'plan_etapes'       => $culture->plante->stades()->orderBy('jour_debut')->get(['nom_stade', 'jour_debut', 'jour_fin']),
         ];
     }
 

@@ -310,8 +310,17 @@ function CultureCard({ s, onDelete }) {
                         {liveData.meteo.temperature}°C — {liveData.meteo.description}
                     </div>
                     <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 font-medium">
+                        <Droplets size={14} className="text-blue-400" />
+                        Pluie prévue : <span className="font-bold">{liveData.pluie_mm} mm</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 font-medium">
                         <Droplets size={14} className="text-emerald-500" />
-                        Besoin : <span className="font-bold text-emerald-600 dark:text-emerald-400">{Number(liveData.besoin_eau_live).toLocaleString('fr-FR')} L/jour</span>
+                        À arroser : <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                            {Number(liveData.besoin_eau_live).toLocaleString('fr-FR')} L
+                        </span>
+                        {liveData.pluie_mm > 0 && (
+                            <span className="text-emerald-500 font-semibold">(Optimisé)</span>
+                        )}
                     </div>
                 </div>
             )}
