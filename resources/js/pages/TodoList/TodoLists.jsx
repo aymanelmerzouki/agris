@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, ClipboardList, ListTodo, Plus, X, Trash2, Clock, Droplets, Sprout, Wrench, Scissors, Wheat, MoreHorizontal, CheckCircle2 } from 'lucide-react';
+import { Calendar, ClipboardList, ListTodo, Plus, X, Trash2, Clock, Droplets, Sprout, Wrench, Scissors, Wheat, MoreHorizontal, CheckCircle2, Edit2 } from 'lucide-react';
 import api from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -30,6 +30,8 @@ export default function TodoLists() {
     const [ouvriers, setOuvriers] = useState([]);
     const [showListForm, setShowListForm] = useState(false);
     const [showTacheForm, setShowTacheForm] = useState(false);
+    const [editTache, setEditTache] = useState(null);
+    const [editTacheForm, setEditTacheForm] = useState({});
 
     const [listForm, setListForm] = useState({ titre: '', description: '', ouvrier_id: '', dateEcheance: '', priorite: 'normale', parcelle: '' });
     const [tacheForm, setTacheForm] = useState({ nomTache: '', description: '', categorie: 'autre', priorite: 'normale', dureeEstimeeMin: '' });
@@ -74,6 +76,13 @@ export default function TodoLists() {
     const updateStatut = async (tache, statut) => {
         const { data } = await api.put(`/todo-lists/${selected.id}/taches/${tache.id}`, { statut });
         setTaches((prev) => prev.map((t) => (t.id === tache.id ? data : t)));
+    };
+
+    const handleEditTache = async (e) => {
+        e.preventDefault();
+        const { data } = await api.put(`/todo-lists/${selected.id}/taches/${editTache.id}`, editTacheForm);
+        setTaches((prev) => prev.map((t) => t.id === editTache.id ? data : t));
+        setEditTache(null);
     };
 
     const setL = (k) => (e) => setListForm({ ...listForm, [k]: e.target.value });
@@ -169,7 +178,7 @@ export default function TodoLists() {
                                         )}
                                     </div>
                                 </div>
-                                <p className="text-xs text-gray-400 dark:text-zinc-400">{l.nbreTaches} tâche(s) · {l.statut}</p>
+                                <p className="text-xs text-gray-400 dark:text-zinc-400">{l.nbreTaches} tâche(s) · {STATUTS_TACHE.find(s => s.value === l.statut)?.label ?? l.statut}</p>
                                 {l.dateEcheance && <p className="text-xs text-gray-300 mt-0.5 flex items-center gap-1"><Calendar size={14} />{new Date(l.dateEcheance).toLocaleDateString('fr-FR')}</p>}
                             </button>
                         ))}
@@ -245,7 +254,11 @@ export default function TodoLists() {
                                             </div>
                                             <div className="flex items-center gap-2 shrink-0">
                                                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${PRIORITE_COLORS[t.priorite]}`}>{t.priorite}</span>
-                                                {user?.role === 'manager' && (
+                                                {user?.role === 'manager' && (<>
+                                                    <button onClick={() => { setEditTache(t); setEditTacheForm({ nomTache: t.nomTache, description: t.description ?? '', categorie: t.categorie, priorite: t.priorite, dureeEstimeeMin: t.dureeEstimeeMin ?? '', statut: t.statut }); }}
+                                                        className="p-1 text-zinc-400 hover:text-blue-400 dark:hover:bg-zinc-800 rounded transition-colors">
+                                                        <Edit2 size={14} />
+                                                    </button>
                                                     <button onClick={async () => {
                                                         if (!confirm('Supprimer cette tâche ?')) return;
                                                         await api.delete(`/todo-lists/${selected.id}/taches/${t.id}`);
@@ -253,7 +266,7 @@ export default function TodoLists() {
                                                     }} className="p-1 text-zinc-400 hover:text-red-400 dark:hover:bg-zinc-800 rounded transition-colors">
                                                         <Trash2 size={14} />
                                                     </button>
-                                                )}
+                                                </>)}
                                             </div>
                                         </div>
 
@@ -295,6 +308,38 @@ export default function TodoLists() {
                     )}
                 </div>
             </div>
+
+            {/* Modal édition tâche */}
+            {editTache && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/80 backdrop-blur-sm px-4">
+                    <div className="bg-white dark:bg-zinc-900 dark:border dark:border-zinc-800 rounded-2xl shadow-xl p-6 w-full max-w-md space-y-4">
+                        <div className="flex items-center justify-between">
+                            <h3 className="font-bold text-gray-800 dark:text-zinc-100">Modifier la tâche</h3>
+                            <button onClick={() => setEditTache(null)}><X size={20} className="text-gray-400 dark:text-zinc-400" /></button>
+                        </div>
+                        <form onSubmit={handleEditTache} className="space-y-3">
+                            <input className="input" placeholder="Nom *" value={editTacheForm.nomTache} onChange={(e) => setEditTacheForm({...editTacheForm, nomTache: e.target.value})} required />
+                            <div className="grid grid-cols-2 gap-3">
+                                <select className="input" value={editTacheForm.categorie} onChange={(e) => setEditTacheForm({...editTacheForm, categorie: e.target.value})}>
+                                    {CATEGORIES.map((c) => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
+                                </select>
+                                <select className="input" value={editTacheForm.priorite} onChange={(e) => setEditTacheForm({...editTacheForm, priorite: e.target.value})}>
+                                    {PRIORITES.map((p) => <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>)}
+                                </select>
+                                <select className="input" value={editTacheForm.statut} onChange={(e) => setEditTacheForm({...editTacheForm, statut: e.target.value})}>
+                                    {STATUTS_TACHE.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+                                </select>
+                                <input className="input" placeholder="Durée (min)" type="number" value={editTacheForm.dureeEstimeeMin} onChange={(e) => setEditTacheForm({...editTacheForm, dureeEstimeeMin: e.target.value})} />
+                            </div>
+                            <textarea className="input" rows={2} placeholder="Description" value={editTacheForm.description} onChange={(e) => setEditTacheForm({...editTacheForm, description: e.target.value})} />
+                            <div className="flex gap-3">
+                                <button type="button" onClick={() => setEditTache(null)} className="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-300 dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-sm font-medium transition">Annuler</button>
+                                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition">Enregistrer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
