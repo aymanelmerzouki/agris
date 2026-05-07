@@ -21,6 +21,8 @@ export default function Offres() {
     const [suivies, setSuivies] = useState([]);
     const [negociationItem, setNegociationItem] = useState(null);
     const [negocForm, setNegocForm] = useState({ prix: '', quantite: '', message: '' });
+    const [mesNegociations, setMesNegociations] = useState([]);
+    const [toast, setToast] = useState('');
     const [editItem, setEditItem] = useState(null);
     const [editForm, setEditForm] = useState({});
     const [form, setForm] = useState({
@@ -33,6 +35,7 @@ export default function Offres() {
         api.get('/offres').then((r) => setOffres(r.data.data));
         api.get('/plantes?per_page=100').then((r) => setPlantes(r.data.data));
         api.get('/ventes').then((r) => setMesVentes(r.data)).catch(() => {});
+        api.get('/negociations/mes').then((r) => setMesNegociations(r.data)).catch(() => {});
     }, []);
 
     useEffect(() => {
@@ -90,7 +93,22 @@ export default function Offres() {
         }
     };
 
-    const toggleSuivie = (id) => setSuivies((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
+    const handleNegociation = async () => {
+        try {
+            const { data } = await api.post('/negociations', {
+                offre_id: negociationItem.id,
+                prix_propose: negocForm.prix,
+                quantite_proposee: negocForm.quantite,
+                message: negocForm.message,
+            });
+            setMesNegociations((prev) => [data, ...prev]);
+            setNegociationItem(null);
+            setToast('Votre proposition a été envoyée.');
+            setTimeout(() => setToast(''), 3000);
+        } catch (err) {
+            alert(err.response?.data?.message || 'Erreur lors de l\'envoi.');
+        }
+    }; setSuivies((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
 
     const supprimerOffre = async (id) => {
         if (!confirm('Supprimer cette offre ?')) return;
@@ -101,12 +119,18 @@ export default function Offres() {
     const offresFiltrees = offres.filter((o) => {
         const matchSearch = !searchQuery || (o.plante?.nom ?? '').toLowerCase().includes(searchQuery.toLowerCase()) || (o.description ?? '').toLowerCase().includes(searchQuery.toLowerCase());
         if (activeTab === 'mes_offres') return matchSearch && o.user_id === user?.id;
-        if (activeTab === 'suivies') return matchSearch && suivies.includes(o.id);
+        if (activeTab === 'suivies') return false; // handled separately below
         return matchSearch;
     });
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
+            {/* Toast */}
+            {toast && (
+                <div className="fixed top-4 right-4 z-50 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-lg text-sm font-medium animate-fadeIn">
+                    {toast}
+                </div>
+            )}
             <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-950 dark:to-zinc-950 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
@@ -135,7 +159,7 @@ export default function Offres() {
                     {[
                         { key: 'toutes', label: 'Toutes les offres' },
                         { key: 'mes_offres', label: 'Mes offres', badge: offres.filter((o) => o.user_id === user?.id).length },
-                        { key: 'suivies', label: 'Offres suivies', badge: suivies.length },
+                        { key: 'suivies', label: 'Offres suivies', badge: mesNegociations.length },
                     ].map(({ key, label, badge }) => (
                         <button key={key} onClick={() => setActiveTab(key)}
                             className={activeTab === key
@@ -194,6 +218,29 @@ export default function Offres() {
                     </form>
                 )}
 
+                {activeTab === 'suivies' ? (
+                    <div className="space-y-4">
+                        {mesNegociations.length === 0 ? (
+                            <p className="text-center text-gray-400 dark:text-zinc-500 py-20">Aucune négociation en cours.</p>
+                        ) : mesNegociations.map((n) => (
+                            <div key={n.id} className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-5 shadow-sm">
+                                <div className="flex items-start justify-between mb-3">
+                                    <p className="font-bold text-gray-800 dark:text-zinc-100">{n.offre?.plante?.nom ?? 'Produit agricole'}</p>
+                                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${n.statut === 'acceptee' ? 'bg-emerald-100 text-emerald-700' : n.statut === 'refusee' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-700'}`}>
+                                        {n.statut === 'en_attente' ? 'En attente' : n.statut === 'acceptee' ? 'Acceptée' : 'Refusée'}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-zinc-400">
+                                    <span>Prix initial : <strong className="text-gray-700 dark:text-zinc-200">{n.offre?.prix} MAD</strong></span>
+                                    <span>→</span>
+                                    <span>Ta proposition : <strong className="text-emerald-600">{n.prix_propose} MAD</strong></span>
+                                </div>
+                                <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1">Quantité demandée : {n.quantite_proposee} {n.offre?.unite}</p>
+                                {n.message && <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1 italic">"{n.message}"</p>}
+                            </div>
+                        ))}
+                    </div>
+                ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {offresFiltrees.map((o) => (
                         <div key={o.id} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 p-5 hover:shadow-md transition-shadow flex flex-col gap-3">
@@ -257,6 +304,7 @@ export default function Offres() {
                         </div>
                     ))}
                 </div>
+                )}
 
                 {mesVentes.length > 0 && (
                     <div className="mt-10">
@@ -352,7 +400,7 @@ export default function Offres() {
                                     className="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-300 dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-sm font-medium transition">
                                     Annuler
                                 </button>
-                                <button onClick={() => { alert('Négociation envoyée.'); setNegociationItem(null); }}
+                                <button onClick={handleNegociation}
                                     className="flex-1 py-2.5 rounded-xl bg-emerald-600 dark:bg-emerald-700 hover:bg-emerald-700 text-white text-sm font-semibold transition">
                                     Envoyer
                                 </button>

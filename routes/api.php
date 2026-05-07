@@ -43,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('suivi-plantes/calculer',     [SuiviPlanteController::class, 'calculer']);
         Route::apiResource('suivi-plantes', SuiviPlanteController::class);
         Route::apiResource('stocks', StockController::class);
+        Route::post('negociations', [\App\Http\Controllers\NegociationController::class, 'store']);
+        Route::get('negociations/mes', [\App\Http\Controllers\NegociationController::class, 'mesNegociations']);
     });
     Route::middleware('role:manager')->group(function () {
         Route::apiResource('todo-lists', TodoListController::class)->except(['index', 'show']);
