@@ -21,6 +21,7 @@ export default function Offres() {
     const [suivies, setSuivies] = useState([]);
     const [editItem, setEditItem] = useState(null);
     const [editForm, setEditForm] = useState({});
+    const [negociationItem, setNegociationItem] = useState(null);
     const [negocForm, setNegocForm] = useState({ prix: '', message: '' });
     const [form, setForm] = useState({
         plante_id: '', prix: '', quantite: '', unite: 'kg',
