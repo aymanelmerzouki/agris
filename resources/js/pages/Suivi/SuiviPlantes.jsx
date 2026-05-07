@@ -213,11 +213,6 @@ export default function SuiviPlantes() {
                         {(!form.natureSol || !form.plante_id) && <p className="text-xs text-center text-gray-400">Sélectionnez une plante et un type de sol pour continuer</p>}
                     </form>
                 )}
-                        {!calcul && <p className="text-xs text-center text-gray-400">Sélectionnez une plante, un sol et une superficie pour continuer</p>}
-                    </form>
-                )}
-
-                
                 {loading ? (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {[...Array(3)].map((_, i) => <div key={i} className="bg-gray-100 rounded-2xl h-40 animate-pulse" />)}
