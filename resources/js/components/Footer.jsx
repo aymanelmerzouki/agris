@@ -11,8 +11,8 @@ export default function Footer() {
                 <div>
                     <p className="font-semibold text-gray-800 dark:text-zinc-100 mb-3">L'Équipe</p>
                     <ul className="space-y-1 text-sm">
-                        <li><a href="mailto:ayman@agris.ma" className="text-gray-500 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">Ayman</a></li>
-                        <li><a href="mailto:yahya@agris.ma" className="text-gray-500 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">Yahya</a></li>
+                        <li><a href="mailto:ayman_elmerzouki@um5.ac.ma" className="text-gray-500 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">Ayman Elmerzouki</a></li>
+                        <li><a href="mailto:yahya_elhabti@um5.ac.ma" className="text-gray-500 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors">Yahya El Habti</a></li>
                     </ul>
                 </div>
                 <div>
