@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, ClipboardList } from 'lucide-react';
+import { Calendar, ClipboardList, ListTodo, Plus, X, Trash2 } from 'lucide-react';
 import api from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -47,6 +47,13 @@ export default function TodoLists() {
         setListForm({ titre: '', description: '', ouvrier_id: '', dateEcheance: '', priorite: 'normale', parcelle: '' });
     };
 
+    const handleDeleteList = async (id) => {
+        if (!confirm('Supprimer cette liste et toutes ses tâches ?')) return;
+        await api.delete(`/todo-lists/${id}`);
+        setLists((prev) => prev.filter((l) => l.id !== id));
+        if (selected?.id === id) setSelected(null);
+    };
+
     const handleCreateTache = async (e) => {
         e.preventDefault();
         const { data } = await api.post(`/todo-lists/${selected.id}/taches`, tacheForm);
@@ -68,16 +75,19 @@ export default function TodoLists() {
     return (
         <div className="min-h-screen pb-20 md:pb-8">
 
-            <div className="w-full bg-white dark:bg-zinc-950 border-b border-gray-200 dark:border-zinc-800 pb-6 mb-8 mt-4 px-6">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-950 dark:to-zinc-950 dark:border-b dark:border-zinc-800 px-6 py-8">
                 <div className="max-w-6xl mx-auto flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">Tâches</h1>
-                        <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1">{lists.length} liste(s)</p>
+                        <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
+                            <ListTodo size={24} /> Tâches
+                        </h1>
+                        <p className="text-green-100 dark:text-zinc-400 text-sm mt-1">{lists.length} liste(s)</p>
                     </div>
                     {user?.role === 'manager' && (
                         <button onClick={() => setShowListForm(!showListForm)}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm text-sm">
-                            {showListForm ? 'Annuler' : '+ Nouvelle liste'}
+                            className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm">
+                            {showListForm ? <X size={18} /> : <Plus size={18} />}
+                            {showListForm ? 'Annuler' : 'Nouvelle liste'}
                         </button>
                     )}
                 </div>
@@ -141,7 +151,15 @@ export default function TodoLists() {
                                 className={`w-full text-left bg-white dark:bg-zinc-900 rounded-xl border p-3 hover:shadow-md transition ${selected?.id === l.id ? 'border-green-400 shadow-md' : 'border-gray-100 dark:border-zinc-800 shadow-sm'}`}>
                                 <div className="flex items-center justify-between mb-1">
                                     <p className="font-semibold text-sm text-gray-900 dark:text-zinc-100 truncate">{l.titre}</p>
-                                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${PRIORITE_COLORS[l.priorite]}`}>{l.priorite}</span>
+                                    <div className="flex items-center gap-1">
+                                        <span className={`text-xs px-1.5 py-0.5 rounded-full ${PRIORITE_COLORS[l.priorite]}`}>{l.priorite}</span>
+                                        {user?.role === 'manager' && (
+                                            <button onClick={(e) => { e.stopPropagation(); handleDeleteList(l.id); }}
+                                                className="p-1 text-zinc-500 hover:text-red-400 dark:hover:bg-zinc-800 rounded transition-colors">
+                                                <Trash2 size={14} />
+                                            </button>
+                                        )}
+                                    </div>
                                 </div>
                                 <p className="text-xs text-gray-400 dark:text-zinc-400">{l.nbreTaches} tâche(s) · {l.statut}</p>
                                 {l.dateEcheance && <p className="text-xs text-gray-300 mt-0.5 flex items-center gap-1"><Calendar size={14} />{new Date(l.dateEcheance).toLocaleDateString('fr-FR')}</p>}
