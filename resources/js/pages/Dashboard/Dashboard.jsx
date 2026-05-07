@@ -41,7 +41,7 @@ function formatDate(d) {
 function Skeleton() {
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-emerald-800 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-800 px-6 py-8">
                 <div className="max-w-6xl mx-auto space-y-2">
                     <div className="h-3 w-28 bg-green-400/40 rounded animate-pulse" />
                     <div className="h-7 w-44 bg-green-400/40 rounded animate-pulse" />
@@ -71,7 +71,7 @@ export default function Dashboard() {
     if (stats.role === 'ouvrier') {
         return (
             <div className="min-h-screen pb-20 md:pb-8">
-                <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-emerald-800 px-6 py-8">
+                <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-800 px-6 py-8">
                     <div className="max-w-2xl mx-auto">
                         <p className="text-green-100 text-sm">Bienvenue sur Agris</p>
                         <h1 className="text-2xl font-extrabold text-white mt-1">Bonjour, {user?.name}</h1>
@@ -144,7 +144,7 @@ export default function Dashboard() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-emerald-800 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-800 px-6 py-8">
                 <div className="max-w-6xl mx-auto">
                     <p className="text-green-100 text-sm">Bienvenue sur Agris</p>
                     <h1 className="text-2xl md:text-3xl font-extrabold text-white mt-1">Bonjour, {user?.name}</h1>
