@@ -20,14 +20,14 @@ const SOL_COLORS = {
 
 function StatCard({ icon: Icon, label, value, sub, gradient, glow }) {
     return (
-        <div className="relative bg-gradient-to-br from-white to-gray-50 dark:from-green-900 dark:to-green-950 rounded-2xl border border-gray-100/50 dark:border-green-900/50 shadow-xl shadow-gray-900/5 p-5 flex items-center gap-4 overflow-hidden">
+        <div className="relative bg-gradient-to-br from-white to-gray-50 dark:from-zinc-900 dark:to-zinc-900 rounded-2xl border border-gray-100/50 dark:border-zinc-800 shadow-xl shadow-gray-900/5 p-5 flex items-center gap-4 overflow-hidden">
             <div className={`absolute -top-6 -left-6 w-24 h-24 rounded-full opacity-10 blur-2xl ${glow}`} />
             <div className={`relative z-10 w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${gradient}`}>
                 <Icon size={22} className="text-white" strokeWidth={2} />
             </div>
             <div className="relative z-10">
-                <p className="text-2xl font-extrabold text-gray-900 dark:text-white">{value}</p>
-                <p className="text-sm font-semibold text-gray-700 dark:text-green-300">{label}</p>
+                <p className="text-2xl font-extrabold text-gray-900 dark:text-zinc-100">{value}</p>
+                <p className="text-sm font-semibold text-gray-700 dark:text-zinc-400">{label}</p>
                 {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
             </div>
         </div>
@@ -49,7 +49,7 @@ function Skeleton() {
             </div>
             <div className="max-w-6xl mx-auto px-4 md:px-6 mt-6">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {[...Array(3)].map((_, i) => <div key={i} className="bg-gray-100 dark:bg-green-900 rounded-2xl h-24 animate-pulse" />)}
+                    {[...Array(3)].map((_, i) => <div key={i} className="bg-gray-100 dark:bg-zinc-900 rounded-2xl h-24 animate-pulse" />)}
                 </div>
             </div>
         </div>
@@ -90,12 +90,12 @@ export default function Dashboard() {
                             glow="bg-green-400" />
                     </div>
                     <Link to="/todo-lists"
-                        className="flex items-center gap-4 bg-gradient-to-br from-white to-gray-50 dark:from-green-900 dark:to-green-950 rounded-2xl border border-gray-100/50 dark:border-green-900/50 shadow-xl shadow-gray-900/5 p-5 hover:shadow-2xl transition-all group">
+                        className="flex items-center gap-4 bg-gradient-to-br from-white to-gray-50 dark:from-zinc-900 dark:to-zinc-900 rounded-2xl border border-gray-100/50 dark:border-zinc-800 shadow-xl shadow-gray-900/5 p-5 hover:shadow-2xl transition-all group">
                         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg">
                             <ListTodo size={22} className="text-white" />
                         </div>
                         <div>
-                            <p className="font-bold text-gray-900 dark:text-white">Voir mon planning du jour</p>
+                            <p className="font-bold text-gray-900 dark:text-zinc-100">Voir mon planning du jour</p>
                             <p className="text-sm text-gray-400">Consultez vos tâches assignées et mettez à jour leur statut</p>
                         </div>
                         <span className="ml-auto text-gray-300 group-hover:text-green-500 transition text-xl">→</span>
@@ -160,23 +160,23 @@ export default function Dashboard() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-gradient-to-br from-white to-gray-50 dark:from-green-900 dark:to-green-950 rounded-2xl border border-gray-100/50 dark:border-green-900/50 shadow-xl shadow-gray-900/5 p-5">
+                    <div className="bg-gradient-to-br from-white to-gray-50 dark:from-zinc-900 dark:to-zinc-900 rounded-2xl border border-gray-100/50 dark:border-zinc-800 shadow-xl shadow-gray-900/5 p-5">
                         <div className="flex items-center gap-2 mb-1">
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center">
                                 <TrendingUp size={16} className="text-white" />
                             </div>
-                            <h3 className="font-bold text-gray-800 dark:text-white">Évolution des cultures</h3>
+                            <h3 className="font-bold text-gray-800 dark:text-zinc-100">Évolution des cultures</h3>
                         </div>
                         <p className="text-xs text-gray-400 mb-4 ml-10">Nouvelles cultures par mois</p>
                         <Line data={lineData} options={lineOptions} />
                     </div>
 
-                    <div className="bg-gradient-to-br from-white to-gray-50 dark:from-green-900 dark:to-green-950 rounded-2xl border border-gray-100/50 dark:border-green-900/50 shadow-xl shadow-gray-900/5 p-5">
+                    <div className="bg-gradient-to-br from-white to-gray-50 dark:from-zinc-900 dark:to-zinc-900 rounded-2xl border border-gray-100/50 dark:border-zinc-800 shadow-xl shadow-gray-900/5 p-5">
                         <div className="flex items-center gap-2 mb-1">
                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
                             </div>
-                            <h3 className="font-bold text-gray-800 dark:text-white">Répartition des sols</h3>
+                            <h3 className="font-bold text-gray-800 dark:text-zinc-100">Répartition des sols</h3>
                         </div>
                         <p className="text-xs text-gray-400 mb-4 ml-10">Types de sols dans vos cultures</p>
                         {solValues.length > 0 ? (
@@ -193,28 +193,28 @@ export default function Dashboard() {
 
                 <div>
                     <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-lg font-bold text-gray-900 dark:text-white">Actualités agricoles</h2>
-                        <span className="flex items-center gap-1.5 text-xs bg-green-50 dark:bg-green-900/30 text-green-600 border border-green-100 dark:border-green-800 px-3 py-1.5 rounded-full font-medium">
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-zinc-100">Actualités agricoles</h2>
+                        <span className="flex items-center gap-1.5 text-xs bg-green-50 dark:bg-zinc-800/30 text-green-600 border border-green-100 dark:border-zinc-700 px-3 py-1.5 rounded-full font-medium">
                             <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
                             En direct
                         </span>
                     </div>
                     {news.length === 0 ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {[...Array(4)].map((_, i) => <div key={i} className="bg-gray-100 dark:bg-green-900 rounded-2xl h-48 animate-pulse" />)}
+                            {[...Array(4)].map((_, i) => <div key={i} className="bg-gray-100 dark:bg-zinc-900 rounded-2xl h-48 animate-pulse" />)}
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                             {news.map((a, i) => (
                                 <a key={i} href={a.url} target="_blank" rel="noreferrer"
-                                    className="bg-gradient-to-br from-white to-gray-50 dark:from-green-900 dark:to-green-950 border border-gray-100/50 dark:border-green-900/50 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
+                                    className="bg-gradient-to-br from-white to-gray-50 dark:from-zinc-900 dark:to-zinc-900 border border-gray-100/50 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
                                     <div className="h-32 overflow-hidden">
                                         <img src={a.image || 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400'} alt={a.title}
                                             className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                                             onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400'; }} />
                                     </div>
                                     <div className="p-3">
-                                        <p className="text-xs font-semibold text-gray-800 dark:text-green-200 line-clamp-2 leading-snug">{a.title}</p>
+                                        <p className="text-xs font-semibold text-gray-800 dark:text-zinc-400 line-clamp-2 leading-snug">{a.title}</p>
                                         <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
                                             <span>{a.source}</span>
                                             <span>{formatDate(a.date)}</span>
