@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Calendar, ClipboardList } from 'lucide-react';
 import api from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -10,7 +11,7 @@ const STATUTS_TACHE = [
 
 const CATEGORIES = ['irrigation', 'recolte', 'traitement', 'semis', 'entretien', 'autre'];
 const PRIORITES  = ['basse', 'normale', 'haute', 'urgente'];
-const PRIORITE_COLORS = { basse: 'bg-gray-100 text-gray-500', normale: 'bg-blue-100 text-blue-600', haute: 'bg-orange-100 text-orange-600', urgente: 'bg-red-100 text-red-600' };
+const PRIORITE_COLORS = { basse: 'bg-gray-100 text-gray-500', normale: 'bg-blue-100 text-blue-600', haute: 'bg-orange-100 text-orange-600', urgente: 'bg-red-500/10 text-red-400 border border-red-500/20' };
 
 export default function TodoLists() {
     const { user } = useAuth();
@@ -127,7 +128,7 @@ export default function TodoLists() {
                     
                     {lists.length === 0 ? (
                         <div className="w-full flex flex-col items-center justify-center min-h-[50vh] text-center text-gray-400 dark:text-zinc-400">
-                            <p className="text-4xl mb-3">📋</p>
+                            <ClipboardList size={48} className="text-zinc-500 mb-4 mx-auto" />
                             <p className="font-medium text-sm">Aucune liste de tâches</p>
                             {user?.role === 'manager' && (
                                 <p className="text-xs mt-1 opacity-70">Créez une liste pour commencer</p>
@@ -143,7 +144,7 @@ export default function TodoLists() {
                                     <span className={`text-xs px-1.5 py-0.5 rounded-full ${PRIORITE_COLORS[l.priorite]}`}>{l.priorite}</span>
                                 </div>
                                 <p className="text-xs text-gray-400 dark:text-zinc-400">{l.nbreTaches} tâche(s) · {l.statut}</p>
-                                {l.dateEcheance && <p className="text-xs text-gray-300 mt-0.5">📅 {new Date(l.dateEcheance).toLocaleDateString('fr-FR')}</p>}
+                                {l.dateEcheance && <p className="text-xs text-gray-300 mt-0.5 flex items-center gap-1"><Calendar size={14} />{new Date(l.dateEcheance).toLocaleDateString('fr-FR')}</p>}
                             </button>
                         ))}
                     </div>
@@ -154,7 +155,7 @@ export default function TodoLists() {
                 <div className="flex-1">
                     {lists.length === 0 ? null : !selected ? (
                         <div className="flex flex-col items-center justify-center min-h-[50vh] text-center text-gray-500 dark:text-zinc-400/60">
-                            <p className="text-4xl mb-3">📋</p>
+                            <ClipboardList size={48} className="text-zinc-500 mb-4 mx-auto" />
                             <p className="font-medium">Sélectionnez une liste</p>
                             <p className="text-sm mt-1">Cliquez sur une liste pour voir ses tâches</p>
                         </div>
