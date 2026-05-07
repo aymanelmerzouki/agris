@@ -264,12 +264,12 @@ function CultureCard({ s, onDelete }) {
     );
 
     return (
-        <div className="bg-white dark:bg-zinc-900 rounded-2xl p-5 border border-gray-100 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all relative">
+        <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-xl shadow-sm hover:shadow-md transition-all relative p-5">
             {/* Header */}
             <div className="flex items-start justify-between">
                 <div>
-                    <h3 className="text-lg font-bold text-gray-800 dark:text-zinc-100">{s.plante?.nom}</h3>
-                    <p className="text-xs text-gray-400 dark:text-zinc-400 mt-0.5">{s.plante?.espece}</p>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-zinc-100">{s.plante?.nom}</h3>
+                    <p className="text-xs text-gray-500 dark:text-zinc-400 mt-0.5">{s.plante?.espece}</p>
                 </div>
                 <button onClick={handleDelete} className="text-gray-300 hover:text-red-500 transition-colors mt-0.5">
                     <Trash2 size={16} />
@@ -304,7 +304,7 @@ function CultureCard({ s, onDelete }) {
 
             {/* Live data block */}
             {liveData && (
-                <div className="mt-4 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-950/80 border border-zinc-200 dark:border-zinc-800 text-xs space-y-2">
+                <div className="mt-4 p-4 bg-gray-50 dark:bg-zinc-950/50 border border-gray-100 dark:border-zinc-800/50 rounded-lg space-y-2 text-xs">
                     <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 font-medium">
                         <Thermometer size={14} className="text-orange-500" />
                         {liveData.meteo.temperature}°C — {liveData.meteo.description}
@@ -344,7 +344,7 @@ function CultureCard({ s, onDelete }) {
             )}
 
             {/* Footer */}
-            <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">
+            <div className="mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800 flex justify-between items-center text-xs text-gray-500 dark:text-zinc-400">
                 <span>Jour {Math.floor(liveData?.progression_jours ?? 0)} de culture</span>
                 <span>{new Date(s.dateDebut).toLocaleDateString('fr-FR')}</span>
             </div>
