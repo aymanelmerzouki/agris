@@ -31,9 +31,7 @@ export default function Navbar() {
         ...(['manager', 'ouvrier'].includes(user?.role) ? [
             { to: '/todo-lists', icon: ClipboardList, label: 'Tâches' },
         ] : []),
-        ...(!['ouvrier'].includes(user?.role) ? [
-            { to: '/alertes', icon: Bell, label: 'Alertes' },
-        ] : []),
+        { to: '/alertes', icon: Bell, label: 'Alertes' },
     ];
 
     const isActive = (path) => location.pathname === path;
