@@ -74,18 +74,17 @@ export default function TodoLists() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-
-            <div className="px-6 py-8 border-b border-gray-200 dark:border-zinc-800">
-                <div className="max-w-6xl mx-auto flex items-center justify-between">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-800 px-6 py-8">
+                <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
-                            <ListTodo size={24} className="text-emerald-500" /> Tâches
+                        <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
+                            <ListTodo size={24} /> Tâches
                         </h1>
-                        <p className="text-gray-500 dark:text-zinc-400 text-sm mt-1">{lists.length} liste(s)</p>
+                        <p className="text-green-100 text-sm mt-1">{lists.length} liste(s)</p>
                     </div>
                     {user?.role === 'manager' && (
                         <button onClick={() => setShowListForm(!showListForm)}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm flex items-center gap-2 text-sm">
+                            className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm">
                             {showListForm ? <X size={18} /> : <Plus size={18} />}
                             {showListForm ? 'Annuler' : 'Nouvelle liste'}
                         </button>
