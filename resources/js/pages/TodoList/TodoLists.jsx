@@ -102,7 +102,7 @@ export default function TodoLists() {
                     </div>
                     {user?.role === 'manager' && (
                         <button onClick={() => setShowListForm(!showListForm)}
-                            className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm">
+                            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors shadow-sm">
                             {showListForm ? <X size={18} /> : <Plus size={18} />}
                             {showListForm ? 'Annuler' : 'Nouvelle liste'}
                         </button>
@@ -165,7 +165,7 @@ export default function TodoLists() {
                     <div className="space-y-2">
                         {lists.map((l) => (
                             <button key={l.id} onClick={() => selectList(l)}
-                                className={`w-full text-left bg-white dark:bg-zinc-900 rounded-xl border p-3 hover:shadow-md transition ${selected?.id === l.id ? 'border-green-400 shadow-md' : 'border-gray-100 dark:border-zinc-800 shadow-sm'}`}>
+                                className={`w-full text-left bg-white dark:bg-zinc-900 rounded-xl border p-3 transition-colors cursor-pointer ${selected?.id === l.id ? 'border-emerald-500 shadow-md' : 'border-gray-100 dark:border-zinc-800 shadow-sm hover:border-emerald-500/50'}`}>
                                 <div className="flex items-center justify-between mb-1">
                                     <p className="font-semibold text-sm text-gray-900 dark:text-zinc-100 truncate">{l.titre}</p>
                                     <div className="flex items-center gap-1">
