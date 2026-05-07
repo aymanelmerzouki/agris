@@ -291,7 +291,6 @@ export default function TodoLists() {
                                     );
                                 })}
                             </div>
-                            </div>
                         </>
                     )}
                 </div>
