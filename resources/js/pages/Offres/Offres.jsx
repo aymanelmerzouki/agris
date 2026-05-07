@@ -19,7 +19,8 @@ export default function Offres() {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeTab, setActiveTab] = useState('toutes');
     const [suivies, setSuivies] = useState([]);
-    const [negociationItem, setNegociationItem] = useState(null);
+    const [editItem, setEditItem] = useState(null);
+    const [editForm, setEditForm] = useState({});
     const [negocForm, setNegocForm] = useState({ prix: '', message: '' });
     const [form, setForm] = useState({
         plante_id: '', prix: '', quantite: '', unite: 'kg',
@@ -91,7 +92,17 @@ export default function Offres() {
         }
     };
 
-    const toggleSuivie = (id) => setSuivies((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
+    const ouvrirEdition = (o) => {
+        setEditItem(o);
+        setEditForm({ prix: o.prix, quantite: o.quantite, description: o.description ?? '', localisation: o.localisation ?? '' });
+    };
+
+    const handleEdit = async (e) => {
+        e.preventDefault();
+        const { data } = await api.put(`/offres/${editItem.id}`, editForm);
+        setOffres((prev) => prev.map((o) => o.id === editItem.id ? { ...o, ...data } : o));
+        setEditItem(null);
+    }; setSuivies((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
 
     const supprimerOffre = async (id) => {
         if (!confirm('Supprimer cette offre ?')) return;
@@ -231,7 +242,7 @@ export default function Offres() {
 
                             {activeTab === 'mes_offres' ? (
                                 <div className="flex gap-2 mt-auto pt-3 border-t border-gray-100">
-                                    <button className="flex items-center gap-2 text-emerald-600 hover:bg-emerald-50 px-3 py-2 rounded-lg text-sm font-medium transition">
+                                    <button onClick={() => ouvrirEdition(o)} className="flex items-center gap-2 text-emerald-600 hover:bg-emerald-50 px-3 py-2 rounded-lg text-sm font-medium transition">
                                         <Edit2 size={16} /> Modifier
                                     </button>
                                     <button onClick={() => supprimerOffre(o.id)} className="flex items-center gap-2 text-red-600 hover:bg-red-50 px-3 py-2 rounded-lg text-sm font-medium transition">
@@ -264,6 +275,54 @@ export default function Offres() {
                         </div>
                     ))}
                 </div>
+
+                {/* Modal édition offre */}
+                {editItem && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/80 backdrop-blur-sm px-4">
+                        <div className="bg-white dark:bg-zinc-900 dark:border dark:border-zinc-800 rounded-2xl shadow-xl p-6 w-full max-w-md space-y-4">
+                            <div className="flex items-center justify-between">
+                                <h3 className="font-bold text-gray-800 dark:text-zinc-100">Modifier l'offre</h3>
+                                <button onClick={() => setEditItem(null)}><X size={20} className="text-gray-400 dark:text-zinc-400" /></button>
+                            </div>
+                            <form onSubmit={handleEdit} className="space-y-4">
+                                <div>
+                                    <label className={LABEL}>Prix (MAD) *</label>
+                                    <input className="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg p-3 text-gray-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:bg-zinc-950"
+                                        type="number" min="0" step="0.01" value={editForm.prix}
+                                        onChange={(e) => setEditForm({ ...editForm, prix: e.target.value })} required />
+                                </div>
+                                <div>
+                                    <label className={LABEL}>Quantité *</label>
+                                    <input className="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg p-3 text-gray-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:bg-zinc-950"
+                                        type="number" min="0" step="0.01" value={editForm.quantite}
+                                        onChange={(e) => setEditForm({ ...editForm, quantite: e.target.value })} required />
+                                </div>
+                                <div>
+                                    <label className={LABEL}>Localisation</label>
+                                    <input className="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg p-3 text-gray-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:bg-zinc-950"
+                                        placeholder="ex: Agadir" value={editForm.localisation}
+                                        onChange={(e) => setEditForm({ ...editForm, localisation: e.target.value })} />
+                                </div>
+                                <div>
+                                    <label className={LABEL}>Description</label>
+                                    <textarea className="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg p-3 text-gray-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:bg-zinc-950 placeholder-gray-400 dark:placeholder-zinc-600"
+                                        rows={2} value={editForm.description}
+                                        onChange={(e) => setEditForm({ ...editForm, description: e.target.value })} />
+                                </div>
+                                <div className="flex gap-3">
+                                    <button type="button" onClick={() => setEditItem(null)}
+                                        className="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-300 dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-sm font-medium transition">
+                                        Annuler
+                                    </button>
+                                    <button type="submit"
+                                        className="flex-1 py-2.5 rounded-xl bg-emerald-600 dark:bg-emerald-700 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white text-sm font-semibold transition">
+                                        <Save size={16} className="inline mr-1" /> Enregistrer
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
 
                 {/* Modale négociation */}
                 {negociationItem && (
