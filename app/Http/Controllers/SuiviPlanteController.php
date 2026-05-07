@@ -40,7 +40,7 @@ class SuiviPlanteController extends Controller
             'plante_id'        => 'required|exists:plantes,id',
             'dateDebut'        => 'required|date',
             'natureSol'        => 'required|in:argileux,sableux,limoneux,calcaire,humifere',
-            'superficieHa'     => 'required|numeric|min:0.01',
+            'superficie'       => 'required|numeric|min:0.01',
             'unite_superficie' => 'required|in:ha,m2,unite',
             'parcelle'         => 'nullable|string',
             'notesAgriculteur' => 'nullable|string',
@@ -48,7 +48,7 @@ class SuiviPlanteController extends Controller
         ]);
 
         $plante = Plante::find($data['plante_id']);
-        $calcul = SolCalculator::calculer($data['natureSol'], $data['superficieHa'], $plante->typeIrrigation);
+        $calcul = SolCalculator::calculer($data['natureSol'], $data['superficie'], $plante->typeIrrigation);
 
         $suivi = SuiviPlante::create([
             ...$data,
