@@ -228,7 +228,7 @@ export default function Offres() {
                             <div key={n.id} className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-5 shadow-sm">
                                 <div className="flex items-start justify-between mb-3">
                                     <p className="font-bold text-gray-800 dark:text-zinc-100">{n.offre?.plante?.nom ?? 'Produit agricole'}</p>
-                                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${n.statut === 'acceptee' ? 'bg-emerald-100 text-emerald-700' : n.statut === 'refusee' ? 'bg-red-100 text-red-600' : 'bg-amber-100 text-amber-700'}`}>
+                                    <span className={`text-xs px-2 py-1 rounded-full font-medium border ${n.statut === 'acceptee' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : n.statut === 'refusee' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'}`}>
                                         {n.statut === 'en_attente' ? 'En attente' : n.statut === 'acceptee' ? 'Acceptée' : 'Refusée'}
                                     </span>
                                 </div>
@@ -243,8 +243,8 @@ export default function Offres() {
                                     if (!confirm('Supprimer cette négociation ?')) return;
                                     await api.delete(`/negociations/${n.id}`);
                                     setMesNegociations((prev) => prev.filter((x) => x.id !== n.id));
-                                }} className="mt-3 text-xs text-red-400 hover:text-red-600 transition">
-                                    Supprimer
+                                }} className="mt-4 inline-flex items-center text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 px-3 py-1.5 rounded-md transition-colors cursor-pointer">
+                                    <Trash2 size={16} className="mr-2" /> Supprimer
                                 </button>
                             </div>
                         ))}
