@@ -30,16 +30,24 @@ class CalculateurService
             default => ($culture->superficie ?? 1) * 10000,
         };
 
-        // Besoin brut basé sur la biologie de la plante (L/m²/jour)
-        $besoinParM2 = $culture->plante->besoin_eau_l_m2 ?? 3.0;
-        $besoinBrut = $besoinParM2 * $multiplicateur * $surfaceM2;
+        // Efficience irrigation localisée (goutte-à-goutte)
+        $efficienceIrrigation = 0.4;
 
-        // Apport pluie (1mm = 1L/m²)
-        $pluieMm = $meteo['pluie_mm'] ?? 0;
-        $apportPluie = $pluieMm * $surfaceM2;
+        // Coefficient de rétention du sol
+        $coefSol = match($culture->natureSol ?? '') {
+            'sableux'           => 1.2,
+            'calcaire', 'limoneux' => 1.0,
+            'argileux', 'humifere' => 0.8,
+            default             => 1.0,
+        };
 
-        // Recommandation finale
-        $besoinNet = max(0, round($besoinBrut - $apportPluie));
+        // Algorithme de précision
+        $besoinParM2 = ($culture->plante->besoin_eau_l_m2 ?? 3.0) * $multiplicateur;
+        $besoinBrut     = $besoinParM2 * $surfaceM2;
+        $besoinOptimise = $besoinBrut * $efficienceIrrigation * $coefSol;
+        $pluieMm        = $meteo['pluie_mm'] ?? 0;
+        $apportPluie    = $pluieMm * $surfaceM2;
+        $besoinNet      = max(0, round($besoinOptimise - $apportPluie));
 
         return [
             'meteo'             => $meteo,
