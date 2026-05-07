@@ -102,7 +102,9 @@ export default function Offres() {
         const { data } = await api.put(`/offres/${editItem.id}`, editForm);
         setOffres((prev) => prev.map((o) => o.id === editItem.id ? { ...o, ...data } : o));
         setEditItem(null);
-    }; setSuivies((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
+    }; 
+
+    const toggleSuivie = (id) => setSuivies((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
 
     const supprimerOffre = async (id) => {
         if (!confirm('Supprimer cette offre ?')) return;
