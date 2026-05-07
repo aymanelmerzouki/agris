@@ -316,7 +316,9 @@ function CultureCard({ s, onDelete }) {
                     <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 font-medium">
                         <Droplets size={14} className="text-emerald-500" />
                         À arroser : <span className="font-bold text-emerald-600 dark:text-emerald-400">
-                            {Number(liveData.besoin_eau_live).toLocaleString('fr-FR')} L
+                            {liveData.besoin_eau_live >= 1000
+                                ? `${(liveData.besoin_eau_live / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} m³`
+                                : `${Number(liveData.besoin_eau_live).toLocaleString('fr-FR')} L`}
                         </span>
                         {liveData.pluie_mm > 0 && (
                             <span className="text-emerald-500 font-semibold">(Optimisé)</span>
