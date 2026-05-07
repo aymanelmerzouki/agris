@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation as useRouterLocatio
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import PrivateRoute from './components/PrivateRoute';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 import Landing from './pages/Landing/Landing';
 import Login from './pages/Auth/Login';
@@ -23,11 +24,12 @@ import '../css/app.css';
 function Layout({ children }) {
     const location = useRouterLocation();
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 transition-colors duration-200">
+        <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 transition-colors duration-200">
             <Navbar />
-            <main key={location.pathname} className="animate-fadeIn">
+            <main key={location.pathname} className="animate-fadeIn flex-1">
                 {children}
             </main>
+            <Footer />
         </div>
     );
 }
