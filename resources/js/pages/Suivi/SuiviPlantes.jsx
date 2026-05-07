@@ -67,8 +67,6 @@ export default function SuiviPlantes() {
     const [plantes, setPlantes] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [calcul, setCalcul] = useState(null);
-    const [calcLoading, setCalcLoading] = useState(false);
     const [searchParams] = useSearchParams();
     const [form, setForm] = useState({
         plante_id: searchParams.get('plante_id') ?? '', dateDebut: '', natureSol: '',
@@ -89,33 +87,13 @@ export default function SuiviPlantes() {
         }).finally(() => setLoading(false));
     }, []);
 
-    const set = (k) => (v) => {
-        const newForm = { ...form, [k]: v };
-        setForm(newForm);
-        if (newForm.plante_id && newForm.natureSol && newForm.superficie > 0) {
-            calculerAuto(newForm);
-        }
-    };
-
-    const calculerAuto = async (f) => {
-        setCalcLoading(true);
-        try {
-            const { data } = await api.post('/suivi-plantes/calculer', {
-                plante_id: f.plante_id,
-                natureSol: f.natureSol,
-                superficieHa: f.superficie,
-            });
-            setCalcul(data);
-        } catch {}
-        finally { setCalcLoading(false); }
-    };
+    const set = (k) => (v) => setForm((prev) => ({ ...prev, [k]: v }));
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const { data } = await api.post('/suivi-plantes', form);
         setSuivis((prev) => [data, ...prev]);
         setShowForm(false);
-        setCalcul(null);
         setForm({ plante_id: '', dateDebut: '', natureSol: '', superficie: '', unite_superficie: 'ha', parcelle: '', stadeVegetatif: 'germination', notesAgriculteur: '' });
     };
 
