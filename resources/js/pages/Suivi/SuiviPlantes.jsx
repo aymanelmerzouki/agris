@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { Map, X, Plus, Save, Trash2, Thermometer, Droplets } from 'lucide-react';
+import { Map, X, Plus, Save, Trash2, Thermometer, Droplets, MapPin, Maximize2 } from 'lucide-react';
 import api from '../../api';
 
 const STADES = ['germination', 'croissance', 'floraison', 'fructification', 'recolte'];
@@ -352,6 +352,22 @@ function CultureCard({ s, onDelete }) {
             )}
 
             {s.notesAgriculteur && <p className="text-xs text-gray-400 mt-3 line-clamp-2 italic">"{s.notesAgriculteur}"</p>}
+
+            {/* Traçabilité parcellaire */}
+            {(s.parcelle || s.superficie) && (
+                <div className="flex flex-wrap gap-3 mt-1">
+                    {s.parcelle && (
+                        <span className="flex items-center gap-1.5 text-xs text-zinc-400">
+                            <MapPin size={13} /> {s.parcelle}
+                        </span>
+                    )}
+                    {s.superficie && (
+                        <span className="flex items-center gap-1.5 text-xs text-zinc-400">
+                            <Maximize2 size={13} /> {s.superficie} {s.unite_superficie === 'ha' ? 'Hectares' : s.unite_superficie === 'm2' ? 'm²' : 'Pots'}
+                        </span>
+                    )}
+                </div>
+            )}
 
             {/* Footer */}
             <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center text-xs text-gray-400">

@@ -20,7 +20,7 @@ export default function Offres() {
     const [activeTab, setActiveTab] = useState('toutes');
     const [suivies, setSuivies] = useState([]);
     const [negociationItem, setNegociationItem] = useState(null);
-    const [negocForm, setNegocForm] = useState({ prix: '', message: '' });
+    const [negocForm, setNegocForm] = useState({ prix: '', quantite: '', message: '' });
     const [editItem, setEditItem] = useState(null);
     const [editForm, setEditForm] = useState({});
     const [form, setForm] = useState({
@@ -334,6 +334,12 @@ export default function Offres() {
                                 <input className="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg p-3 text-gray-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:bg-zinc-950"
                                     type="number" min="0" step="0.01" placeholder={`Prix actuel : ${negociationItem.prix} MAD`}
                                     value={negocForm.prix} onChange={(e) => setNegocForm({ ...negocForm, prix: e.target.value })} />
+                            </div>
+                            <div>
+                                <label className={LABEL}>Quantité souhaitée ({negociationItem.unite})</label>
+                                <input className="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg p-3 text-gray-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:bg-zinc-950"
+                                    type="number" min="0.01" max={negociationItem.quantite} step="0.01" placeholder={`Max : ${negociationItem.quantite} ${negociationItem.unite}`}
+                                    value={negocForm.quantite} onChange={(e) => setNegocForm({ ...negocForm, quantite: e.target.value })} />
                             </div>
                             <div>
                                 <label className={LABEL}>Message au vendeur</label>
