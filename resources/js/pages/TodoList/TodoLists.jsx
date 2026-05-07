@@ -1,9 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Calendar, ClipboardList, ListTodo, Plus, X, Trash2 } from 'lucide-react';
+import { Calendar, ClipboardList, ListTodo, Plus, X, Trash2, Clock, Droplets, Sprout, Wrench, Scissors, Wheat, MoreHorizontal, CheckCircle2 } from 'lucide-react';
 import api from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
 
-const STATUTS_TACHE = [
+const CATEGORIE_ICONS = {
+    irrigation: Droplets,
+    recolte: Scissors,
+    traitement: Wrench,
+    semis: Sprout,
+    entretien: Wrench,
+    autre: MoreHorizontal,
+};
     { value: 'en_attente', label: 'En attente', color: 'bg-gray-100 text-gray-600' },
     { value: 'en_cours',   label: 'En cours',   color: 'bg-yellow-100 text-yellow-700' },
     { value: 'termine',    label: 'Terminé',     color: 'bg-green-100 text-green-700' },
@@ -218,41 +225,70 @@ export default function TodoLists() {
 
                                     <input className="input" type="number" placeholder="Durée estimée (min)" value={tacheForm.dureeEstimeeMin} onChange={setT('dureeEstimeeMin')} />
                                     <textarea className="input col-span-2 text-xs" rows={2} placeholder="Description" value={tacheForm.description} onChange={setT('description')} />
-                                    <button className="btn-primary col-span-2 text-sm" type="submit">Ajouter la tâche</button>
+                                    <button className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl transition col-span-2 text-sm" type="submit">Ajouter la tâche</button>
                                 </form>
                             )}
 
                             
                             <div className="space-y-2">
-                                {taches.length === 0 && <p className="text-gray-400 text-sm text-center py-10">Aucune tâche dans cette liste.</p>}
-                                {taches.map((t) => (
-                                    <div key={t.id} className="bg-white dark:bg-zinc-900 rounded-xl border border-gray-100 dark:border-zinc-800 shadow-sm p-4 flex items-center justify-between hover:shadow-md transition">
-                                        <div className="flex-1">
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <p className="font-medium text-gray-900 dark:text-zinc-100">{t.nomTache}</p>
-                                                <span className={`text-xs px-2 py-0.5 rounded-full ${PRIORITE_COLORS[t.priorite]}`}>{t.priorite}</span>
+                                {taches.length === 0 && <p className="text-gray-400 dark:text-zinc-500 text-sm text-center py-10">Aucune tâche dans cette liste.</p>}
+                                {taches.map((t) => {
+                                    const CatIcon = CATEGORIE_ICONS[t.categorie] ?? MoreHorizontal;
+                                    return (
+                                    <div key={t.id} className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 p-4 rounded-xl shadow-sm hover:shadow-md transition">
+                                        <div className="flex items-start justify-between gap-2">
+                                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                                                <CatIcon size={18} className="text-emerald-500 shrink-0" />
+                                                <p className="font-semibold text-gray-900 dark:text-zinc-100 truncate">{t.nomTache}</p>
                                             </div>
-                                            <div className="flex items-center gap-2 text-xs text-gray-400">
-                                                <span className="bg-gray-100 px-2 py-0.5 rounded-full">{t.categorie}</span>
-                                                {t.dureeEstimeeMin && <span>⏱ {t.dureeEstimeeMin} min</span>}
-                                                {t.completeeAt && <span>✅ {new Date(t.completeeAt).toLocaleDateString('fr-FR')}</span>}
+                                            <div className="flex items-center gap-2 shrink-0">
+                                                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${PRIORITE_COLORS[t.priorite]}`}>{t.priorite}</span>
+                                                {user?.role === 'manager' && (
+                                                    <button onClick={async () => {
+                                                        if (!confirm('Supprimer cette tâche ?')) return;
+                                                        await api.delete(`/todo-lists/${selected.id}/taches/${t.id}`);
+                                                        setTaches((prev) => prev.filter((x) => x.id !== t.id));
+                                                    }} className="p-1 text-zinc-400 hover:text-red-400 dark:hover:bg-zinc-800 rounded transition-colors">
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                )}
                                             </div>
                                         </div>
-                                        
-                                        {user?.role === 'ouvrier' ? (
-                                            <select
-                                                className={`text-xs px-3 py-1.5 rounded-full border-0 font-medium cursor-pointer ${STATUTS_TACHE.find(s => s.value === t.statut)?.color}`}
-                                                value={t.statut}
-                                                onChange={(e) => updateStatut(t, e.target.value)}>
-                                                {STATUTS_TACHE.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
-                                            </select>
-                                        ) : (
-                                            <span className={`text-xs px-3 py-1.5 rounded-full font-medium ${STATUTS_TACHE.find(s => s.value === t.statut)?.color}`}>
-                                                {STATUTS_TACHE.find(s => s.value === t.statut)?.label}
-                                            </span>
+
+                                        {t.description && (
+                                            <p className="text-xs text-gray-500 dark:text-zinc-400 mt-2 ml-6">
+                                                {t.description.length > 60 ? t.description.slice(0, 60) + '…' : t.description}
+                                            </p>
                                         )}
+
+                                        <div className="flex items-center gap-3 mt-3 ml-6">
+                                            {t.dureeEstimeeMin && (
+                                                <span className="flex items-center gap-1 text-xs text-zinc-400">
+                                                    <Clock size={12} /> {t.dureeEstimeeMin} min
+                                                </span>
+                                            )}
+                                            {t.completeeAt && (
+                                                <span className="flex items-center gap-1 text-xs text-emerald-500">
+                                                    <CheckCircle2 size={12} /> {new Date(t.completeeAt).toLocaleDateString('fr-FR')}
+                                                </span>
+                                            )}
+                                            {user?.role === 'ouvrier' ? (
+                                                <select
+                                                    className="ml-auto text-xs px-2 py-1 rounded-full border-0 font-medium cursor-pointer bg-gray-100 dark:bg-zinc-800 dark:text-zinc-300"
+                                                    value={t.statut}
+                                                    onChange={(e) => updateStatut(t, e.target.value)}>
+                                                    {STATUTS_TACHE.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
+                                                </select>
+                                            ) : (
+                                                <span className={`ml-auto text-xs px-2 py-0.5 rounded-full font-medium ${STATUTS_TACHE.find(s => s.value === t.statut)?.color}`}>
+                                                    {STATUTS_TACHE.find(s => s.value === t.statut)?.label}
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
-                                ))}
+                                    );
+                                })}
+                            </div>
                             </div>
                         </>
                     )}
