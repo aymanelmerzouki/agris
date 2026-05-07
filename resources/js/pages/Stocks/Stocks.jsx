@@ -123,7 +123,7 @@ export default function Stocks() {
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {stocks.map((s) => (
-                            <div key={s.id} className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3 relative">
+                            <div key={s.id} className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3 relative">
                                 <div className="flex items-start justify-between">
                                     <div>
                                         <h3 className="text-lg font-bold text-gray-800 dark:text-zinc-100 capitalize">{s.produit}</h3>

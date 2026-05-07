@@ -267,25 +267,25 @@ export default function Offres() {
 
                 {/* Modale négociation */}
                 {negociationItem && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-                        <div className="bg-white rounded-2xl shadow-xl p-6 w-full max-w-md space-y-4">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/80 backdrop-blur-sm px-4">
+                        <div className="bg-white dark:bg-zinc-900 dark:border dark:border-zinc-800 rounded-2xl shadow-xl p-6 w-full max-w-md space-y-4">
                             <div className="flex items-center justify-between">
-                                <h3 className="font-bold text-gray-800">Négocier — {negociationItem.plante?.nom ?? 'Produit'}</h3>
-                                <button onClick={() => setNegociationItem(null)}><X size={20} className="text-gray-400 hover:text-gray-600" /></button>
+                                <h3 className="font-bold text-gray-800 dark:text-zinc-100">Négocier — {negociationItem.plante?.nom ?? 'Produit'}</h3>
+                                <button onClick={() => setNegociationItem(null)}><X size={20} className="text-gray-400 dark:text-zinc-400 hover:text-gray-600" /></button>
                             </div>
                             <div>
                                 <label className={LABEL}>Prix proposé (MAD)</label>
-                                <input className={INPUT} type="number" min="0" step="0.01" placeholder={`Prix actuel : ${negociationItem.prix} MAD`}
+                                <input className={INPUT + " dark:bg-zinc-950 dark:border-zinc-800 dark:text-white"} type="number" min="0" step="0.01" placeholder={`Prix actuel : ${negociationItem.prix} MAD`}
                                     value={negocForm.prix} onChange={(e) => setNegocForm({ ...negocForm, prix: e.target.value })} />
                             </div>
                             <div>
                                 <label className={LABEL}>Message au vendeur</label>
-                                <textarea className={INPUT} rows={3} placeholder="Votre proposition..."
+                                <textarea className={INPUT + " dark:bg-zinc-950 dark:border-zinc-800 dark:text-white"} rows={3} placeholder="Votre proposition..."
                                     value={negocForm.message} onChange={(e) => setNegocForm({ ...negocForm, message: e.target.value })} />
                             </div>
                             <div className="flex gap-3">
                                 <button onClick={() => setNegociationItem(null)}
-                                    className="flex-1 py-2.5 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition">
+                                    className="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-sm font-medium transition">
                                     Annuler
                                 </button>
                                 <button onClick={() => { alert('Négociation envoyée (fonctionnalité à brancher sur l\'API).'); setNegociationItem(null); }}
