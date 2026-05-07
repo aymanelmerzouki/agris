@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Negociation;
-use App\Models\Offre;
 use Illuminate\Http\Request;
 
 class NegociationController extends Controller
@@ -17,26 +16,25 @@ class NegociationController extends Controller
             'message'           => 'nullable|string|max:500',
         ]);
 
-        $negociation = Negociation::create([
-            ...$data,
-            'user_id' => $request->user()->id,
-        ]);
+        $negociation = Negociation::create([...$data, 'user_id' => $request->user()->id]);
 
         return response()->json($negociation->load('offre.plante'), 201);
     }
 
-    public function destroy(Request $request, \App\Models\Negociation $negociation)
+    public function mesNegociations(Request $request)
+    {
+        return response()->json(
+            Negociation::where('user_id', $request->user()->id)
+                ->with(['offre.plante', 'offre.user'])
+                ->latest()
+                ->get()
+        );
+    }
+
+    public function destroy(Request $request, Negociation $negociation)
     {
         if ($negociation->user_id !== $request->user()->id) abort(403);
         $negociation->delete();
         return response()->json(null, 204);
-    }
-    {
-        $negociations = Negociation::where('user_id', $request->user()->id)
-            ->with(['offre.plante', 'offre.user'])
-            ->latest()
-            ->get();
-
-        return response()->json($negociations);
     }
 }
