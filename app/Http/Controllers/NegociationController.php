@@ -25,7 +25,12 @@ class NegociationController extends Controller
         return response()->json($negociation->load('offre.plante'), 201);
     }
 
-    public function mesNegociations(Request $request)
+    public function destroy(Request $request, \App\Models\Negociation $negociation)
+    {
+        if ($negociation->user_id !== $request->user()->id) abort(403);
+        $negociation->delete();
+        return response()->json(null, 204);
+    }
     {
         $negociations = Negociation::where('user_id', $request->user()->id)
             ->with(['offre.plante', 'offre.user'])

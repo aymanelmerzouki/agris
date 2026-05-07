@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('stocks', StockController::class);
         Route::post('negociations', [\App\Http\Controllers\NegociationController::class, 'store']);
         Route::get('negociations/mes', [\App\Http\Controllers\NegociationController::class, 'mesNegociations']);
+        Route::delete('negociations/{negociation}', [\App\Http\Controllers\NegociationController::class, 'destroy']);
     });
     Route::middleware('role:manager')->group(function () {
         Route::apiResource('todo-lists', TodoListController::class)->except(['index', 'show']);

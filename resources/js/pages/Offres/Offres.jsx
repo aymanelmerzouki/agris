@@ -239,6 +239,13 @@ export default function Offres() {
                                 </div>
                                 <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1">Quantité demandée : {n.quantite_proposee} {n.offre?.unite}</p>
                                 {n.message && <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1 italic">"{n.message}"</p>}
+                                <button onClick={async () => {
+                                    if (!confirm('Supprimer cette négociation ?')) return;
+                                    await api.delete(`/negociations/${n.id}`);
+                                    setMesNegociations((prev) => prev.filter((x) => x.id !== n.id));
+                                }} className="mt-3 text-xs text-red-400 hover:text-red-600 transition">
+                                    Supprimer
+                                </button>
                             </div>
                         ))}
                     </div>
