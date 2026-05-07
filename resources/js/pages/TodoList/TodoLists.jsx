@@ -11,6 +11,8 @@ const CATEGORIE_ICONS = {
     entretien: Wrench,
     autre: MoreHorizontal,
 };
+
+const STATUTS_TACHE = [
     { value: 'en_attente', label: 'En attente', color: 'bg-gray-100 text-gray-600' },
     { value: 'en_cours',   label: 'En cours',   color: 'bg-yellow-100 text-yellow-700' },
     { value: 'termine',    label: 'Terminé',     color: 'bg-green-100 text-green-700' },
