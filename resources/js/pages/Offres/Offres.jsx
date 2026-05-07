@@ -108,7 +108,9 @@ export default function Offres() {
         } catch (err) {
             alert(err.response?.data?.message || 'Erreur lors de l\'envoi.');
         }
-    }; setSuivies((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
+    };
+
+    const toggleSuivie = (id) => setSuivies((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
 
     const supprimerOffre = async (id) => {
         if (!confirm('Supprimer cette offre ?')) return;
