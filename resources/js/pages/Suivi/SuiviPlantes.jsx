@@ -142,107 +142,77 @@ export default function SuiviPlantes() {
                         {/* Card 1 — Plante */}
                         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm">
                             <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Plante *</label>
-                            <select className="w-full bg-gray-50/50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-zinc-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none"
+                            <select className="input"
                                 value={form.plante_id} onChange={(e) => set('plante_id')(e.target.value)} required>
-                                <option value="">Choisir une plante</option>
-                                {plantes.map((p) => <option key={p.id} value={p.id}>{p.nom} — {p.espece}</option>)}
+                                <option value="" className="dark:bg-zinc-950 dark:text-zinc-100">Choisir une plante</option>
+                                {plantes.map((p) => <option key={p.id} value={p.id} className="dark:bg-zinc-950 dark:text-zinc-100">{p.nom} — {p.espece}</option>)}
                             </select>
                         </div>
 
                         {/* Card 2 — Nature du sol */}
                         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm">
-                            <label className="block mb-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">
-                                Nature du sol *
-                            </label>
+                            <label className="block mb-3 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Nature du sol *</label>
                             <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
                                 {NATURES_SOL.map((sol) => (
                                     <button key={sol.value} type="button"
                                         onClick={() => set('natureSol')(sol.value)}
                                         className={form.natureSol === sol.value
-                                            ? 'border-2 border-emerald-500 ring-4 ring-emerald-50 bg-emerald-50/10 shadow-md transform scale-[1.02] transition-all rounded-xl overflow-hidden'
-                                            : 'border border-gray-200 bg-white hover:border-gray-300 opacity-70 hover:opacity-100 transition-all cursor-pointer rounded-xl overflow-hidden'}>
-                                        <img src={sol.img} alt={sol.label}
-                                            className="w-full h-16 object-cover bg-gray-200"
+                                            ? 'border-2 border-emerald-500 ring-4 ring-emerald-50 shadow-md transform scale-[1.02] transition-all rounded-xl overflow-hidden'
+                                            : 'border border-gray-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:border-gray-300 opacity-70 hover:opacity-100 transition-all cursor-pointer rounded-xl overflow-hidden'}>
+                                        <img src={sol.img} alt={sol.label} className="w-full h-16 object-cover bg-gray-200"
                                             onError={(e) => { e.target.onerror=null; e.target.src=sol.fallback; }} />
                                         <div className="p-2 text-center">
-                                            <p className="text-xs font-bold text-gray-800">{sol.label}</p>
-                                            <p className="text-xs text-gray-400 leading-tight">{sol.desc}</p>
+                                            <p className="text-xs font-bold text-gray-800 dark:text-zinc-200">{sol.label}</p>
+                                            <p className="text-xs text-gray-400 dark:text-zinc-500 leading-tight">{sol.desc}</p>
                                         </div>
                                     </button>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Card 3 — Parcelle */}
+                        {/* Card 3 — Superficie & Parcelle */}
                         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Superficie *</label>
                                     <div className="flex gap-2">
-                                        <input className="w-full bg-gray-50/50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-zinc-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
-                                            type="number" step="0.01" min="0.01" placeholder="ex: 2.5"
+                                        <input className="input" type="number" step="0.01" min="0.01" placeholder="ex: 2.5"
                                             value={form.superficie} onChange={(e) => set('superficie')(e.target.value)} required />
-                                        <select className="bg-gray-50/50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-zinc-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 p-3 transition-all outline-none"
-                                            value={form.unite_superficie} onChange={(e) => set('unite_superficie')(e.target.value)}>
-                                            <option value="ha">ha</option>
-                                            <option value="m2">m²</option>
-                                            <option value="unite">Pots/Fûts</option>
+                                        <select className="input w-auto" value={form.unite_superficie} onChange={(e) => set('unite_superficie')(e.target.value)}>
+                                            <option className="dark:bg-zinc-950" value="ha">ha</option>
+                                            <option className="dark:bg-zinc-950" value="m2">m²</option>
+                                            <option className="dark:bg-zinc-950" value="unite">Pots</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div>
                                     <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Parcelle</label>
-                                    <input className="w-full bg-gray-50/50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-zinc-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
-                                        placeholder="ex: P-12"
+                                    <input className="input" placeholder="ex: P-12"
                                         value={form.parcelle} onChange={(e) => set('parcelle')(e.target.value)} />
                                 </div>
                             </div>
                         </div>
 
-                        {/* Estimations calculées */}
-                        {calcLoading && (
-                            <div className="bg-gray-50 rounded-xl p-4 text-sm text-gray-400 animate-pulse border border-gray-100">
-                                Calcul en cours...
-                            </div>
-                        )}
-                        {calcul && !calcLoading && (
-                            <div className="bg-white rounded-2xl p-5 border border-emerald-100 shadow-sm">
-                                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">Estimations calculées automatiquement</p>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <div className="bg-blue-50 rounded-xl p-4 text-center">
-                                        <p className="text-2xl font-extrabold text-blue-600">{calcul.BesoinsEau} L</p>
-                                        <p className="text-xs text-gray-500 mt-1">Besoins en eau / jour</p>
-                                    </div>
-                                    <div className="bg-emerald-50 rounded-xl p-4 text-center">
-                                        <p className="text-2xl font-extrabold text-emerald-600">{calcul.phSol}</p>
-                                        <p className="text-xs text-gray-500 mt-1">pH du sol estimé</p>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-
                         {/* Card 4 — Planification */}
                         <div className="bg-white dark:bg-zinc-900 p-6 rounded-2xl border border-gray-100 dark:border-zinc-800 shadow-sm">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Date de début *</label>
-                                    <input className="w-full bg-gray-50/50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-zinc-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none"
-                                        type="date" value={form.dateDebut} onChange={(e) => set('dateDebut')(e.target.value)} required />
-                                </div>
+                            <div>
+                                <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Date de début *</label>
+                                <input className="input" type="date" value={form.dateDebut} onChange={(e) => set('dateDebut')(e.target.value)} required />
                             </div>
                             <div className="mt-6">
                                 <label className="block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider">Notes</label>
-                                <textarea className="w-full bg-gray-50/50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-zinc-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none placeholder-gray-400"
-                                    rows={2} placeholder="Observations agronomiques..."
+                                <textarea className="input" rows={2} placeholder="Observations agronomiques..."
                                     value={form.notesAgriculteur} onChange={(e) => set('notesAgriculteur')(e.target.value)} />
                             </div>
                         </div>
 
-                        <button type="submit" disabled={!form.natureSol || !calcul}
-                            className="flex items-center justify-center gap-2 w-full bg-emerald-600 dark:bg-emerald-700 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-semibold py-3.5 rounded-xl shadow-sm shadow-emerald-600/20 transition-all disabled:bg-gray-100 disabled:text-gray-400 disabled:shadow-none">
-                            <Save size={20} />
-                            Enregistrer la culture
+                        <button type="submit" disabled={!form.natureSol || !form.plante_id || !form.superficie || !form.dateDebut}
+                            className="flex items-center justify-center gap-2 w-full bg-emerald-600 dark:bg-emerald-700 hover:bg-emerald-700 dark:hover:bg-emerald-600 text-white font-semibold py-3.5 rounded-xl shadow-sm transition-all disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none disabled:cursor-not-allowed">
+                            <Save size={20} /> Enregistrer la culture
                         </button>
+                        {(!form.natureSol || !form.plante_id) && <p className="text-xs text-center text-gray-400">Sélectionnez une plante et un type de sol pour continuer</p>}
+                    </form>
+                )}
                         {!calcul && <p className="text-xs text-center text-gray-400">Sélectionnez une plante, un sol et une superficie pour continuer</p>}
                     </form>
                 )}
