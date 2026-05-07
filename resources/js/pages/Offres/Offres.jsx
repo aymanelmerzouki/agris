@@ -280,7 +280,7 @@ export default function Offres() {
                             </div>
                             <div>
                                 <label className={LABEL}>Message au vendeur</label>
-                                <textarea className={INPUT + " dark:bg-zinc-950 dark:border-zinc-800 dark:text-white"} rows={3} placeholder="Votre proposition..."
+                                <textarea className="w-full bg-white dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 rounded-lg p-3 text-gray-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:focus:bg-zinc-950 placeholder-gray-400 dark:placeholder-zinc-600" rows={3} placeholder="Votre proposition..."
                                     value={negocForm.message} onChange={(e) => setNegocForm({ ...negocForm, message: e.target.value })} />
                             </div>
                             <div className="flex gap-3">
