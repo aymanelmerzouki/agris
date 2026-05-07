@@ -19,7 +19,7 @@ class CalculateurService
             ->where('jour_fin', '>=', $joursEcoules)
             ->first();
 
-        $meteo = $this->weatherService->getDailyWeather($culture->parcelle ?? 'Rabat');
+        $meteo = $this->weatherService->getDailyWeather('Rabat');
         $multiplicateur = $stade ? $stade->multiplicateur_eau : 1.0;
 
         // Surface en m²
@@ -30,22 +30,15 @@ class CalculateurService
             default => ($culture->superficie ?? 1) * 10000,
         };
 
-        // Besoin de base en L/m² selon type d'irrigation
-        $besoinBaseParM2 = match($culture->plante->typeIrrigation ?? 'pluviale') {
-            'goutte_a_goutte' => 0.003,
-            'aspersion'       => 0.004,
-            'submersion'      => 0.006,
-            default           => 0.002,
-        };
+        // Besoin brut basé sur la biologie de la plante (L/m²/jour)
+        $besoinParM2 = $culture->plante->besoin_eau_l_m2 ?? 3.0;
+        $besoinBrut = $besoinParM2 * $multiplicateur * $surfaceM2;
 
-        // A = Besoin brut (L)
-        $besoinBrut = $besoinBaseParM2 * $multiplicateur * $surfaceM2;
-
-        // B = Apport naturel (1mm pluie = 1L/m²)
+        // Apport pluie (1mm = 1L/m²)
         $pluieMm = $meteo['pluie_mm'] ?? 0;
         $apportPluie = $pluieMm * $surfaceM2;
 
-        // C = Recommandation finale
+        // Recommandation finale
         $besoinNet = max(0, round($besoinBrut - $apportPluie));
 
         return [

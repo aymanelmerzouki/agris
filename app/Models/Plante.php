@@ -13,7 +13,7 @@ class Plante extends Model
     protected $fillable = [
         'nom', 'espece', 'famille', 'origine', 'description', 'conditionsCulture',
         'temperatureMin', 'temperatureMax', 'saisonPlantation', 'dureePousseeJours',
-        'rendementMoyenKgHa', 'typeIrrigation', 'estBio', 'imageUrl',
+        'rendementMoyenKgHa', 'besoin_eau_l_m2', 'typeIrrigation', 'estBio', 'imageUrl',
     ];
 
     protected $casts = ['estBio' => 'boolean'];

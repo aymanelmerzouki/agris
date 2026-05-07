@@ -269,7 +269,7 @@ function CultureCard({ s, onDelete }) {
             <div className="flex items-start justify-between">
                 <div>
                     <h3 className="text-lg font-bold text-gray-800 dark:text-zinc-100">{s.plante?.nom}</h3>
-                    <p className="text-xs text-gray-400 mt-0.5">{s.plante?.espece}</p>
+                    <p className="text-xs text-gray-400 dark:text-zinc-400 mt-0.5">{s.plante?.espece}</p>
                 </div>
                 <button onClick={handleDelete} className="text-gray-300 hover:text-red-500 transition-colors mt-0.5">
                     <Trash2 size={16} />
