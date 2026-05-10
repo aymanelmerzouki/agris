@@ -12,6 +12,7 @@ class Tache extends Model
     protected $fillable = [
         'todo_list_id', 'nomTache', 'description', 'priorite',
         'categorie', 'statut', 'estFaite', 'completeeAt', 'dureeEstimeeMin',
+        'parcelle', 'dateEcheance',
     ];
 
     protected $casts = ['estFaite' => 'boolean', 'completeeAt' => 'datetime'];

@@ -53,10 +53,16 @@ export default function TodoLists() {
 
     const handleCreateList = async (e) => {
         e.preventDefault();
-        const { data } = await api.post('/todo-lists', { ...listForm, dateCreation: new Date().toISOString().split('T')[0] });
-        setLists((prev) => [data, ...prev]);
-        setShowListForm(false);
-        setListForm({ titre: '', ouvrier_id: '' });
+        try {
+            const { data } = await api.post('/todo-lists', { ...listForm, dateCreation: new Date().toISOString().split('T')[0] });
+            setLists((prev) => [data, ...prev]);
+            setShowListForm(false);
+            setListForm({ titre: '', ouvrier_id: '' });
+        } catch (err) {
+            const msg = err.response?.data?.message || Object.values(err.response?.data?.errors ?? {})[0]?.[0] || 'Erreur création liste.';
+            setToast('❌ ' + msg);
+            setTimeout(() => setToast(''), 4000);
+        }
     };
 
     const handleDeleteList = async (id) => {
@@ -137,7 +143,7 @@ export default function TodoLists() {
                                     ))}
                                 </select>
                             </div>
-                            <button className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl transition text-sm" type="submit">Créer la liste</button>
+                            <button className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-xl transition text-sm" type="submit" disabled={!listForm.ouvrier_id}>Créer la liste</button>
                         </form>
                     )}
 
