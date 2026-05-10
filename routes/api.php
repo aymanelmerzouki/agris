@@ -57,7 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('role:manager')->group(function () {
         Route::apiResource('todo-lists', TodoListController::class)->except(['index', 'show']);
     });
-    Route::middleware('role:manager,ouvrier')->group(function () {
+    Route::middleware(['role:manager,ouvrier', 'ouvrier.actif'])->group(function () {
         Route::apiResource('todo-lists', TodoListController::class)->only(['index', 'show']);
         Route::get   ('todo-lists/{todoList}/taches',           [TacheController::class, 'index']);
         Route::post  ('todo-lists/{todoList}/taches',           [TacheController::class, 'store']);

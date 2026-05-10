@@ -20,6 +20,7 @@ import TodoLists from './pages/TodoList/TodoLists';
 import Alertes from './pages/Alertes/Alertes';
 import Equipe from './pages/Equipe/Equipe';
 import PortailOuvrier from './pages/Equipe/PortailOuvrier';
+import WaitingApproval from './pages/Equipe/WaitingApproval';
 
 import '../css/app.css';
 
@@ -37,10 +38,15 @@ function Layout({ children }) {
 }
 
 function Home() {
-    const { user, loading } = useAuth();
+    const { user, loading, refreshUser } = useAuth();
     if (loading) return null;
-    if (user?.role === 'ouvrier' && user?.statut_emploi !== 'actif') {
-        return <PortailOuvrier statut={user.statut_emploi} onDemandeSoumise={() => window.location.reload()} />;
+    if (user?.role === 'ouvrier') {
+        if (user.statut_emploi === 'aucun') {
+            return <PortailOuvrier statut={user.statut_emploi} onDemandeSoumise={refreshUser} />;
+        }
+        if (user.statut_emploi === 'en_attente') {
+            return <WaitingApproval onApproved={refreshUser} />;
+        }
     }
     return user ? <Navigate to="/dashboard" replace /> : <Landing />;
 }
