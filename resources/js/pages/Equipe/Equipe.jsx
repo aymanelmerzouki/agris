@@ -30,12 +30,12 @@ export default function Equipe() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-800 px-6 py-8">
+            <div className="px-6 py-8 border-b border-gray-200 dark:border-zinc-800 mb-6">
                 <div className="max-w-3xl mx-auto">
-                    <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
-                        <Users size={24} /> Mon Équipe
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+                        <Users size={24} className="text-emerald-500" /> Mon Équipe
                     </h1>
-                    <p className="text-green-100 text-sm mt-1">Gérez vos ouvriers et les demandes d'intégration</p>
+                    <p className="text-gray-500 dark:text-zinc-400 text-sm mt-1">Gérez vos ouvriers et les demandes d'intégration</p>
                 </div>
             </div>
 

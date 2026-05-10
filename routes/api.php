@@ -25,6 +25,8 @@ Route::middleware('auth:sanctum')->group(function () {
         \App\Models\User::where('role', 'ouvrier')->select('id','name','poste')->get()
     ));
     Route::apiResource('plantes', PlanteController::class)->only(['index', 'show']);
+    // Onboarding — accessible à tous les rôles authentifiés
+    Route::post('onboarding/soumettre', [\App\Http\Controllers\OnboardingController::class, 'soumettreDemande']);
     Route::apiResource('biblios', BiblioController::class)->only(['index', 'show']);
     Route::middleware('role:agriculteur,manager')->group(function () {
         Route::apiResource('plantes', PlanteController::class)->except(['index', 'show']);
@@ -47,12 +49,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('negociations/mes', [\App\Http\Controllers\NegociationController::class, 'mesNegociations']);
         Route::delete('negociations/{negociation}', [\App\Http\Controllers\NegociationController::class, 'destroy']);
 
-        // Onboarding
+        // Onboarding — routes manager
         Route::get ('equipe/code',                [\App\Http\Controllers\OnboardingController::class, 'monCode']);
         Route::get ('equipe/demandes',            [\App\Http\Controllers\OnboardingController::class, 'demandesEnAttente']);
         Route::post('equipe/{ouvrier}/accepter',  [\App\Http\Controllers\OnboardingController::class, 'accepter']);
         Route::post('equipe/{ouvrier}/refuser',   [\App\Http\Controllers\OnboardingController::class, 'refuser']);
-        Route::post('onboarding/soumettre',       [\App\Http\Controllers\OnboardingController::class, 'soumettreDemande']);
     });
     Route::middleware('role:manager')->group(function () {
         Route::apiResource('todo-lists', TodoListController::class)->except(['index', 'show']);
