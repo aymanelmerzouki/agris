@@ -148,7 +148,7 @@ export default function TodoLists() {
                             <input className="input" type="date" placeholder="Date échéance" value={listForm.dateEcheance} onChange={setL('dateEcheance')} />
                             <input className="input" placeholder="Parcelle" value={listForm.parcelle} onChange={setL('parcelle')} />
                             <textarea className="input text-xs" rows={2} placeholder="Description" value={listForm.description} onChange={setL('description')} />
-                            <button className="btn-primary w-full text-sm" type="submit">Créer la liste</button>
+                            <button className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl transition text-sm" type="submit">Créer la liste</button>
                         </form>
                     )}
 
@@ -206,7 +206,8 @@ export default function TodoLists() {
                                 </div>
                                 {user?.role === 'manager' && (
                                     <button onClick={() => setShowTacheForm(!showTacheForm)}
-                                        className="btn-primary text-sm">
+                                        className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition">
+                                        {showTacheForm ? <X size={14} /> : <Plus size={14} />}
                                         {showTacheForm ? 'Annuler' : '+ Tâche'}
                                     </button>
                                 )}
