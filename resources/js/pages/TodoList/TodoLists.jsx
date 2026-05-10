@@ -283,7 +283,16 @@ export default function TodoLists() {
                                                 <select
                                                     className="ml-auto text-xs px-2 py-1 rounded-full border-0 font-medium cursor-pointer bg-gray-100 dark:bg-zinc-800 dark:text-zinc-300"
                                                     value={t.statut}
-                                                    onChange={(e) => updateStatut(t, e.target.value)}>
+                                                    onChange={async (e) => {
+                                                        try {
+                                                            await updateStatut(t, e.target.value);
+                                                            setToast('Statut mis à jour.');
+                                                            setTimeout(() => setToast(''), 2500);
+                                                        } catch {
+                                                            setToast('❌ Erreur lors de la mise à jour.');
+                                                            setTimeout(() => setToast(''), 3000);
+                                                        }
+                                                    }}>
                                                     {STATUTS_TACHE.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                                                 </select>
                                             ) : (
@@ -317,9 +326,6 @@ export default function TodoLists() {
                                 </select>
                                 <select className="input" value={editTacheForm.priorite} onChange={(e) => setEditTacheForm({...editTacheForm, priorite: e.target.value})}>
                                     {PRIORITES.map((p) => <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>)}
-                                </select>
-                                <select className="input" value={editTacheForm.statut} onChange={(e) => setEditTacheForm({...editTacheForm, statut: e.target.value})}>
-                                    {STATUTS_TACHE.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                                 </select>
                                 <input className="input" placeholder="Durée (min)" type="number" value={editTacheForm.dureeEstimeeMin} onChange={(e) => setEditTacheForm({...editTacheForm, dureeEstimeeMin: e.target.value})} />
                             </div>
