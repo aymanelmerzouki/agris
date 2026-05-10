@@ -33,8 +33,9 @@ export default function TodoLists() {
     const [editTache, setEditTache] = useState(null);
     const [editTacheForm, setEditTacheForm] = useState({});
 
-    const [listForm, setListForm] = useState({ titre: '', description: '', ouvrier_id: '', dateEcheance: '', priorite: 'normale', parcelle: '' });
-    const [tacheForm, setTacheForm] = useState({ nomTache: '', description: '', categorie: 'autre', priorite: 'normale', dureeEstimeeMin: '' });
+    const [listForm, setListForm] = useState({ titre: '', ouvrier_id: '' });
+    const [tacheForm, setTacheForm] = useState({ nomTache: '', description: '', categorie: 'autre', priorite: 'normale', dureeEstimeeMin: '', parcelle: '', dateEcheance: '' });
+    const [toast, setToast] = useState('');
 
     useEffect(() => {
         api.get('/todo-lists').then((r) => setLists(r.data.data ?? r.data));
@@ -55,7 +56,7 @@ export default function TodoLists() {
         const { data } = await api.post('/todo-lists', { ...listForm, dateCreation: new Date().toISOString().split('T')[0] });
         setLists((prev) => [data, ...prev]);
         setShowListForm(false);
-        setListForm({ titre: '', description: '', ouvrier_id: '', dateEcheance: '', priorite: 'normale', parcelle: '' });
+        setListForm({ titre: '', ouvrier_id: '' });
     };
 
     const handleDeleteList = async (id) => {
@@ -70,7 +71,9 @@ export default function TodoLists() {
         const { data } = await api.post(`/todo-lists/${selected.id}/taches`, tacheForm);
         setTaches((prev) => [...prev, data]);
         setShowTacheForm(false);
-        setTacheForm({ nomTache: '', description: '', categorie: 'autre', priorite: 'normale', dureeEstimeeMin: '' });
+        setTacheForm({ nomTache: '', description: '', categorie: 'autre', priorite: 'normale', dureeEstimeeMin: '', parcelle: '', dateEcheance: '' });
+        setToast('Tâche ajoutée avec succès.');
+        setTimeout(() => setToast(''), 3000);
     };
 
     const updateStatut = async (tache, statut) => {
@@ -117,37 +120,16 @@ export default function TodoLists() {
                     {showListForm && user?.role === 'manager' && (
                         <form onSubmit={handleCreateList} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-md border border-gray-100 dark:border-zinc-800 p-4 mb-4 space-y-3">
                             <h3 className="font-bold text-gray-800 dark:text-zinc-100 text-sm">Nouvelle liste</h3>
-
                             <input className="input" placeholder="Titre *" value={listForm.titre} onChange={setL('titre')} required />
-
-                            
                             <div>
                                 <label className="text-xs text-gray-500 mb-1 block">Assigner à un ouvrier *</label>
                                 <select className="input" value={listForm.ouvrier_id} onChange={setL('ouvrier_id')} required>
                                     <option value="">Choisir un ouvrier</option>
                                     {ouvriers.map((o) => (
-                                        <option key={o.id} value={o.id}>
-                                            {o.name}{o.poste ? ` — ${o.poste}` : ''}
-                                        </option>
+                                        <option key={o.id} value={o.id}>{o.name}{o.poste ? ` — ${o.poste}` : ''}</option>
                                     ))}
                                 </select>
-                                {ouvrierSelectionne && (
-                                    <div className="mt-1 flex items-center gap-2 bg-green-50 rounded-lg px-2 py-1">
-                                        <div className="w-6 h-6 rounded-full bg-green-200 flex items-center justify-center text-xs font-bold text-green-700">
-                                            {ouvrierSelectionne.name[0]}
-                                        </div>
-                                        <span className="text-xs text-green-700 font-medium">{ouvrierSelectionne.name}</span>
-                                    </div>
-                                )}
                             </div>
-
-                            <select className="input" value={listForm.priorite} onChange={setL('priorite')}>
-                                {PRIORITES.map((p) => <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>)}
-                            </select>
-
-                            <input className="input" type="date" placeholder="Date échéance" value={listForm.dateEcheance} onChange={setL('dateEcheance')} />
-                            <input className="input" placeholder="Parcelle" value={listForm.parcelle} onChange={setL('parcelle')} />
-                            <textarea className="input text-xs" rows={2} placeholder="Description" value={listForm.description} onChange={setL('description')} />
                             <button className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl transition text-sm" type="submit">Créer la liste</button>
                         </form>
                     )}
@@ -188,11 +170,17 @@ export default function TodoLists() {
 
                 
                 <div className="flex-1">
+                    {/* Toast */}
+                    {toast && (
+                        <div className="mb-4 bg-emerald-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium animate-fadeIn">
+                            {toast}
+                        </div>
+                    )}
                     {lists.length === 0 ? null : !selected ? (
                         <div className="flex flex-col items-center justify-center min-h-[50vh] text-center text-gray-500 dark:text-zinc-400/60">
                             <ClipboardList size={48} className="text-zinc-500 mb-4 mx-auto" />
-                            <p className="font-medium">Sélectionnez une liste</p>
-                            <p className="text-sm mt-1">Cliquez sur une liste pour voir ses tâches</p>
+                            <p className="font-medium">Sélectionnez ou créez une liste pour y ajouter des tâches.</p>
+                            <p className="text-sm mt-1 opacity-70">Cliquez sur une liste à gauche</p>
                         </div>
                     ) : (
                         <>
@@ -217,26 +205,22 @@ export default function TodoLists() {
                             {showTacheForm && (
                                 <form onSubmit={handleCreateTache} className="bg-white dark:bg-zinc-900 rounded-2xl shadow-md border border-gray-100 dark:border-zinc-800 p-4 mb-4 grid grid-cols-2 gap-3">
                                     <input className="input col-span-2" placeholder="Nom de la tâche *" value={tacheForm.nomTache} onChange={setT('nomTache')} required />
-
-                                    
                                     <div>
-                                        <label className="text-xs text-gray-500 mb-1 block">Nature de la tâche</label>
+                                        <label className="text-xs text-gray-500 mb-1 block">Nature</label>
                                         <select className="input" value={tacheForm.categorie} onChange={setT('categorie')}>
-                                            {CATEGORIES.map((c) => (
-                                                <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>
-                                            ))}
+                                            {CATEGORIES.map((c) => <option key={c} value={c}>{c.charAt(0).toUpperCase() + c.slice(1)}</option>)}
                                         </select>
                                     </div>
-
                                     <div>
                                         <label className="text-xs text-gray-500 mb-1 block">Priorité</label>
                                         <select className="input" value={tacheForm.priorite} onChange={setT('priorite')}>
                                             {PRIORITES.map((p) => <option key={p} value={p}>{p.charAt(0).toUpperCase() + p.slice(1)}</option>)}
                                         </select>
                                     </div>
-
-                                    <input className="input" type="number" placeholder="Durée estimée (min)" value={tacheForm.dureeEstimeeMin} onChange={setT('dureeEstimeeMin')} />
-                                    <textarea className="input col-span-2 text-xs" rows={2} placeholder="Description" value={tacheForm.description} onChange={setT('description')} />
+                                    <input className="input" placeholder="Parcelle" value={tacheForm.parcelle} onChange={setT('parcelle')} />
+                                    <input className="input" type="date" value={tacheForm.dateEcheance} onChange={setT('dateEcheance')} />
+                                    <input className="input" type="number" placeholder="Durée (min)" value={tacheForm.dureeEstimeeMin} onChange={setT('dureeEstimeeMin')} />
+                                    <textarea className="input col-span-2 text-xs" rows={2} placeholder="Description agronomique" value={tacheForm.description} onChange={setT('description')} />
                                     <button className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl transition col-span-2 text-sm" type="submit">Ajouter la tâche</button>
                                 </form>
                             )}
