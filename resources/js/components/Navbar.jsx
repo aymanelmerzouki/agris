@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import DarkModeToggle from './DarkModeToggle';
 import {
     LayoutDashboard, BookOpen, Bookmark, ShoppingCart,
-    Sprout, Package, ClipboardList, Bell, Leaf
+    Sprout, Package, ClipboardList, Bell, Leaf, Users
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -30,6 +30,9 @@ export default function Navbar() {
         ] : []),
         ...(['manager', 'ouvrier'].includes(user?.role) ? [
             { to: '/todo-lists', icon: ClipboardList, label: 'Tâches' },
+        ] : []),
+        ...(['manager'].includes(user?.role) ? [
+            { to: '/equipe', icon: Users, label: 'Équipe' },
         ] : []),
         { to: '/alertes', icon: Bell, label: 'Alertes' },
     ];

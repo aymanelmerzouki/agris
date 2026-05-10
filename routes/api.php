@@ -46,6 +46,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('negociations', [\App\Http\Controllers\NegociationController::class, 'store']);
         Route::get('negociations/mes', [\App\Http\Controllers\NegociationController::class, 'mesNegociations']);
         Route::delete('negociations/{negociation}', [\App\Http\Controllers\NegociationController::class, 'destroy']);
+
+        // Onboarding
+        Route::get ('equipe/code',                [\App\Http\Controllers\OnboardingController::class, 'monCode']);
+        Route::get ('equipe/demandes',            [\App\Http\Controllers\OnboardingController::class, 'demandesEnAttente']);
+        Route::post('equipe/{ouvrier}/accepter',  [\App\Http\Controllers\OnboardingController::class, 'accepter']);
+        Route::post('equipe/{ouvrier}/refuser',   [\App\Http\Controllers\OnboardingController::class, 'refuser']);
+        Route::post('onboarding/soumettre',       [\App\Http\Controllers\OnboardingController::class, 'soumettreDemande']);
     });
     Route::middleware('role:manager')->group(function () {
         Route::apiResource('todo-lists', TodoListController::class)->except(['index', 'show']);

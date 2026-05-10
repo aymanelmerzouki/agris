@@ -15,6 +15,7 @@ class User extends Authenticatable
 
     protected $fillable = [
         'name', 'email', 'password', 'role', 'nomEntreprise', 'poste',
+        'code_exploitation', 'statut_emploi', 'gerant_id',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -27,6 +28,8 @@ class User extends Authenticatable
         ];
     }
 
+    public function gerant()    { return $this->belongsTo(User::class, 'gerant_id'); }
+    public function ouvriers()  { return $this->hasMany(User::class, 'gerant_id'); }
     public function suiviPlantes()
     {
         return $this->hasMany(SuiviPlante::class);

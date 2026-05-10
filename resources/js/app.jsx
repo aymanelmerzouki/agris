@@ -18,6 +18,8 @@ import Stocks from './pages/Stocks/Stocks';
 import Offres from './pages/Offres/Offres';
 import TodoLists from './pages/TodoList/TodoLists';
 import Alertes from './pages/Alertes/Alertes';
+import Equipe from './pages/Equipe/Equipe';
+import PortailOuvrier from './pages/Equipe/PortailOuvrier';
 
 import '../css/app.css';
 
@@ -37,6 +39,9 @@ function Layout({ children }) {
 function Home() {
     const { user, loading } = useAuth();
     if (loading) return null;
+    if (user?.role === 'ouvrier' && user?.statut_emploi !== 'actif') {
+        return <PortailOuvrier statut={user.statut_emploi} onDemandeSoumise={() => window.location.reload()} />;
+    }
     return user ? <Navigate to="/dashboard" replace /> : <Landing />;
 }
 
@@ -58,6 +63,7 @@ createRoot(document.getElementById('app')).render(
                     <Route path="/offres" element={<PrivateRoute roles={['agriculteur', 'manager']}><Layout><Offres /></Layout></PrivateRoute>} />
                     <Route path="/todo-lists" element={<PrivateRoute roles={['manager', 'ouvrier']}><Layout><TodoLists /></Layout></PrivateRoute>} />
                     <Route path="/alertes" element={<PrivateRoute><Layout><Alertes /></Layout></PrivateRoute>} />
+                    <Route path="/equipe" element={<PrivateRoute roles={['manager']}><Layout><Equipe /></Layout></PrivateRoute>} />
 
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
