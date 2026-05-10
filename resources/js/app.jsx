@@ -41,11 +41,14 @@ function Home() {
     const { user, loading, refreshUser } = useAuth();
     if (loading) return null;
     if (user?.role === 'ouvrier') {
-        if (user.statut_emploi === 'aucun') {
+        if (!user.statut_emploi || user.statut_emploi === 'aucun') {
             return <PortailOuvrier statut={user.statut_emploi} onDemandeSoumise={refreshUser} />;
         }
         if (user.statut_emploi === 'en_attente') {
             return <WaitingApproval onApproved={refreshUser} />;
+        }
+        if (user.statut_emploi === 'actif') {
+            return <Navigate to="/dashboard" replace />;
         }
     }
     return user ? <Navigate to="/dashboard" replace /> : <Landing />;

@@ -22,6 +22,7 @@ class AuthController extends Controller
         ]);
 
         $user = User::create([...$data, 'password' => Hash::make($data['password'])]);
+        $user->refresh(); // charge les valeurs par défaut (statut_emploi, etc.)
         $token = $user->createToken('api')->plainTextToken;
 
         return response()->json(['user' => $user, 'token' => $token], 201);
