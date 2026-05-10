@@ -68,12 +68,19 @@ export default function TodoLists() {
 
     const handleCreateTache = async (e) => {
         e.preventDefault();
-        const { data } = await api.post(`/todo-lists/${selected.id}/taches`, tacheForm);
-        setTaches((prev) => [...prev, data]);
-        setShowTacheForm(false);
-        setTacheForm({ nomTache: '', description: '', categorie: 'autre', priorite: 'normale', dureeEstimeeMin: '', parcelle: '', dateEcheance: '' });
-        setToast('Tâche ajoutée avec succès.');
-        setTimeout(() => setToast(''), 3000);
+        try {
+            const payload = { ...tacheForm, dureeEstimeeMin: tacheForm.dureeEstimeeMin || null };
+            const { data } = await api.post(`/todo-lists/${selected.id}/taches`, payload);
+            setTaches((prev) => [...prev, data]);
+            setShowTacheForm(false);
+            setTacheForm({ nomTache: '', description: '', categorie: 'autre', priorite: 'normale', dureeEstimeeMin: '', parcelle: '', dateEcheance: '' });
+            setToast('Tâche ajoutée avec succès.');
+            setTimeout(() => setToast(''), 3000);
+        } catch (err) {
+            const msg = err.response?.data?.message || Object.values(err.response?.data?.errors ?? {})[0]?.[0] || 'Erreur lors de l\'ajout.';
+            setToast('❌ ' + msg);
+            setTimeout(() => setToast(''), 4000);
+        }
     };
 
     const updateStatut = async (tache, statut) => {
@@ -95,7 +102,7 @@ export default function TodoLists() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-800 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-950 dark:to-zinc-950 dark:border-b dark:border-zinc-800 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">

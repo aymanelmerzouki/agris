@@ -25,6 +25,8 @@ class TacheController extends Controller
             'priorite'        => 'in:basse,normale,haute,urgente',
             'categorie'       => 'in:irrigation,recolte,traitement,semis,entretien,autre',
             'dureeEstimeeMin' => 'nullable|integer|min:1',
+            'parcelle'        => 'nullable|string|max:255',
+            'dateEcheance'    => 'nullable|date',
         ]);
 
         $tache = $todoList->taches()->create($data);
@@ -51,6 +53,8 @@ class TacheController extends Controller
             'statut'          => 'in:en_attente,en_cours,termine',
             'estFaite'        => 'boolean',
             'dureeEstimeeMin' => 'nullable|integer|min:1',
+            'parcelle'        => 'nullable|string|max:255',
+            'dateEcheance'    => 'nullable|date',
         ]);
 
         if ($user->role === 'ouvrier') {
@@ -102,6 +106,8 @@ class TacheController extends Controller
             'priorite'        => 'in:basse,normale,haute,urgente',
             'categorie'       => 'in:irrigation,recolte,traitement,semis,entretien,autre',
             'dureeEstimeeMin' => 'nullable|integer|min:1',
+            'parcelle'        => 'nullable|string|max:255',
+            'dateEcheance'    => 'nullable|date',
         ]);
 
         $tache = $todoList->taches()->create($data);
@@ -123,6 +129,8 @@ class TacheController extends Controller
             'statut'          => 'in:en_attente,en_cours,termine',
             'estFaite'        => 'boolean',
             'dureeEstimeeMin' => 'nullable|integer|min:1',
+            'parcelle'        => 'nullable|string|max:255',
+            'dateEcheance'    => 'nullable|date',
         ]);
 
         if ($user->role === 'ouvrier') {
