@@ -4,7 +4,7 @@ import { Package, Plus, X, Save, Trash2, MapPin, Calendar, AlertTriangle, Shoppi
 import api from '../../api';
 
 const UNITES = ['kg', 'tonne', 'caisse', 'litre', 'unite'];
-const INPUT = "w-full bg-gray-50/50 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-600 text-gray-800 dark:text-zinc-100 text-sm rounded-xl focus:bg-white focus:ring-4 focus:ring-emerald-500/15 focus:border-emerald-500 block p-3 transition-all outline-none";
+const INPUT = "w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 text-gray-900 dark:text-zinc-100 placeholder-gray-400 dark:placeholder-zinc-500 text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 dark:focus:ring-emerald-500 dark:focus:border-emerald-500 block p-3 transition-all";
 const LABEL = "block mb-2 text-[11px] font-bold text-gray-400 uppercase tracking-wider";
 
 export default function Stocks() {
@@ -107,7 +107,7 @@ export default function Stocks() {
                                 <Save size={18} /> Enregistrer
                             </button>
                             <button type="button" onClick={() => setShowForm(false)}
-                                className="flex items-center justify-center gap-2 flex-1 bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 font-medium py-3 rounded-xl transition-all shadow-sm">
+                                className="flex items-center justify-center gap-2 flex-1 bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 text-gray-700 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-700 font-medium py-3 rounded-xl transition-all shadow-sm">
                                 <X size={18} /> Annuler
                             </button>
                         </div>
