@@ -108,13 +108,13 @@ export default function TodoLists() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-950 dark:to-zinc-950 dark:border-b dark:border-zinc-800 px-6 py-8">
+            <div className="bg-white border-b border-gray-200 dark:bg-zinc-950 dark:border-zinc-800 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
+                        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                             <ListTodo size={24} /> Tâches
                         </h1>
-                        <p className="text-green-100 text-sm mt-1">{lists.length} liste(s)</p>
+                        <p className="text-gray-500 dark:text-zinc-400 text-sm mt-1">{lists.length} liste(s)</p>
                     </div>
                     {user?.role === 'manager' && (
                         <button onClick={() => setShowListForm(!showListForm)}
@@ -199,7 +199,7 @@ export default function TodoLists() {
                         <>
                             <div className="flex items-center justify-between mb-4">
                                 <div>
-                                    <h2 className="text-xl font-bold text-gray-900">{selected.titre}</h2>
+                                    <h2 className="text-xl font-bold text-gray-900 dark:text-zinc-100">{selected.titre}</h2>
                                     <p className="text-sm text-gray-400">
                                         {selected.parcelle && `📍 ${selected.parcelle} · `}
                                         {taches.length} tâche(s)
@@ -209,7 +209,7 @@ export default function TodoLists() {
                                     <button onClick={() => setShowTacheForm(!showTacheForm)}
                                         className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition">
                                         {showTacheForm ? <X size={14} /> : <Plus size={14} />}
-                                        {showTacheForm ? 'Annuler' : '+ Tâche'}
+                                        {showTacheForm ? 'Annuler' : 'Tâche'}
                                     </button>
                                 )}
                             </div>
