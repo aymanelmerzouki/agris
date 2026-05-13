@@ -37,16 +37,16 @@ export default function Stocks() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-800 px-6 py-8">
+            <div className="bg-white border-b border-gray-200 dark:bg-zinc-950 dark:border-zinc-800 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-extrabold text-white flex items-center gap-3">
+                        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-zinc-100 flex items-center gap-3">
                             <Package size={28} /> Gestion des stocks
                         </h1>
-                        <p className="text-green-200 text-sm mt-1">{stocks.length} produit(s) en stock</p>
+                        <p className="text-gray-500 dark:text-zinc-400 text-sm mt-1">{stocks.length} produit(s) en stock</p>
                     </div>
                     <button onClick={() => setShowForm(!showForm)}
-                        className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition">
+                        className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:border dark:border-zinc-700 text-white dark:text-zinc-100 text-sm font-medium px-4 py-2 rounded-xl transition">
                         {showForm ? <X size={18} /> : <Plus size={18} />}
                         {showForm ? 'Annuler' : 'Ajouter'}
                     </button>
