@@ -118,7 +118,7 @@ export default function TodoLists() {
                     </div>
                     {user?.role === 'manager' && (
                         <button onClick={() => setShowListForm(!showListForm)}
-                            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors shadow-sm">
+                            className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 dark:border dark:border-zinc-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors shadow-sm">
                             {showListForm ? <X size={18} /> : <Plus size={18} />}
                             {showListForm ? 'Annuler' : 'Nouvelle liste'}
                         </button>
@@ -143,7 +143,7 @@ export default function TodoLists() {
                                     ))}
                                 </select>
                             </div>
-                            <button className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-xl transition text-sm" type="submit" disabled={!listForm.ouvrier_id}>Créer la liste</button>
+                            <button className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 dark:border dark:border-zinc-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium py-2.5 rounded-xl transition text-sm" type="submit" disabled={!listForm.ouvrier_id}>Créer la liste</button>
                         </form>
                     )}
 
@@ -207,7 +207,7 @@ export default function TodoLists() {
                                 </div>
                                 {user?.role === 'manager' && (
                                     <button onClick={() => setShowTacheForm(!showTacheForm)}
-                                        className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition">
+                                        className="flex items-center gap-1.5 bg-emerald-600 hover:bg-emerald-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 dark:border dark:border-zinc-700 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition">
                                         {showTacheForm ? <X size={14} /> : <Plus size={14} />}
                                         {showTacheForm ? 'Annuler' : 'Tâche'}
                                     </button>
@@ -234,7 +234,7 @@ export default function TodoLists() {
                                     <input className="input" type="date" value={tacheForm.dateEcheance} onChange={setT('dateEcheance')} />
                                     <input className="input" type="number" placeholder="Durée (min)" value={tacheForm.dureeEstimeeMin} onChange={setT('dureeEstimeeMin')} />
                                     <textarea className="input col-span-2 text-xs" rows={2} placeholder="Description agronomique" value={tacheForm.description} onChange={setT('description')} />
-                                    <button className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-xl transition col-span-2 text-sm" type="submit">Ajouter la tâche</button>
+                                    <button className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 dark:border dark:border-zinc-700 text-white font-medium py-2.5 rounded-xl transition col-span-2 text-sm" type="submit">Ajouter la tâche</button>
                                 </form>
                             )}
 
@@ -338,7 +338,7 @@ export default function TodoLists() {
                             <textarea className="input" rows={2} placeholder="Description" value={editTacheForm.description} onChange={(e) => setEditTacheForm({...editTacheForm, description: e.target.value})} />
                             <div className="flex gap-3">
                                 <button type="button" onClick={() => setEditTache(null)} className="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-zinc-700 text-gray-600 dark:text-zinc-300 dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 text-sm font-medium transition">Annuler</button>
-                                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold transition">Enregistrer</button>
+                                <button type="submit" className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 dark:border dark:border-zinc-700 text-white text-sm font-semibold transition">Enregistrer</button>
                             </div>
                         </form>
                     </div>
