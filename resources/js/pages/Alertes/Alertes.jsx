@@ -29,7 +29,7 @@ export default function Alertes() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-white border-b border-gray-200 dark:bg-zinc-950 dark:border-zinc-800 px-6 py-8">
+            <div className="bg-white border-b border-gray-200 dark:bg-zinc-900 dark:border-zinc-800 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
                         <h1 className="text-2xl font-extrabold text-gray-900 dark:text-zinc-100 flex items-center gap-2">

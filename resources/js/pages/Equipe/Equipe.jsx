@@ -30,7 +30,7 @@ export default function Equipe() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-white border-b border-gray-200 dark:bg-zinc-950 dark:border-zinc-800 px-6 py-8 mb-6">
+            <div className="bg-white border-b border-gray-200 dark:bg-zinc-900 dark:border-zinc-800 px-6 py-8 mb-6">
                 <div className="max-w-3xl mx-auto">
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
                         <Users size={24} className="text-emerald-500" /> Mon Équipe
