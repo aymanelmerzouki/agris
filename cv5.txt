@@ -1,0 +1,27 @@
+Agis en tant que Lead Fullstack Developer. Le Lead Architect exige une refonte du système d'unités pour le rendre compatible avec l'agriculture multi-échelles (du grand champ à l'agriculture urbaine).
+
+TÂCHES STRICTES DE MISE À NIVEAU DES UNITÉS :
+
+1. BACKEND (Base de données & Migration) :
+- Modifie la table `suivi_plantes`. La colonne `superficieHa` doit être renommée en `superficie` (float).
+- Ajoute une colonne `unite_superficie` (enum ou string : 'ha', 'm2', 'unite').
+
+2. FRONTEND (Formulaire de création) :
+- À côté de l'input de la superficie, ajoute un `<select>` obligatoire :
+  <option value="ha">Hectares (ha)</option>
+  <option value="m2">Mètres carrés (m²)</option>
+  <option value="unite">Pots / Fûts (Urbain)</option>
+
+3. BACKEND (Le Moteur de Calcul - CalculateurService) :
+- Crée une règle absolue : TOUS les calculs d'eau doivent se faire en m².
+- Dans tes calculs, ajoute ce convertisseur avant d'appliquer la pluie ou le besoin :
+  ```php
+  $surfaceM2 = match($plante->unite_superficie) {
+      'ha' => $plante->superficie * 10000,
+      'm2' => $plante->superficie,
+      'unite' => $plante->superficie * 0.25, // Estimation d'un fût standard
+      default => $plante->superficie
+  };
+Applique ensuite la formule : Besoin Brut = Base * Multiplicateur * $surfaceM2.
+
+Confirme-moi quand cette logique est intégrée.

@@ -1,0 +1,82 @@
+Agis en tant que Lead Backend Developer. La base de connaissances des plantes est prête. Nous passons au Mouvement 2 : la création du connecteur Météo.
+
+TÂCHES STRICTES À EXÉCUTER :
+
+1. CONFIGURATION DE L'ENVIRONNEMENT :
+- Ajoute cette ligne dans le fichier `.env` et `.env.example` (l'API key sera remplie plus tard) :
+  `OPENWEATHER_API_KEY=ton_api_key_ici`
+
+2. CRÉATION DU SERVICE (WeatherService) :
+- Crée un nouveau fichier `app/Services/WeatherService.php`.
+- Ce service utilisera la façade `Illuminate\Support\Facades\Http`.
+- Implémente une méthode `getDailyWeather(string $city = 'Casablanca')` (ville par défaut pour le Maroc).
+- Voici la logique stricte à utiliser pour la méthode :
+
+  ```php
+  namespace App\Services;
+  
+  use Illuminate\Support\Facades\Http;
+  use Illuminate\Support\Facades\Log;
+
+  class WeatherService
+  {
+      private $apiKey;
+      private $baseUrl = '[https://api.openweathermap.org/data/2.5/weather](https://api.openweathermap.org/data/2.5/weather)';
+
+      public function __construct()
+      {
+          $this->apiKey = env('OPENWEATHER_API_KEY');
+      }
+
+      public function getDailyWeather(string $city)
+      {
+          if (!$this->apiKey || $this->apiKey === 'ton_api_key_ici') {
+              Log::warning("Clé API OpenWeather manquante. Météo simulée pour {$city}.");
+              return $this->getMockedData(); // Fallback de développement
+          }
+
+          try {
+              $response = Http::timeout(5)->get($this->baseUrl, [
+                  'q' => $city . ',MA', // Restreint au Maroc
+                  'appid' => $this->apiKey,
+                  'units' => 'metric',
+                  'lang' => 'fr'
+              ]);
+
+              if ($response->successful()) {
+                  $data = $response->json();
+                  return [
+                      'temperature' => $data['main']['temp'],
+                      'humidite' => $data['main']['humidity'],
+                      'pluie_mm' => isset($data['rain']['1h']) ? $data['rain']['1h'] : 0,
+                      'description' => $data['weather'][0]['description'] ?? 'Dégagé'
+                  ];
+              }
+
+              Log::error("Erreur API Météo: " . $response->body());
+              return $this->getMockedData();
+
+          } catch (\Exception $e) {
+              Log::error("Exception API Météo: " . $e->getMessage());
+              return $this->getMockedData();
+          }
+      }
+
+      // Méthode de secours pour le développement local sans clé API
+      private function getMockedData()
+      {
+          return [
+              'temperature' => rand(20, 35),
+              'humidite' => rand(40, 80),
+              'pluie_mm' => rand(0, 5), // Simulation de 0 à 5mm de pluie
+              'description' => 'Météo simulée (Dev)'
+          ];
+      }
+  }
+VERSIONING :
+
+git add .
+
+git commit -m "feat(meteo): création du WeatherService avec intégration OpenWeather et fallback de simulation"
+
+git push

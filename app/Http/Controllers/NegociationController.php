@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Negociation;
+use App\Notifications\NegociationRecueNotification;
 use Illuminate\Http\Request;
 
 class NegociationController extends Controller
@@ -17,6 +18,10 @@ class NegociationController extends Controller
         ]);
 
         $negociation = Negociation::create([...$data, 'user_id' => $request->user()->id]);
+
+        // Notifier le vendeur de l'offre
+        $negociation->load('offre.plante');
+        $negociation->offre->user->notify(new NegociationRecueNotification($negociation));
 
         return response()->json($negociation->load('offre.plante'), 201);
     }
