@@ -52,7 +52,6 @@ class User extends Authenticatable
 
     public function messagesEnvoyes()  { return $this->hasMany(Message::class, 'expediteur_id'); }
     public function messagesRecus()    { return $this->hasMany(Message::class, 'destinataire_id'); }
-    public function stocks()           { return $this->hasMany(Stock::class); }
     public function abonnement()       { return $this->hasOne(Abonnement::class); }
     public function plantesFavoris()   { return $this->belongsToMany(Plante::class, 'plante_favoris'); }
     public function offresAchetees()   { return $this->hasMany(Offre::class, 'acheteur_id'); }

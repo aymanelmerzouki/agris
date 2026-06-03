@@ -1,7 +1,7 @@
 <?php
 namespace App\Jobs;
-use App\Models\AlerteArrosage;
 use App\Models\SuiviPlante;
+use App\Services\CalculateurService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -10,24 +10,13 @@ use Illuminate\Queue\SerializesModels;
 class EnvoyerAlertesArrosage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    public function handle(): void
+    public function handle(CalculateurService $calculateur): void
     {
-        $today = now()->toDateString();
-        SuiviPlante::with('user', 'plante')
+        SuiviPlante::with('user', 'plante.stades')
             ->where('statut', 'en_cours')
-            ->chunk(100, function ($suivis) use ($today) {
+            ->chunk(100, function ($suivis) use ($calculateur) {
                 foreach ($suivis as $suivi) {
-                    $existe = AlerteArrosage::where('suivi_plante_id', $suivi->id)
-                        ->where('datePrevue', $today)->exists();
-                    if (!$existe) {
-                        AlerteArrosage::create([
-                            'suivi_plante_id' => $suivi->id,
-                            'datePrevue'      => $today,
-                            'quantiteLitres'  => $suivi->BesoinsEau,
-                            'envoyee'         => true,
-                        ]);
-                        $suivi->user->notify(new \App\Notifications\AlerteArrosageNotification($suivi));
-                    }
+                    $calculateur->genererRecommandation($suivi);
                 }
             });
     }

@@ -7,7 +7,6 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OffreController;
 use App\Http\Controllers\PlanteFavoriController;
 use App\Http\Controllers\PlanteController;
-use App\Http\Controllers\StockController;
 use App\Http\Controllers\SuiviPlanteController;
 use App\Http\Controllers\TacheController;
 use App\Http\Controllers\TodoListController;
@@ -21,8 +20,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',      [AuthController::class, 'me']);
     Route::get('/dashboard-stats', [DashboardController::class, 'index']);
-    Route::get('/ouvriers', fn() => response()->json(
-        \App\Models\User::where('role', 'ouvrier')->select('id','name','poste')->get()
+    Route::get('/ouvriers', fn(\Illuminate\Http\Request $r) => response()->json(
+        $r->user()->ouvriers()->where('statut_emploi', 'actif')->select('id','name','poste')->get()
     ));
     Route::apiResource('plantes', PlanteController::class)->only(['index', 'show']);
     // Onboarding — accessible à tous les rôles authentifiés
@@ -44,7 +43,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('suivi-plantes/{suiviPlante}/live',  [SuiviPlanteController::class, 'getLiveStats']);
         Route::post('suivi-plantes/calculer',     [SuiviPlanteController::class, 'calculer']);
         Route::apiResource('suivi-plantes', SuiviPlanteController::class);
-        Route::apiResource('stocks', StockController::class);
         Route::post('negociations', [\App\Http\Controllers\NegociationController::class, 'store']);
         Route::get('negociations/mes', [\App\Http\Controllers\NegociationController::class, 'mesNegociations']);
         Route::delete('negociations/{negociation}', [\App\Http\Controllers\NegociationController::class, 'destroy']);
@@ -52,8 +50,10 @@ Route::middleware('auth:sanctum')->group(function () {
         // Onboarding — routes manager
         Route::get ('equipe/code',                [\App\Http\Controllers\OnboardingController::class, 'monCode']);
         Route::get ('equipe/demandes',            [\App\Http\Controllers\OnboardingController::class, 'demandesEnAttente']);
+        Route::get ('equipe/membres',             [\App\Http\Controllers\OnboardingController::class, 'membres']);
         Route::post('equipe/{ouvrier}/accepter',  [\App\Http\Controllers\OnboardingController::class, 'accepter']);
         Route::post('equipe/{ouvrier}/refuser',   [\App\Http\Controllers\OnboardingController::class, 'refuser']);
+        Route::delete('equipe/{ouvrier}',         [\App\Http\Controllers\OnboardingController::class, 'retirer']);
     });
     Route::middleware('role:manager')->group(function () {
         Route::apiResource('todo-lists', TodoListController::class)->except(['index', 'show']);

@@ -69,7 +69,7 @@ export default function Offres() {
     const accepter = async (offre) => {
         const qte = parseFloat(qteAchat[offre.id]);
         if (!qte || qte <= 0) return alert('Veuillez saisir une quantité.');
-        if (qte > offre.quantite) return alert(`Stock insuffisant. Maximum : ${offre.quantite} ${offre.unite}.`);
+        if (qte > offre.quantite) return alert(`Quantité insuffisante. Maximum : ${offre.quantite} ${offre.unite}.`);
         try {
             const { data } = await api.post(`/offres/${offre.id}/accepter`, { quantite: qte });
             setMesVentes((prev) => [data, ...prev]);

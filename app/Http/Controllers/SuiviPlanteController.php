@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Plante;
 use App\Models\SuiviPlante;
+use App\Notifications\AgronomicAlertNotification;
+use App\Services\GeolocationService;
 use App\Services\SolCalculator;
 use Illuminate\Http\Request;
 
@@ -34,11 +36,11 @@ class SuiviPlanteController extends Controller
         return response()->json($calcul);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, GeolocationService $geolocation)
     {
         $data = $request->validate([
             'plante_id'        => 'required|exists:plantes,id',
-            'dateDebut'        => 'required|date',
+            'dateDebut'        => 'required|date|before_or_equal:today',
             'natureSol'        => 'required|in:argileux,sableux,limoneux,calcaire,humifere',
             'superficie'       => 'required|numeric|min:0.01',
             'unite_superficie' => 'required|in:ha,m2,unite',
@@ -53,10 +55,17 @@ class SuiviPlanteController extends Controller
         $suivi = SuiviPlante::create([
             ...$data,
             'user_id'        => $request->user()->id,
+            'ville'          => $geolocation->resoudreVille($request->ip()),
             'stadeVegetatif' => null,
             'phSol'          => $calcul['phSol'],
             'BesoinsEau'     => $calcul['BesoinsEau'],
         ]);
+
+        $request->user()->notify(new AgronomicAlertNotification(
+            "Nouvelle culture enregistrée : {$plante->nom}.",
+            'check',
+            '/suivi'
+        ));
 
         return response()->json($suivi->load('plante'), 201);
     }

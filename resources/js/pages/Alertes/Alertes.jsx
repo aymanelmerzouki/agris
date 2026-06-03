@@ -29,15 +29,15 @@ export default function Alertes() {
 
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-white border-b border-gray-200 dark:bg-zinc-900 dark:border-zinc-800 px-6 py-8">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-800 px-6 py-8">
                 <div className="max-w-5xl mx-auto flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-extrabold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
+                        <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
                             <Bell size={24} /> Alertes
                         </h1>
-                        <p className="text-gray-500 dark:text-zinc-400 text-sm mt-1">{alertes.length} alerte(s)</p>
+                        <p className="text-green-100 text-sm mt-1">{alertes.length} alerte(s)</p>
                     </div>
-                    <button className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:border dark:border-zinc-700 text-white dark:text-zinc-100 text-sm font-medium px-4 py-2 rounded-xl transition shadow-sm"
+                    <button className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white text-sm font-medium px-4 py-2 rounded-xl transition"
                         onClick={marquerLues}>
                         <CheckCheck size={18} /> Tout marquer lu
                     </button>

@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Copy, Check, Users, UserCheck, UserX } from 'lucide-react';
+import { Copy, Check, Users, UserCheck, UserX, Trash2 } from 'lucide-react';
 import api from '../../api';
 
 export default function Equipe() {
     const [code, setCode] = useState('');
     const [demandes, setDemandes] = useState([]);
+    const [membres, setMembres] = useState([]);
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         api.get('/equipe/code').then((r) => setCode(r.data.code));
         api.get('/equipe/demandes').then((r) => setDemandes(r.data));
+        api.get('/equipe/membres').then((r) => setMembres(r.data));
     }, []);
 
     const copier = () => {
@@ -19,8 +21,10 @@ export default function Equipe() {
     };
 
     const accepter = async (id) => {
+        const d = demandes.find((x) => x.id === id);
         await api.post(`/equipe/${id}/accepter`);
-        setDemandes((prev) => prev.filter((d) => d.id !== id));
+        setDemandes((prev) => prev.filter((x) => x.id !== id));
+        if (d) setMembres((prev) => [...prev, d]);
     };
 
     const refuser = async (id) => {
@@ -28,14 +32,20 @@ export default function Equipe() {
         setDemandes((prev) => prev.filter((d) => d.id !== id));
     };
 
+    const retirer = async (id) => {
+        if (!confirm('Retirer cet ouvrier de votre équipe ?')) return;
+        await api.delete(`/equipe/${id}`);
+        setMembres((prev) => prev.filter((m) => m.id !== id));
+    };
+
     return (
         <div className="min-h-screen pb-20 md:pb-8">
-            <div className="bg-white border-b border-gray-200 dark:bg-zinc-900 dark:border-zinc-800 px-6 py-8 mb-6">
+            <div className="bg-gradient-to-r from-green-600 to-emerald-500 dark:from-zinc-800 dark:to-zinc-800 dark:border-b dark:border-zinc-800 px-6 py-8">
                 <div className="max-w-3xl mx-auto">
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-zinc-100 flex items-center gap-2">
-                        <Users size={24} className="text-emerald-500" /> Mon Équipe
+                    <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
+                        <Users size={24} /> Mon Équipe
                     </h1>
-                    <p className="text-gray-500 dark:text-zinc-400 text-sm mt-1">Gérez vos ouvriers et les demandes d'intégration</p>
+                    <p className="text-green-100 text-sm mt-1">Gérez vos ouvriers et les demandes d'intégration</p>
                 </div>
             </div>
 
@@ -79,6 +89,34 @@ export default function Equipe() {
                                             <UserX size={14} /> Refuser
                                         </button>
                                     </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* Mon équipe (ouvriers actifs) */}
+                <div className="bg-white dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800 rounded-2xl p-6 shadow-sm">
+                    <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">
+                        Mes ouvriers <span className="ml-2 bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded-full text-xs">{membres.length}</span>
+                    </p>
+                    {membres.length === 0 ? (
+                        <p className="text-sm text-gray-400 dark:text-zinc-500 text-center py-6">Aucun ouvrier dans votre équipe.</p>
+                    ) : (
+                        <div className="space-y-3">
+                            {membres.map((m) => (
+                                <div key={m.id} className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-zinc-800 rounded-xl">
+                                    <div className="w-9 h-9 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold text-sm">
+                                        {m.name?.[0]?.toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <p className="font-semibold text-gray-800 dark:text-zinc-100 text-sm">{m.name}</p>
+                                        <p className="text-xs text-gray-400 dark:text-zinc-500">{m.email}{m.poste ? ` · ${m.poste}` : ''}</p>
+                                    </div>
+                                    <button onClick={() => retirer(m.id)} title="Retirer de l'équipe"
+                                        className="ml-auto flex items-center gap-1.5 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 text-red-600 dark:text-red-400 text-xs font-semibold px-3 py-1.5 rounded-lg transition">
+                                        <Trash2 size={14} /> Retirer
+                                    </button>
                                 </div>
                             ))}
                         </div>

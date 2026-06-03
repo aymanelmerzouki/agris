@@ -11,7 +11,7 @@ class SuiviPlante extends Model
 
     protected $fillable = [
         'user_id', 'plante_id', 'dateDebut', 'DateAgriculte', 'BesoinsEau',
-        'superficie', 'unite_superficie', 'parcelle', 'stadeVegetatif', 'tauxHumidite',
+        'superficie', 'unite_superficie', 'parcelle', 'ville', 'stadeVegetatif', 'tauxHumidite',
         'phSol', 'notesAgriculteur', 'statut', 'natureSol',
         'besoin_eau_calcule', 'ph_estime',
     ];

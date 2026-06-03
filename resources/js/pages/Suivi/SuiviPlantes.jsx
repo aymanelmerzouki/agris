@@ -286,6 +286,11 @@ function CultureCard({ s, onDelete }) {
                     <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 font-medium">
                         <Thermometer size={14} className="text-orange-500" />
                         {liveData.meteo.temperature}°C — {liveData.meteo.description}
+                        {liveData.meteo.ville && (
+                            <span className="ml-auto flex items-center gap-1 text-zinc-400">
+                                <MapPin size={12} /> {liveData.meteo.ville}
+                            </span>
+                        )}
                     </div>
                     <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 font-medium">
                         <Droplets size={14} className="text-blue-400" />
@@ -298,10 +303,15 @@ function CultureCard({ s, onDelete }) {
                                 ? `${(liveData.besoin_eau_live / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} m³`
                                 : `${Number(liveData.besoin_eau_live).toLocaleString('fr-FR')} L`}
                         </span>
-                        {liveData.pluie_mm > 0 && (
-                            <span className="text-emerald-500 font-semibold">(Optimisé)</span>
-                        )}
                     </div>
+                    {liveData.economie_eau > 0 && (
+                        <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-semibold">
+                            <Droplets size={14} />
+                            Économie grâce à la pluie : {liveData.economie_eau >= 1000
+                                ? `${(liveData.economie_eau / 1000).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} m³`
+                                : `${Number(liveData.economie_eau).toLocaleString('fr-FR')} L`}
+                        </div>
+                    )}
                 </div>
             )}
 

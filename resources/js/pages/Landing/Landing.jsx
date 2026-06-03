@@ -8,7 +8,6 @@ const features = [
     { icon: '🌿', title: 'Suivi cultures', desc: 'Stade végétatif, pH sol, progression.' },
     { icon: '🛒', title: 'Marketplace', desc: 'Achetez et vendez en dirhams marocains.' },
     { icon: '📋', title: 'Gestion équipe', desc: 'Tâches et suivi d\'avancement ouvriers.' },
-    { icon: '📦', title: 'Stocks', desc: 'Gérez vos stocks et anticipez vos besoins.' },
 ];
 
 const stats = [

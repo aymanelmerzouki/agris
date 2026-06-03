@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Offre;
 use App\Models\Vente;
-use App\Services\StockService;
+use App\Services\VenteService;
 use Illuminate\Http\Request;
 
 class OffreController extends Controller
 {
-    public function __construct(private StockService $stockService) {}
+    public function __construct(private VenteService $venteService) {}
     public function index(Request $request)
     {
         $query = Offre::with('user:id,name', 'plante:id,nom,espece');
@@ -72,7 +72,7 @@ class OffreController extends Controller
 
         $data = $request->validate(['quantite' => 'required|numeric|min:0.01']);
 
-        $vente = $this->stockService->traiterAchat($offre, $data['quantite'], $request->user()->id);
+        $vente = $this->venteService->traiterAchat($offre, $data['quantite'], $request->user()->id);
 
         return response()->json($vente->load('offre.plante', 'acheteur:id,name', 'vendeur:id,name'), 201);
     }
@@ -92,8 +92,8 @@ class OffreController extends Controller
             return response()->json(['message' => 'Action non autorisée.'], 403);
         }
 
-        $this->stockService->annulerAchat($vente);
-        return response()->json(['message' => 'Achat annulé, stock restauré.']);
+        $this->venteService->annulerAchat($vente);
+        return response()->json(['message' => 'Achat annulé, offre restaurée.']);
     }
 
     public function destroy(Offre $offre)

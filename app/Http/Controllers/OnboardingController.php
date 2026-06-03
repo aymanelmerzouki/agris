@@ -52,6 +52,15 @@ class OnboardingController extends Controller
         );
     }
 
+    // Gérant : liste des ouvriers actifs (acceptés)
+    public function membres(Request $request)
+    {
+        return response()->json(
+            $request->user()->ouvriers()->where('statut_emploi', 'actif')
+                ->select('id', 'name', 'email', 'poste')->get()
+        );
+    }
+
     // Gérant : accepter un ouvrier
     public function accepter(Request $request, User $ouvrier)
     {
@@ -66,6 +75,14 @@ class OnboardingController extends Controller
         $this->verifierGerant($request, $ouvrier);
         $ouvrier->update(['statut_emploi' => 'aucun', 'gerant_id' => null]);
         return response()->json(['message' => 'Demande refusée.']);
+    }
+
+    // Gérant : retirer un ouvrier de son équipe
+    public function retirer(Request $request, User $ouvrier)
+    {
+        $this->verifierGerant($request, $ouvrier);
+        $ouvrier->update(['statut_emploi' => 'aucun', 'gerant_id' => null]);
+        return response()->json(['message' => 'Ouvrier retiré.']);
     }
 
     // Gérant : son code d'exploitation

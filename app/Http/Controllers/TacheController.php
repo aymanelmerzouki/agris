@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tache;
 use App\Models\TodoList;
+use App\Notifications\AgronomicAlertNotification;
 use App\Notifications\TaskAssignedNotification;
 use App\Notifications\TaskCompletedNotification;
 use Illuminate\Http\Request;
@@ -34,6 +35,13 @@ class TacheController extends Controller
 
         if ($todoList->ouvrier) {
             $todoList->ouvrier->notify(new TaskAssignedNotification($tache));
+        }
+        if ($todoList->manager) {
+            $todoList->manager->notify(new AgronomicAlertNotification(
+                "Tâche « {$tache->nomTache} » assignée à " . ($todoList->ouvrier->name ?? 'un ouvrier') . '.',
+                'check',
+                '/todo-lists'
+            ));
         }
 
         return response()->json($tache, 201);

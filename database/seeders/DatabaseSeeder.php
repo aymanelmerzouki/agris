@@ -5,7 +5,6 @@ use App\Models\Biblio;
 use App\Models\Message;
 use App\Models\Offre;
 use App\Models\Plante;
-use App\Models\Stock;
 use App\Models\SuiviPlante;
 use App\Models\Tache;
 use App\Models\TodoList;
@@ -33,7 +32,6 @@ class DatabaseSeeder extends Seeder
         Biblio::factory(10)->create();
         SuiviPlante::factory(3)->create(['user_id' => $agriculteur->id, 'plante_id' => $plantes->random()->id]);
         Offre::factory(3)->create(['user_id' => $agriculteur->id, 'plante_id' => $plantes->random()->id]);
-        Stock::factory(3)->create(['user_id' => $manager->id, 'plante_id' => $plantes->random()->id]);
         $todoList = TodoList::factory()->create([
             'manager_id' => $manager->id,
             'ouvrier_id' => $ouvrier->id,

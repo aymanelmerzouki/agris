@@ -4,12 +4,12 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class WeatherService
 {
     private string $apiKey;
-    private string $baseUrl = 'https://api.openweathermap.org/data/2.5/weather';
+    private string $weatherUrl = 'https://api.openweathermap.org/data/2.5/weather';
+    private string $forecastUrl = 'https://api.openweathermap.org/data/2.5/forecast';
 
     public function __construct()
     {
@@ -18,50 +18,80 @@ class WeatherService
 
     public function getDailyWeather(string $city = 'Rabat'): array
     {
-        // Cache 1h par ville pour éviter les appels répétés
         return Cache::remember("weather_{$city}", 3600, function () use ($city) {
-            if (!$this->apiKey || $this->apiKey === 'ton_api_key_ici') {
-                Log::warning("Clé API OpenWeather manquante. Données météo indisponibles pour {$city}.");
-                return $this->getUnavailableData($city);
+            if (!$this->cleValide()) {
+                return $this->indisponible($city);
             }
 
             try {
-                $response = Http::timeout(5)->get($this->baseUrl, [
+                $actuel = Http::timeout(5)->get($this->weatherUrl, [
                     'q'     => $city . ',MA',
                     'appid' => $this->apiKey,
                     'units' => 'metric',
                     'lang'  => 'fr',
                 ]);
 
-                if ($response->successful()) {
-                    $data = $response->json();
-                    return [
-                        'temperature' => round($data['main']['temp'], 1),
-                        'humidite'    => $data['main']['humidity'],
-                        'pluie_mm'    => $data['rain']['1h'] ?? 0,
-                        'description' => $data['weather'][0]['description'] ?? 'Dégagé',
-                        'source'      => 'api',
-                    ];
+                if (!$actuel->successful()) {
+                    return $this->indisponible($city);
                 }
 
-                Log::error('Erreur API Météo: ' . $response->body());
-                return $this->getUnavailableData($city);
+                $data = $actuel->json();
 
-            } catch (\Exception $e) {
-                Log::error('Exception API Météo: ' . $e->getMessage());
-                return $this->getUnavailableData($city);
+                return [
+                    'ville'           => $city,
+                    'temperature'     => round($data['main']['temp'], 1),
+                    'humidite'        => $data['main']['humidity'],
+                    'pluie_mm'        => $data['rain']['1h'] ?? 0,
+                    'pluie_prevue_mm' => $this->pluiePrevue24h($city),
+                    'description'     => $data['weather'][0]['description'] ?? 'Dégagé',
+                    'source'          => 'api',
+                ];
+            } catch (\Throwable $e) {
+                return $this->indisponible($city);
             }
         });
     }
 
-    private function getUnavailableData(string $city): array
+    private function pluiePrevue24h(string $city): float
+    {
+        try {
+            $forecast = Http::timeout(5)->get($this->forecastUrl, [
+                'q'     => $city . ',MA',
+                'appid' => $this->apiKey,
+                'units' => 'metric',
+                'cnt'   => 8,
+            ]);
+
+            if (!$forecast->successful()) {
+                return 0;
+            }
+
+            $total = 0;
+            foreach ($forecast->json('list', []) as $creneau) {
+                $total += $creneau['rain']['3h'] ?? 0;
+            }
+
+            return round($total, 1);
+        } catch (\Throwable $e) {
+            return 0;
+        }
+    }
+
+    private function cleValide(): bool
+    {
+        return $this->apiKey && $this->apiKey !== 'ton_api_key_ici';
+    }
+
+    private function indisponible(string $city): array
     {
         return [
-            'temperature' => null,
-            'humidite'    => null,
-            'pluie_mm'    => 0,
-            'description' => 'Données météo indisponibles',
-            'source'      => 'unavailable',
+            'ville'           => $city,
+            'temperature'     => null,
+            'humidite'        => null,
+            'pluie_mm'        => 0,
+            'pluie_prevue_mm' => 0,
+            'description'     => 'Données météo indisponibles',
+            'source'          => 'unavailable',
         ];
     }
 }

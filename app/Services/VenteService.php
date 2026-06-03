@@ -7,7 +7,7 @@ use App\Models\Vente;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
-class StockService
+class VenteService
 {
     public function annulerAchat(Vente $vente): void
     {
@@ -29,7 +29,7 @@ class StockService
 
         if ($offre->quantite < $quantiteDemandee) {
             throw ValidationException::withMessages([
-                'quantite' => "Stock insuffisant. Disponible : {$offre->quantite} {$offre->unite}."
+                'quantite' => "Quantité insuffisante. Disponible : {$offre->quantite} {$offre->unite}."
             ]);
         }
 

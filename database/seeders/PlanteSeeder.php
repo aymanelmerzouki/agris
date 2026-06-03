@@ -21,6 +21,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 60000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
+                'besoin_eau_l_m2' => 6.3,
                 'imageUrl' => '/images/plantes/tomate.webp',
             ],
             [
@@ -37,6 +38,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 3500,
                 'typeIrrigation' => 'pluviale',
                 'estBio' => false,
+                'besoin_eau_l_m2' => 6.3,
                 'imageUrl' => '/images/plantes/ble-dur.webp',
             ],
             [
@@ -53,6 +55,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 8000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => true,
+                'besoin_eau_l_m2' => 3.6,
                 'imageUrl' => '/images/plantes/olivier.webp',
             ],
             [
@@ -69,6 +72,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 500,
                 'typeIrrigation' => 'pluviale',
                 'estBio' => true,
+                'besoin_eau_l_m2' => 3.0,
                 'imageUrl' => '/images/plantes/arganier.webp',
             ],
             [
@@ -85,6 +89,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 25000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
+                'besoin_eau_l_m2' => 3.9,
                 'imageUrl' => '/images/plantes/clementine.webp',
             ],
             [
@@ -101,6 +106,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 25000,
                 'typeIrrigation' => 'aspersion',
                 'estBio' => false,
+                'besoin_eau_l_m2' => 6.3,
                 'imageUrl' => '/images/plantes/pomme-de-terre.webp',
             ],
             [
@@ -117,6 +123,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 15000,
                 'typeIrrigation' => 'aspersion',
                 'estBio' => true,
+                'besoin_eau_l_m2' => 5.5,
                 'imageUrl' => '/images/plantes/menthe-poivree.webp',
             ],
             [
@@ -133,6 +140,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 20000,
                 'typeIrrigation' => 'pluviale',
                 'estBio' => true,
+                'besoin_eau_l_m2' => 1.7,
                 'imageUrl' => '/images/plantes/cactus-figuier.webp',
             ],
             [
@@ -149,6 +157,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 30000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
+                'besoin_eau_l_m2' => 5.8,
                 'imageUrl' => '/images/plantes/oignon.webp',
             ],
             [
@@ -165,6 +174,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 6,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => true,
+                'besoin_eau_l_m2' => 3.6,
                 'imageUrl' => '/images/plantes/safran.webp',
             ],
             [
@@ -181,6 +191,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 35000,
                 'typeIrrigation' => 'goutte_a_goutte',
                 'estBio' => false,
+                'besoin_eau_l_m2' => 5.5,
                 'imageUrl' => '/images/plantes/pasteque.webp',
             ],
             [
@@ -197,6 +208,7 @@ class PlanteSeeder extends Seeder
                 'rendementMoyenKgHa' => 10000,
                 'typeIrrigation' => 'submersion',
                 'estBio' => true,
+                'besoin_eau_l_m2' => 5.2,
                 'imageUrl' => '/images/plantes/dattier.webp',
             ],
         ];
