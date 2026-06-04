@@ -20,6 +20,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',      [AuthController::class, 'me']);
     Route::get('/dashboard-stats', [DashboardController::class, 'index']);
+    // Alertes / notifications — accessibles à tous les rôles authentifiés (y compris ouvrier)
+    Route::get('alertes',                     [AlerteArrosageController::class, 'index']);
+    Route::post('alertes/marquer-lues',       [AlerteArrosageController::class, 'marquerLues']);
     Route::get('/ouvriers', fn(\Illuminate\Http\Request $r) => response()->json(
         $r->user()->ouvriers()->where('statut_emploi', 'actif')->select('id','name','poste')->get()
     ));
@@ -38,8 +41,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::apiResource('abonnements', AbonnementController::class)->only(['index', 'store']);
         Route::get('favoris',                     [PlanteFavoriController::class, 'index']);
         Route::post('plantes/{plante}/favori',     [PlanteFavoriController::class, 'toggle']);
-        Route::get('alertes',                     [AlerteArrosageController::class, 'index']);
-        Route::post('alertes/marquer-lues',       [AlerteArrosageController::class, 'marquerLues']);
         Route::get('suivi-plantes/{suiviPlante}/live',  [SuiviPlanteController::class, 'getLiveStats']);
         Route::post('suivi-plantes/calculer',     [SuiviPlanteController::class, 'calculer']);
         Route::apiResource('suivi-plantes', SuiviPlanteController::class);

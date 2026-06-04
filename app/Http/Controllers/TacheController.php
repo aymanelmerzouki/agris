@@ -6,7 +6,7 @@ use App\Models\Tache;
 use App\Models\TodoList;
 use App\Notifications\AgronomicAlertNotification;
 use App\Notifications\TaskAssignedNotification;
-use App\Notifications\TaskCompletedNotification;
+use App\Notifications\TaskStatusChangedNotification;
 use Illuminate\Http\Request;
 
 class TacheController extends Controller
@@ -38,8 +38,7 @@ class TacheController extends Controller
         }
         if ($todoList->manager) {
             $todoList->manager->notify(new AgronomicAlertNotification(
-                "Tâche « {$tache->nomTache} » assignée à " . ($todoList->ouvrier->name ?? 'un ouvrier') . '.',
-                'check',
+                "Tâche « {$tache->nomTache} » assignée à " . ($todoList->ouvrier->name ?? 'un ouvrier') . '.',                'check',
                 '/todo-lists'
             ));
         }
@@ -80,8 +79,8 @@ class TacheController extends Controller
 
         $tache->update($data);
 
-        if ($user->role === 'ouvrier' && ($data['statut'] ?? null) === 'termine' && $wasNotDone) {
-            $todoList->manager->notify(new TaskCompletedNotification($tache));
+        if ($user->role === 'ouvrier' && isset($data['statut'])) {
+            $todoList->manager?->notify(new TaskStatusChangedNotification($tache, $user, $data['statut']));
         }
 
         return response()->json($tache);
