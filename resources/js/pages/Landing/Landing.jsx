@@ -18,10 +18,10 @@ const stats = [
 ];
 
 const planteShowcase = [
-    { nom: 'Safran', img: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300', tag: 'Taliouine' },
-    { nom: 'Arganier', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300', tag: 'Endémique' },
-    { nom: 'Dattier', img: 'https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?w=300', tag: 'Drâa-Tafilalet' },
-    { nom: 'Clémentine', img: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab12?w=300', tag: 'Souss' },
+    { nom: 'Safran', img: '/images/plantes/safran.webp', tag: 'Taliouine' },
+    { nom: 'Arganier', img: '/images/plantes/arganier.webp', tag: 'Endémique' },
+    { nom: 'Dattier', img: '/images/plantes/dattier.webp', tag: 'Drâa-Tafilalet' },
+    { nom: 'Clémentine', img: '/images/plantes/clementine.webp', tag: 'Souss' },
 ];
 
 const fallbackNews = [
@@ -45,7 +45,7 @@ const fallbackNews = [
         title: 'Safran de Taliouine : une récolte record et une demande internationale en hausse',
         description: 'La coopérative de Taliouine annonce une production record de safran bio. L\'or rouge marocain s\'exporte vers l\'Europe, l\'Asie et les États-Unis.',
         url: '#',
-        image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=600',
+        image: '/images/plantes/safran.webp',
         source: 'souss-massa.ma',
         date: new Date().toISOString(),
     },
@@ -53,7 +53,7 @@ const fallbackNews = [
         title: 'Huile d\'argan : le Maroc exporte pour 700 millions de dirhams par an',
         description: 'L\'arganiculture marocaine continue de croître. Les coopératives féminines du Souss produisent une huile d\'argan certifiée bio reconnue mondialement.',
         url: '#',
-        image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600',
+        image: '/images/plantes/arganier.webp',
         source: 'export.ma',
         date: new Date().toISOString(),
     },
@@ -61,7 +61,7 @@ const fallbackNews = [
         title: 'Agrumes marocains : 2,5 millions de tonnes exportées cette saison',
         description: 'Le Maroc confirme sa place de premier exportateur africain d\'agrumes. Les clémentines et oranges du Souss dominent les marchés européens.',
         url: '#',
-        image: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab12?w=600',
+        image: '/images/plantes/clementine.webp',
         source: 'maroc-export.com',
         date: new Date().toISOString(),
     },
