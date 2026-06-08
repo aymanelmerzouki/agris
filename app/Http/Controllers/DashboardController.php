@@ -22,6 +22,9 @@ class DashboardController extends Controller
             ]);
         }
         if (!in_array($user->role, ['agriculteur', 'manager'])) {
+            if ($user->role === 'admin') {
+                return response()->json(['role' => 'admin']);
+            }
             abort(403, 'Accès non autorisé.');
         }
         $stats = [

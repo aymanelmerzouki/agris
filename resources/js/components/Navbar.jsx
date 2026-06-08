@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import DarkModeToggle from './DarkModeToggle';
 import {
     LayoutDashboard, BookOpen, Bookmark, ShoppingCart,
-    Sprout, ClipboardList, Bell, Leaf, Users
+    Sprout, ClipboardList, Bell, Leaf, Users, ShieldCheck
 } from 'lucide-react';
 
 export default function Navbar() {
@@ -17,7 +17,10 @@ export default function Navbar() {
         navigate('/login');
     };
 
-    const navItems = [
+    const navItems = user?.role === 'admin' ? [
+        { to: '/admin',   icon: ShieldCheck, label: 'Administration' },
+        { to: '/alertes', icon: Bell,        label: 'Alertes' },
+    ] : [
         { to: '/dashboard', icon: LayoutDashboard, label: 'Accueil' },
         { to: '/plantes',   icon: BookOpen,         label: 'Bibliothèque' },
         ...(!['ouvrier'].includes(user?.role) ? [

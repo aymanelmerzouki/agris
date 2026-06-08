@@ -66,4 +66,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put   ('todo-lists/{todoList}/taches/{tache}',   [TacheController::class, 'update']);
         Route::delete('todo-lists/{todoList}/taches/{tache}',   [TacheController::class, 'destroy']);
     });
+
+    // Espace administrateur — gestion des comptes utilisateurs et des abonnements
+    Route::middleware('role:admin')->prefix('admin')->group(function () {
+        Route::get   ('stats',                          [\App\Http\Controllers\AdminController::class, 'stats']);
+        Route::get   ('utilisateurs',                   [\App\Http\Controllers\AdminController::class, 'utilisateurs']);
+        Route::patch ('utilisateurs/{user}/role',       [\App\Http\Controllers\AdminController::class, 'changerRole']);
+        Route::delete('utilisateurs/{user}',            [\App\Http\Controllers\AdminController::class, 'supprimerUtilisateur']);
+        Route::get   ('abonnements',                    [\App\Http\Controllers\AdminController::class, 'abonnements']);
+        Route::patch ('abonnements/{abonnement}',       [\App\Http\Controllers\AdminController::class, 'modifierAbonnement']);
+        Route::delete('abonnements/{abonnement}',       [\App\Http\Controllers\AdminController::class, 'supprimerAbonnement']);
+    });
 });
