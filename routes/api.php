@@ -30,6 +30,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Onboarding — accessible à tous les rôles authentifiés
     Route::post('onboarding/soumettre', [\App\Http\Controllers\OnboardingController::class, 'soumettreDemande']);
     Route::apiResource('biblios', BiblioController::class)->only(['index', 'show']);
+
+    // Abonnement Entreprise — paiement simulé + OTP (manager, abonnement pas encore actif)
+    Route::post('abonnement/initier-paiement', [AbonnementController::class, 'initierPaiement']);
+    Route::post('abonnement/verifier-otp',     [AbonnementController::class, 'verifierOtp']);
+
     Route::middleware('role:agriculteur,manager')->group(function () {
         Route::apiResource('plantes', PlanteController::class)->except(['index', 'show']);
         Route::apiResource('biblios', BiblioController::class)->except(['index', 'show']);

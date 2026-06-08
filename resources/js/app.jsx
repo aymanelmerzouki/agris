@@ -21,6 +21,7 @@ import Equipe from './pages/Equipe/Equipe';
 import PortailOuvrier from './pages/Equipe/PortailOuvrier';
 import WaitingApproval from './pages/Equipe/WaitingApproval';
 import Admin from './pages/Admin/Admin';
+import Abonnement from './pages/Abonnement/Abonnement';
 
 import '../css/app.css';
 
@@ -65,6 +66,7 @@ createRoot(document.getElementById('app')).render(
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/abonnement" element={<PrivateRoute roles={['manager']}><Abonnement /></PrivateRoute>} />
 
                     <Route path="/dashboard" element={<PrivateRoute><Layout><Dashboard /></Layout></PrivateRoute>} />
                     <Route path="/plantes" element={<PrivateRoute><Layout><Plantes /></Layout></PrivateRoute>} />
