@@ -30,6 +30,11 @@ Route::middleware('auth:sanctum')->group(function () {
     // Onboarding — accessible à tous les rôles authentifiés
     Route::post('onboarding/soumettre', [\App\Http\Controllers\OnboardingController::class, 'soumettreDemande']);
     Route::apiResource('biblios', BiblioController::class)->only(['index', 'show']);
+
+    // Abonnement Entreprise — paiement simulé + OTP (manager, abonnement pas encore actif)
+    Route::post('abonnement/initier-paiement', [AbonnementController::class, 'initierPaiement']);
+    Route::post('abonnement/verifier-otp',     [AbonnementController::class, 'verifierOtp']);
+
     Route::middleware('role:agriculteur,manager')->group(function () {
         Route::apiResource('plantes', PlanteController::class)->except(['index', 'show']);
         Route::apiResource('biblios', BiblioController::class)->except(['index', 'show']);
@@ -65,5 +70,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post  ('todo-lists/{todoList}/taches',           [TacheController::class, 'store']);
         Route::put   ('todo-lists/{todoList}/taches/{tache}',   [TacheController::class, 'update']);
         Route::delete('todo-lists/{todoList}/taches/{tache}',   [TacheController::class, 'destroy']);
+    });
+
+    // Espace administrateur — gestion des comptes utilisateurs et des abonnements
+    Route::middleware('role:admin')->prefix('admin')->group(function () {
+        Route::get   ('stats',                          [\App\Http\Controllers\AdminController::class, 'stats']);
+        Route::get   ('utilisateurs',                   [\App\Http\Controllers\AdminController::class, 'utilisateurs']);
+        Route::patch ('utilisateurs/{user}/role',       [\App\Http\Controllers\AdminController::class, 'changerRole']);
+        Route::delete('utilisateurs/{user}',            [\App\Http\Controllers\AdminController::class, 'supprimerUtilisateur']);
+        Route::get   ('abonnements',                    [\App\Http\Controllers\AdminController::class, 'abonnements']);
+        Route::patch ('abonnements/{abonnement}',       [\App\Http\Controllers\AdminController::class, 'modifierAbonnement']);
+        Route::delete('abonnements/{abonnement}',       [\App\Http\Controllers\AdminController::class, 'supprimerAbonnement']);
     });
 });

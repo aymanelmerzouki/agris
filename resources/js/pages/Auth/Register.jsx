@@ -14,8 +14,13 @@ export default function Register() {
         e.preventDefault();
         setError('');
         try {
-            await register(form);
-            navigate('/');
+            const user = await register(form);
+            // Un compte Entreprise (manager) doit finaliser son abonnement avant d'accéder à l'espace.
+            if (user.role === 'manager') {
+                navigate('/abonnement');
+            } else {
+                navigate('/');
+            }
         } catch (err) {
             setError(err.response?.data?.message || 'Erreur lors de l\'inscription.');
         }

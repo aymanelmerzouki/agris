@@ -20,6 +20,8 @@ import Alertes from './pages/Alertes/Alertes';
 import Equipe from './pages/Equipe/Equipe';
 import PortailOuvrier from './pages/Equipe/PortailOuvrier';
 import WaitingApproval from './pages/Equipe/WaitingApproval';
+import Admin from './pages/Admin/Admin';
+import Abonnement from './pages/Abonnement/Abonnement';
 
 import '../css/app.css';
 
@@ -50,6 +52,9 @@ function Home() {
             return <Navigate to="/dashboard" replace />;
         }
     }
+    if (user?.role === 'admin') {
+        return <Navigate to="/admin" replace />;
+    }
     return user ? <Navigate to="/dashboard" replace /> : <Landing />;
 }
 
@@ -61,6 +66,7 @@ createRoot(document.getElementById('app')).render(
                     <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/abonnement" element={<PrivateRoute roles={['manager']}><Abonnement /></PrivateRoute>} />
 
                     <Route path="/dashboard" element={<PrivateRoute><Layout><Dashboard /></Layout></PrivateRoute>} />
                     <Route path="/plantes" element={<PrivateRoute><Layout><Plantes /></Layout></PrivateRoute>} />
@@ -71,6 +77,7 @@ createRoot(document.getElementById('app')).render(
                     <Route path="/todo-lists" element={<PrivateRoute roles={['manager', 'ouvrier']}><Layout><TodoLists /></Layout></PrivateRoute>} />
                     <Route path="/alertes" element={<PrivateRoute><Layout><Alertes /></Layout></PrivateRoute>} />
                     <Route path="/equipe" element={<PrivateRoute roles={['manager']}><Layout><Equipe /></Layout></PrivateRoute>} />
+                    <Route path="/admin" element={<PrivateRoute roles={['admin']}><Layout><Admin /></Layout></PrivateRoute>} />
 
                     <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>

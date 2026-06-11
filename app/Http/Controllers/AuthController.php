@@ -17,8 +17,11 @@ class AuthController extends Controller
             'email'        => 'required|email|unique:users',
             'password'     => ['required', 'confirmed', Password::min(8)],
             'role'         => 'required|in:agriculteur,manager,ouvrier',
-            'nomEntreprise'=> 'nullable|string|max:255',
+            'nomEntreprise'=> 'required_if:role,manager|nullable|string|max:255|unique:users,nomEntreprise',
             'poste'        => 'nullable|string|max:255',
+        ], [
+            'nomEntreprise.required_if' => 'Le nom de l\'entreprise est obligatoire pour un compte Entreprise.',
+            'nomEntreprise.unique'      => 'Ce nom d\'entreprise est déjà utilisé.',
         ]);
 
         $user = User::create([...$data, 'password' => Hash::make($data['password'])]);
