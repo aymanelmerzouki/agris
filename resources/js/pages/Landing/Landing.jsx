@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { BookOpen, Droplets, Sprout, ShoppingCart, ClipboardList } from 'lucide-react';
 import api from '../../api';
 
 const features = [
-    { icon: '📚', title: 'Bibliothèque', desc: 'Base de données complète de plantes marocaines.' },
-    { icon: '💧', title: 'Alertes arrosage', desc: 'Quantité exacte d\'eau chaque matin.' },
-    { icon: '🌿', title: 'Suivi cultures', desc: 'Stade végétatif, pH sol, progression.' },
-    { icon: '🛒', title: 'Marketplace', desc: 'Achetez et vendez en dirhams marocains.' },
-    { icon: '📋', title: 'Gestion équipe', desc: 'Tâches et suivi d\'avancement ouvriers.' },
+    { icon: BookOpen,      title: 'Bibliothèque', desc: 'Base de données complète de plantes marocaines.' },
+    { icon: Droplets,      title: 'Alertes arrosage', desc: 'Quantité exacte d\'eau chaque matin.' },
+    { icon: Sprout,        title: 'Suivi cultures', desc: 'Stade végétatif, pH sol, progression.' },
+    { icon: ShoppingCart,  title: 'Marketplace', desc: 'Achetez et vendez en dirhams marocains.' },
+    { icon: ClipboardList, title: 'Gestion équipe', desc: 'Tâches et suivi d\'avancement ouvriers.' },
 ];
 
 const stats = [
@@ -159,15 +160,18 @@ export default function Landing() {
                         <p className="text-gray-500 max-w-xl mx-auto text-sm">Une plateforme complète pour les agriculteurs indépendants et les entreprises agricoles marocaines.</p>
                     </div>
                     <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                        {features.map((f) => (
+                        {features.map((f) => {
+                            const Icon = f.icon;
+                            return (
                             <div key={f.title} className="bg-white border border-gray-100 rounded-2xl p-5 hover:shadow-lg transition group">
-                                <div className="w-11 h-11 bg-green-50 rounded-xl flex items-center justify-center text-2xl mb-3 group-hover:bg-green-100 transition">
-                                    {f.icon}
+                                <div className="w-11 h-11 bg-green-50 rounded-xl flex items-center justify-center mb-3 group-hover:bg-green-100 transition">
+                                    <Icon size={22} className="text-green-600" strokeWidth={2} />
                                 </div>
                                 <h3 className="font-semibold text-gray-900 mb-1 text-sm">{f.title}</h3>
                                 <p className="text-xs text-gray-500 leading-relaxed">{f.desc}</p>
                             </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </section>
